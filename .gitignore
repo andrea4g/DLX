@@ -1,0 +1,10 @@
+#ignore everything
+*
+#except .vhd, .gitignore, .vhdl, .txt, files
+!.gitignore
+!*.vhd
+!*.vhdl
+!*.txt
+
+# ...even if they are in subdirectories
+!*/
