@@ -7,6 +7,8 @@ end entity;
 
 architecture test_tb_logic_n of tb_logic_n is
 
+  constant n : integer := 4;
+
   component logic_n is
     generic (n : integer := 1);
     port (
@@ -21,12 +23,10 @@ architecture test_tb_logic_n of tb_logic_n is
   signal tb_r1, tb_r2, tb_y         : std_logic_vector(n - 1 downto 0) := (others => '0');
   signal tb_s0, tb_s1, tb_s2, tb_s3 : std_logic := '0';
 
-  constant nbit : integer := 4;
-
 begin
 
   dut : logic_n
-  generic map(nbit)
+  generic map(n)
   port map(tb_r1, tb_r2, tb_s0, tb_s1, tb_s2, tb_s3, tb_y);
 
   tb_logic_n_input_process : process
@@ -51,6 +51,7 @@ begin
     tb_s1 <= '0', '1' after 5 ns, '1' after 10 ns, '0' after 15 ns, '1' after 20 ns, '0' after 25 ns;
     tb_s2 <= '0', '1' after 5 ns, '1' after 10 ns, '0' after 15 ns, '1' after 20 ns, '0' after 25 ns;
     tb_s3 <= '1', '0' after 5 ns, '1' after 10 ns, '0' after 15 ns, '0' after 20 ns, '1' after 25 ns;
+    wait for 30 ns;
   end process;
 
 end architecture;
