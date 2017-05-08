@@ -5,6 +5,6 @@ Datapath	--> ALU			--> Adder (p4)
 			    		    Divider (if there is time)
 			    		    Logic
 			    		    Shift & Rotate		TODO
-		    Register file					TODO
+		    Register file					
 		    FF							
 		    MUX							
