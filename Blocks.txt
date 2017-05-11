@@ -1,10 +1,10 @@
 Control unit 	--> fsm							TODO
-Datapath	--> ALU			--> Adder (p4)
+Datapath	--> ALU			--> Adder (p4)				DONE
 			    		    Subtractor (p4 modified)	TODO
-			    		    Multiplier (booth)
-			    		    Divider (if there is time)
-			    		    Logic
+			    		    Multiplier (booth)			DONE
+			    		    Divider (if there is time)		DONE
+			    		    Logic				DONE
 			    		    Shift & Rotate		TODO
-		    Register file					
-		    FF							
-		    MUX							
+		    Register file						DONE
+		    FF								DONE
+		    MUX								DONE
