@@ -22,8 +22,8 @@ begin
   dut : mux21
   port map(tb_a, tb_b, tb_s, tb_y);
 
-  tb_a <= '0';
-  tb_b <= '1';
-  tb_s <= '0', '1' after 10 ns;
+  tb_a <= '0', '1' after 10 ns, '0' after 20 ns, '1' after 30 ns;
+  tb_b <= '0', '1' after 20 ns;
+  tb_s <= '0', '1' after 20 ns;
 
 end architecture;
