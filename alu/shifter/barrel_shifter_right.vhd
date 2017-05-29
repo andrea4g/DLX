@@ -22,10 +22,10 @@ architecture structral of barrel_shifter_right is
 
   component mux21 is
     port (
-      a	:	in	std_logic;
-      b	:	in	std_logic;
-      s	:	in	std_logic;
-      y	:	out	std_logic
+      a : in  std_logic;
+      b : in  std_logic;
+      s : in  std_logic;
+      y : out std_logic
     );
   end component;
 

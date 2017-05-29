@@ -41,7 +41,7 @@ begin
     tb_r2(1) <= not tb_r2(1) after 960  ns;
     tb_r2(2) <= not tb_r2(2) after 1920 ns;
     tb_r2(3) <= not tb_r2(3) after 3840 ns;
-
+    wait for 1 ns;
   end process;
 
   tb_logic_n_select_process : process
