@@ -1,9 +1,9 @@
-Control unit 	--> Hardwired																	TODO
-Datapath			--> ALU			--> Adder (p4)										DONE
-			    		    				-->	Subtractor (p4 modified)			TODO
-			    		    				-->	Multiplier (booth)						DONE
-			    		    				-->	Logic													DONE
-			    		    				-->	Shift													DONE
-		    			--> Register file															DONE
-		    			--> FF																				DONE
-		    			--> MUX																				DONE
+Control unit  --> Hardwired                                 TODO
+Datapath      --> ALU     --> Adder (p4)                    DONE
+                          --> Subtractor (p4 modified)      TODO
+                          --> Multiplier (booth)            DONE
+                          --> Logic                         DONE
+                          --> Shift                         DONE
+              --> Register file                             DONE
+              --> FF                                        DONE
+              --> MUX                                       DONE

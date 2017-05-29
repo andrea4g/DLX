@@ -11,10 +11,10 @@ entity dlx_cu is
   generic (
     MICROCODE_MEM_SIZE :     integer := 10;  -- Microcode Memory Size
     FUNC_SIZE          :     integer := 11;  -- Func Field Size for R-Type Ops
-    OP_CODE_SIZE       :     integer := 6;  -- Op Code Size
-    -- ALU_OPC_SIZE       :     integer := 6;  -- ALU Op Code Word Size
+    OP_CODE_SIZE       :     integer := 6;   -- Op Code Size
+ -- ALU_OPC_SIZE       :     integer := 6;   -- ALU Op Code Word Size
     IR_SIZE            :     integer := 32;  -- Instruction Register Size
-    CW_SIZE            :     integer := 15);  -- Control Word Size
+    CW_SIZE            :     integer := 15); -- Control Word Size
   port (
     Clk                : in  std_logic;  -- Clock
     Rst                : in  std_logic;  -- Reset:Active-Low
@@ -48,7 +48,7 @@ entity dlx_cu is
     WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
     RF_WE              : out std_logic);  -- Register File Write Enable
 
-end dlx_cu;
+end entity;
 
 architecture dlx_cu_rtl of dlx_cu is
   type mem_array is array (integer range 0 to MICROCODE_MEM_SIZE - 1) of std_logic_vector(CW_SIZE - 1 downto 0);
@@ -164,4 +164,4 @@ begin  -- dlx_cu_rtl
    end case;
   end process ALU_OP_CODE_P;
 
-end dlx_cu_rtl;
+end architecture;
