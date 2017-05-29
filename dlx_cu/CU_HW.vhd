@@ -147,21 +147,21 @@ begin  -- dlx_cu_rtl
   -- outputs: aluOpcode
    ALU_OP_CODE_P : process (IR_opcode, IR_func)
    begin  -- process ALU_OP_CODE_P
-	case conv_integer(unsigned(IR_opcode)) is
-	        -- case of R type requires analysis of FUNC
-		when 0 =>
-			case conv_integer(unsigned(IR_func)) is
-				when 4 => aluOpcode_i <= LLS; -- sll according to instruction set coding
-				when 6 => aluOpcode_i <= LRS; -- srl
-				-- to be continued and filled with all the other instructions
-				when others => aluOpcode_i <= NOP;
-			end case;
-		when 2 => aluOpcode_i <= NOP; -- j
-		when 3 => aluOpcode_i <= NOP; -- jal
-		when 8 => aluOpcode_i <= ADDS; -- addi
-		-- to be continued and filled with other cases
-		when others => aluOpcode_i <= NOP;
-	 end case;
-	end process ALU_OP_CODE_P;
+  case conv_integer(unsigned(IR_opcode)) is
+          -- case of R type requires analysis of FUNC
+    when 0 =>
+      case conv_integer(unsigned(IR_func)) is
+        when 4 => aluOpcode_i <= LLS; -- sll according to instruction set coding
+        when 6 => aluOpcode_i <= LRS; -- srl
+        -- to be continued and filled with all the other instructions
+        when others => aluOpcode_i <= NOP;
+      end case;
+    when 2 => aluOpcode_i <= NOP; -- j
+    when 3 => aluOpcode_i <= NOP; -- jal
+    when 8 => aluOpcode_i <= ADDS; -- addi
+    -- to be continued and filled with other cases
+    when others => aluOpcode_i <= NOP;
+   end case;
+  end process ALU_OP_CODE_P;
 
 end dlx_cu_rtl;
