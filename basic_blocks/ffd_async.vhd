@@ -14,10 +14,10 @@ architecture behavioral of ffd_async is
 begin
   pasynch : process(clk, reset, en)
   begin
-    if(reset = '0') then -- active low
+    if reset = '0' then -- active low
       q <= '0';
     elsif en = '1' then
-      elsif(clk'EVENT and clk = '1') then
+      if clk'EVENT and clk = '1' then
         q <= d;
       end if;
     end if;

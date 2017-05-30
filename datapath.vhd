@@ -19,26 +19,25 @@ entity datapath is
     -- control signals
     clk  : in  std_logic;  -- clock
     rst  : in  std_logic;  -- reset : active-low
-    en   : in  std_logic;
     -- stage 1
-    en1  : out std_logic;  -- enables the register le and the pipeline registers
-    rf1  : out std_logic;  -- enables the read port 1 of the register ﬁle
-    rf2  : out std_logic;  -- enables the read port 2 of the register ﬁle
+    en1  : in  std_logic;  -- enables the register le and the pipeline registers
+    rf1  : in  std_logic;  -- enables the read port 1 of the register ﬁle
+    rf2  : in  std_logic;  -- enables the read port 2 of the register ﬁle
     -- stage 2
-    en2  : out std_logic;  -- enables the pipe registers
-    s1   : out std_logic;  -- input selection of the ﬁrst multiplexer
-    s2   : out std_logic;  -- input selection of the second multiplexer
-    alu1 : out std_logic;  -- alu control bit 1
-    alu2 : out std_logic;  -- alu control bit 2
-    alu3 : out std_logic;  -- alu control bit 3
+    en2  : in  std_logic;  -- enables the pipe registers
+    s1   : in  std_logic;  -- input selection of the ﬁrst multiplexer
+    s2   : in  std_logic;  -- input selection of the second multiplexer
+    alu1 : in  std_logic;  -- alu control bit 1
+    alu2 : in  std_logic;  -- alu control bit 2
+    alu3 : in  std_logic;  -- alu control bit 3
     -- stage 3
-    en3  : out std_logic;  -- enables the memory and the pipeline register
-    rm   : out std_logic;  -- enables the read-out of the memory
-    wm   : out std_logic;  -- enables the write-in of the memory
-    s3   : out std_logic;  -- input selection of the multiplexer
-    wf1  : out std_logic;  -- enables the write port of the register ﬁle
+    en3  : in  std_logic;  -- enables the memory and the pipeline register
+    rm   : in  std_logic;  -- enables the read-out of the memory
+    wm   : in  std_logic;  -- enables the write-in of the memory
+    s3   : in  std_logic;  -- input selection of the multiplexer
+    wf1  : in  std_logic;  -- enables the write port of the register ﬁle
   -- output
-    o                  : out   std_logic_vector (n - 1 downto 0)
+    o    : out std_logic_vector (n - 1 downto 0)
   );
 end entity; -- datapath
 
@@ -199,7 +198,7 @@ begin
   -- stage 3 structure
   memory : register_memory
   generic map(nbit)
-  port map(clk, rst, en3, out_rm, out_wm, );
+  port map(clk, rst, en3, out_rm, out_wm, out_aluout, out_me, out_ram);
 
   mux_out_sel : mux21_generic
   generic map(nbit)
@@ -207,7 +206,7 @@ begin
 
   out_value : reg_n
   generic map(nbit)
-  port map(clk, rst, out_en3, out_val, out_datapath, out_aluout, out_me, out_ram);
+  port map(clk, rst, out_en3, out_val, out_datapath);
 
   -- delay cw
   en2_cw2  : ffd_async
