@@ -105,7 +105,21 @@ architecture structural of datapath is
     );
   end component; -- reg_n
 
-  component ram is
+  component register_memory is
+    generic(n : integer := 1);
+    port(
+      -- control signals
+      clk     : in  std_logic;
+      rst     : in  std_logic;
+      en      : in  std_logic;
+      rm      : in  std_logic;
+      wm      : in  std_logic;
+      -- inputs
+      address : in  std_logic_vector(log2(n) - 1 downto 0);
+      data    : in  std_logic_vector(n - 1 downto 0);
+      -- output
+      o       : out std_logic_vector(n - 1 downto 0)
+    );
   end component;
 
   -- signals stage 1
@@ -183,9 +197,9 @@ begin
   port map(clk, rst, en2, out_rd1, out_rd2);
 
   -- stage 3 structure
-  memory : ram
+  memory : register_memory
   generic map(nbit)
-  port map();
+  port map(clk, rst, en3, out_rm, out_wm, );
 
   mux_out_sel : mux21_generic
   generic map(nbit)
@@ -193,7 +207,7 @@ begin
 
   out_value : reg_n
   generic map(nbit)
-  port map(clk, rst, out_en3, out_val, out_datapath);
+  port map(clk, rst, out_en3, out_val, out_datapath, out_aluout, out_me, out_ram);
 
   -- delay cw
   en2_cw2  : ffd_async
