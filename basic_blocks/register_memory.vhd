@@ -1,6 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeic_std.all;
+use ieee.numeric_std.all;
 use work.functions.all;
 use work.all;
 
@@ -42,12 +42,11 @@ architecture behavioral of register_memory is
           if (rm = '1') then
             o <= registers(to_integer(unsigned(address)));
           end if;
-          if (wr = '1') then
+          if (wm = '1') then
             registers (to_integer(unsigned(address))) <= data;
           end if;
         else
-          out2 <= (others => '0');
-          out1 <= (others => '0');
+          o <= (others => '0');
         end if;
       else
         registers <= (others =>(others =>'0'));

@@ -8,7 +8,7 @@ entity reg_n is
     clock  : in  std_logic;
     reset  : in  std_logic;
     enable : in  std_logic;
-    x      : in  std_logic_vector (n - 1 downto 0)
+    x      : in  std_logic_vector (n - 1 downto 0);
     y      : out std_logic_vector (n - 1 downto 0)
   );
 end entity; -- reg_n
@@ -27,7 +27,7 @@ architecture structural of reg_n is
 begin
 
   ff_i : for i in 0 to n-1 generate
-    ff : ffd_asynch
+    ff : ffd_async
     port map(x(i), clock, reset, enable, y(i));
   end generate; -- ff_i
 

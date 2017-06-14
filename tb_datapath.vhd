@@ -46,7 +46,7 @@ architecture test_datapath of tb_datapath is
     );
   end component;
 
-  constant tb_n : integer := 4;
+  constant tb_n : integer := 32;
 
   signal tb_inp1, tb_inp2, tb_o : std_logic_vector(tb_n - 1 downto 0);
   signal tb_rd1, tb_rd2, tb_rd  : std_logic_vector(log2(tb_n) - 1 downto 0);
@@ -56,16 +56,58 @@ begin
 
   dut : datapath
   generic map(tb_n)
-  port map(tb_inp1, tb_rd1, tb_rd2, tb_inp2, tb_rd, tb_clk, tb_rst, tb_en1, tb_rf1, tb_rf2, tb_en2, tb_s1, tb_s2, tb_alu1, tb_alu2, tb_alu3, tb_en3, tb_rm, tb_wm, tb_s3, tb_wf1, tb_ou, tb_o);
-
+  port map(--tb_inp1, tb_rd1, tb_rd2, tb_inp2, tb_rd, tb_clk, tb_rst, tb_en1, tb_rf1, tb_rf2, tb_en2, tb_s1, tb_s2, tb_alu1, tb_alu2, tb_alu3, tb_en3, tb_rm, tb_wm, tb_s3, tb_wf1, tb_ou, tb_o);
+    inp1 => tb_inp1,
+    rd1 => tb_rd1,
+    rd2 => tb_rd2,
+    inp2 => tb_inp2,
+    rd => tb_rd,
+    clk => tb_clk,
+    rst => tb_rst,
+    en1 => tb_en1,
+    rf1 => tb_rf1,
+    rf2 => tb_rf2,
+    en2 => tb_en2,
+    s1 => tb_s1,
+    s2 => tb_s2,
+    alu1 => tb_alu1,
+    alu2 => tb_alu2,
+    alu3 => tb_alu3,
+    en3 => tb_en3,
+    rm => tb_rm,
+    wm => tb_wm,
+    s3 => tb_s3,
+    wf1 => tb_wf1,
+    o => tb_o
+  );
+     
   clock_process : process
   begin
     tb_clk <= not tb_clk;
     wait for 0.5 ns;
   end process;
 
-  tb_reset <= '1', '0' after 3 ns, '1' after 5 ns;
-  
+  tb_rst <= '1', '0' after 3 ns, '1' after 5 ns;
+  tb_inp1 <= (others => '1');
+  tb_rd1  <= (others => '0');
+  tb_rd2  <= (others => '0');
+  tb_inp2 <= (others => '1');
+  tb_rd   <= (others => '0');
 
+  -- 0x0000 + 0xFFFF = 0xFFFF
+  tb_en1  <= '1';
+  tb_rf1  <= '1';
+  tb_rf2  <= '0';
+  tb_en2  <= '0';
+  tb_s1   <= '0';
+  tb_s2   <= '0';
+  tb_alu1 <= '0';
+  tb_alu2 <= '0';
+  tb_alu3 <= '0';
+  tb_en3  <= '1';
+  tb_rm   <= '0';
+  tb_wm   <= '0';
+  tb_s3   <= '0';
+  tb_wf1  <= '1';
 
 end architecture;

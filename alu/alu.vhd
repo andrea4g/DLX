@@ -1,16 +1,18 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.functions.all;
 use work.all;
 
 entity alu is
   generic(n : integer := 2);
   port (
     a, b      : in  std_logic_vector(n - 1 downto 0);
-    unit_sel  : in  std_logic_vector(3 downto 0);
+    unit_sel  : in  std_logic_vector(2 downto 0);
     cout      : out std_logic;
     z         : out std_logic;
-    y         : out std_logic_vector(2 * n - 1 downto 0)
+    --y         : out std_logic_vector(2 * n - 1 downto 0)
+    y         : out std_logic_vector(n - 1 downto 0)
   );
 end entity;
 
@@ -78,17 +80,15 @@ architecture structural of alu is
   end component; -- boothMul
 
   component encoder is
-    generic(n := integer := 2);
+    generic(n : integer := 2);
     port (
-      out_add : in  std_logic_vector(n - 1 downto 0);
-      out_sub : in  std_logic_vector(n - 1 downto 0);
-      out_mul : in  std_logic_vector(n - 1 downto 0);
-      out_sll : in  std_logic_vector(n - 1 downto 0);
-      out_sla : in  std_logic_vector(n - 1 downto 0);
-      out_srl : in  std_logic_vector(n - 1 downto 0);
-      out_sra : in  std_logic_vector(n - 1 downto 0);
-      sel     : in  std_logic_vector(2 downto 0);
-      o       : out std_logic_vector(n - 1 downto 0)
+      out_add     : in  std_logic_vector(n - 1 downto 0);
+      out_sub     : in  std_logic_vector(n - 1 downto 0);
+      out_mul     : in  std_logic_vector(2 * n - 1 downto 0);
+      out_sl      : in  std_logic_vector(n - 1 downto 0);
+      out_sr      : in  std_logic_vector(n - 1 downto 0);
+      sel         : in  std_logic_vector(2 downto 0);
+      o           : out std_logic_vector(2 * n - 1 downto 0)
     );
   end component;
 
@@ -100,29 +100,30 @@ architecture structural of alu is
   end component;
 
   signal out_add, out_sub, out_sl, out_sr : std_logic_vector(n - 1 downto 0);
-  signal out_mul                          : std_logic_vector(2 * n - 1 downto 0);
+  --signal out_mul                          : std_logic_vector(2 * n - 1 downto 0);
+  signal out_mul                          : std_logic_vector(n - 1 downto 0);
   signal type_sr                          : std_logic;
 
 begin
 
   add : p4
-  generic(n)
+  generic map(n)
   port map(a, b, '0', out_add);
 
   sub : p4
-  generic(n)
+  generic map(n)
   port map(a, b, '0', out_sub);
 
-  mul : boothMul
-  generic(n)
-  port map(a, b, out_mul);
+  --mul : boothMul
+  --generic map(n)
+  --port map(a, b, out_mul);
 
   sl : barrel_shifter_left
-  generic(n)
+  generic map(n)
   port map(a, b, out_sl);
 
   sr : barrel_shifter_right
-  generic(n)
+  generic map(n)
   port map(a, b, type_sr, out_sl);
 
   bu : branch_unit

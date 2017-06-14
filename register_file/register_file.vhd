@@ -14,13 +14,13 @@ entity register_file is
 	  RD1     : IN  std_logic;
 	  RD2     : IN  std_logic;
 	  WR      : IN  std_logic;
-	  ADD_WR  : IN  std_logic_vector(4  downto 0);
-	  ADD_RD1 : IN  std_logic_vector(4  downto 0);
-	  ADD_RD2 : IN  std_logic_vector(4  downto 0);
-	  DATAIN  : IN  std_logic_vector(63 downto 0);
+	  ADD_WR  : IN  std_logic_vector(4 downto 0);
+	  ADD_RD1 : IN  std_logic_vector(4 downto 0);
+	  ADD_RD2 : IN  std_logic_vector(4 downto 0);
+	  DATAIN  : IN  std_logic_vector(N - 1 downto 0);
     -- OUTPUTS
-    OUT1    : OUT std_logic_vector(63 downto 0);
-	  OUT2    : OUT std_logic_vector(63 downto 0)
+    OUT1    : OUT std_logic_vector(N - 1 downto 0);
+	  OUT2    : OUT std_logic_vector(N - 1 downto 0)
   );
 end entity;
 
@@ -28,7 +28,7 @@ architecture behavioral of register_file is
 
   -- suggested structures
   subtype REG_ADDR  is natural range 0 to N - 1; -- using natural type
-	type    REG_ARRAY is array(REG_ADDR) of std_logic_vector(2 * N - 1 downto 0);
+	type    REG_ARRAY is array(REG_ADDR) of std_logic_vector(N - 1 downto 0);
 
 	signal REGISTERS : REG_ARRAY;
 

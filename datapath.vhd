@@ -37,7 +37,7 @@ entity datapath is
     s3   : in  std_logic;  -- input selection of the multiplexer
     wf1  : in  std_logic;  -- enables the write port of the register ﬁle
   -- output
-    o    : out std_logic_vector (n - 1 downto 0)
+    o    : out std_logic_vector (nbit - 1 downto 0)
   );
 end entity; -- datapath
 
@@ -48,10 +48,11 @@ architecture structural of datapath is
     generic(n : integer := 2);
     port (
       a, b      : in  std_logic_vector(n - 1 downto 0);
-      unit_sel  : in  std_logic_vector(3 downto 0);
+      unit_sel  : in  std_logic_vector(2 downto 0);
       cout      : out std_logic;
       z         : out std_logic;
-      y         : out std_logic_vector(2 * n - 1 downto 0)
+      --y         : out std_logic_vector(2 * n - 1 downto 0)
+      y         : out std_logic_vector(n - 1 downto 0)
     );
   end component;
 
@@ -99,7 +100,7 @@ architecture structural of datapath is
       clock  : in  std_logic;
       reset  : in  std_logic;
       enable : in  std_logic;
-      x      : in  std_logic_vector (n - 1 downto 0)
+      x      : in  std_logic_vector (n - 1 downto 0);
       y      : out std_logic_vector (n - 1 downto 0)
     );
   end component; -- reg_n
@@ -122,14 +123,14 @@ architecture structural of datapath is
   end component;
 
   -- signals stage 1
-  signal data_out, rf_out1, rf_out2, out_inp1, out_a, out_b, out_inp2 : std_logic_vector(n - 1 downto 0);
+  signal data_out, rf_out1, rf_out2, out_inp1, out_a, out_b, out_inp2 : std_logic_vector(nbit - 1 downto 0);
   signal out_rd1 : std_logic_vector(log2(nbit) - 1 downto 0);
   -- signals stage 2
-  signal out_mux1, out_mux2, out_aluout, out_me : std_logic_vector(n - 1 downto 0);
+  signal out_mux1, out_mux2, out_alu, out_aluout, out_me : std_logic_vector(nbit - 1 downto 0);
   signal out_rd2 : std_logic_vector(log2(nbit) - 1 downto 0);
-  signal alu_bit : std_logic_vector(2 downto 0) := out_alu3 & out_alu2 & out_alu1;
+  signal alu_bit  : std_logic_vector(2 downto 0);
   -- signals stage 3
-  signal out_val, out_datapath : std_logic_vector(n - 1 downto 0);
+  signal out_val, out_datapath, out_ram : std_logic_vector(nbit - 1 downto 0);
   -- signals to delay the control word
   signal out_en2  : std_logic;
   signal out_s1   : std_logic;
@@ -142,13 +143,17 @@ architecture structural of datapath is
   signal out_wm   : std_logic;
   signal out_s3   : std_logic;
   signal out_wf1  : std_logic;
+  signal z        : std_logic;
+  signal cout     : std_logic;
 
 begin
+
+  alu_bit <= out_alu3 & out_alu2 & out_alu1;
 
   -- stage 1 structure
   rf : register_file
   generic map (nbit)
-  port map(clk, rst, en1, rf1, rf2, out_wf1, rd, rs1. rs2, data_out, rf_out1, rf_out2);
+  port map(clk, rst, en1, rf1, rf2, wf1, out_rd2, rd1, rd2, out_val, rf_out1, rf_out2);
 
   in1 : reg_n
   generic map(nbit)
@@ -166,9 +171,9 @@ begin
   generic map(nbit)
   port map(clk, rst, en1, inp2, out_inp2);
 
-  rd1 : reg_n
-  generic map(nbit)
-  port map(clk, rst, en1, rd1, out_rd1);
+  rd_1 : reg_n
+  generic map(log2(nbit))
+  port map(clk, rst, en1, rd, out_rd1);
 
   -- stage 2 structure
   mux1_alu : mux21_generic
@@ -181,7 +186,7 @@ begin
 
   arith_log_un : alu
   generic map(nbit)
-  port map(out_mux1, out_mux2, alu_bit, out_alu);
+  port map(out_mux1, out_mux2, alu_bit, cout, z, out_alu);
 
   alu_out : reg_n
   generic map(nbit)
@@ -189,9 +194,9 @@ begin
 
   me : reg_n
   generic map(nbit)
-  port map(clk, rst, en, out_b, out_me);
+  port map(clk, rst, en2, out_b, out_me);
 
-  rd2 : reg_n
+  rd_2 : reg_n
   generic map(nbit)
   port map(clk, rst, en2, out_rd1, out_rd2);
 
