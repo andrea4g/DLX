@@ -11,7 +11,6 @@ entity alu is
     unit_sel  : in  std_logic_vector(2 downto 0);
     cout      : out std_logic;
     z         : out std_logic;
-    --y         : out std_logic_vector(2 * n - 1 downto 0)
     y         : out std_logic_vector(n - 1 downto 0)
   );
 end entity;
@@ -68,27 +67,15 @@ architecture structural of alu is
     );
   end component;
 
-  component boothMul is
-    generic (
-      N : natural := 32
-    );
-    port (
-      a : in    std_logic_vector (  N - 1 downto 0);
-      b : in    std_logic_vector (  N - 1 downto 0);
-      p : out   std_logic_vector (2*N - 1 downto 0)
-    );
-  end component; -- boothMul
-
   component encoder is
     generic(n : integer := 2);
     port (
       out_add     : in  std_logic_vector(n - 1 downto 0);
       out_sub     : in  std_logic_vector(n - 1 downto 0);
-      out_mul     : in  std_logic_vector(2 * n - 1 downto 0);
       out_sl      : in  std_logic_vector(n - 1 downto 0);
       out_sr      : in  std_logic_vector(n - 1 downto 0);
       sel         : in  std_logic_vector(2 downto 0);
-      o           : out std_logic_vector(2 * n - 1 downto 0)
+      o           : out std_logic_vector(n - 1 downto 0)
     );
   end component;
 
@@ -100,8 +87,6 @@ architecture structural of alu is
   end component;
 
   signal out_add, out_sub, out_sl, out_sr : std_logic_vector(n - 1 downto 0);
-  --signal out_mul                          : std_logic_vector(2 * n - 1 downto 0);
-  signal out_mul                          : std_logic_vector(n - 1 downto 0);
   signal type_sr                          : std_logic;
 
 begin
@@ -113,10 +98,6 @@ begin
   sub : p4
   generic map(n)
   port map(a, b, '0', out_sub);
-
-  --mul : boothMul
-  --generic map(n)
-  --port map(a, b, out_mul);
 
   sl : barrel_shifter_left
   generic map(n)
@@ -135,6 +116,6 @@ begin
 
   enc : encoder
   generic map(n)
-  port map(out_add, out_sub, out_mul, out_sl, out_sr, unit_sel, y);
+  port map(out_add, out_sub, out_sl, out_sr, unit_sel, y);
 
 end architecture;

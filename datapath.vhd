@@ -51,7 +51,6 @@ architecture structural of datapath is
       unit_sel  : in  std_logic_vector(2 downto 0);
       cout      : out std_logic;
       z         : out std_logic;
-      --y         : out std_logic_vector(2 * n - 1 downto 0)
       y         : out std_logic_vector(n - 1 downto 0)
     );
   end component;
