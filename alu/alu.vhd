@@ -88,6 +88,7 @@ architecture structural of alu is
 
   signal out_add, out_sub, out_sl, out_sr : std_logic_vector(n - 1 downto 0);
   signal type_sr                          : std_logic;
+  signal pos_s                            : std_logic_vector(log2(n) downto 0) := b(log2(n) downto 0);
 
 begin
 
@@ -101,11 +102,11 @@ begin
 
   sl : barrel_shifter_left
   generic map(n)
-  port map(a, b, out_sl);
+  port map(a, pos_s, out_sl);
 
   sr : barrel_shifter_right
   generic map(n)
-  port map(a, b, type_sr, out_sl);
+  port map(a, pos_s, type_sr, out_sl);
 
   bu : branch_unit
   generic map(n)
