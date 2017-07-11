@@ -1,5 +1,5 @@
 library ieee;
-use ieee.std_logic_116log2(n).all;
+use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.numeric_std.all;
 use work.functions.all;
@@ -63,8 +63,8 @@ begin
           end if;
         end if;
       else
-        out1 <= (others => 'z');
-        out2 <= (others => 'z');
+        out1 <= (others => 'Z');
+        out2 <= (others => 'Z');
       end if;
     else
       registers <= (others =>(others =>'0'));

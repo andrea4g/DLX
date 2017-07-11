@@ -10,7 +10,6 @@ entity datapath is
     -- control signals
     clk   : in  std_logic;  -- clock
     rst   : in  std_logic;  -- reset : active-low
-    cw    : in  std_logic_vector();
     -- stage 1
     ir    : in std_logic_vector(instruction_size - 1 downto 0);
     pc_in : in std_logic_vector(word_size - 1 downto 0);
@@ -47,9 +46,9 @@ architecture structural of datapath is
     port (
       a, b      : in  std_logic_vector(n - 1 downto 0);
       unit_sel  : in  std_logic_vector(2 downto 0);
+      y         : out std_logic_vector(n - 1 downto 0);
       cout      : out std_logic;
-      z         : out std_logic;
-      y         : out std_logic_vector(n - 1 downto 0)
+      z         : out std_logic
     );
   end component;
 
@@ -76,10 +75,10 @@ architecture structural of datapath is
       add_wr  : in  std_logic_vector(4  downto 0);
       add_rd1 : in  std_logic_vector(4  downto 0);
       add_rd2 : in  std_logic_vector(4  downto 0);
-      datain  : in  std_logic_vector(word_size downto 0);
+      datain  : in  std_logic_vector(word_size - 1 downto 0);
       -- outputs
-      out1    : out std_logic_vector(word_size downto 0);
-      out2    : out std_logic_vector(word_size downto 0)
+      out1    : out std_logic_vector(word_size - 1 downto 0);
+      out2    : out std_logic_vector(word_size - 1 downto 0)
     );
   end component;
 
@@ -120,25 +119,26 @@ architecture structural of datapath is
   end component; -- zero_comp
 
   -- signals stage 1
-  signal four    : std_logic_vector (word_size - 1 downto 0) := std_logic_vector(to_unsigned(4, four'length));
+  constant c4    : std_logic_vector (3 downto 0) := X"4";
+  signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
   signal next_pc : std_logic_vector (word_size - 1 downto 0);
   signal npc     : std_logic_vector (word_size - 1 downto 0);
 
   -- signals stage 2
   signal data_out, rf_out1, rf_out2, out_inp1, out_a, out_b, inp2_32, out_inp2 : std_logic_vector(word_size - 1 downto 0);
-  signal rd1, rd2, rd : std_logic_vector(log2(word_size) - 1 downto 0);
+  signal rd1, rd2, rd : std_logic_vector(add_size - 1 downto 0);
   signal inp2         : std_logic_vector(inp2_up downto 0);
-  signal out_rd1      : std_logic_vector(log2(word_size) - 1 downto 0);
+  signal out_rd1      : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 3
   signal out_mux1, out_mux2, out_alu, out_aluout, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
-  signal out_rd2  : std_logic_vector(log2(word_size) - 1 downto 0);
+  signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
   signal alu_bit  : std_logic_vector(2 downto 0);
   signal cond     : std_logic;
 
   -- signals stage 4
   signal out_val, out_alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
-  signal out_rd3 : std_logic_vector(log2(word_size) - 1 downto 0);
+  signal out_rd3 : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 5
   signal wb : std_logic_vector(word_size - 1 downto 0);
@@ -161,13 +161,16 @@ begin
 -----------------------------------------------------------------------------------------
 -- stage 1
 -----------------------------------------------------------------------------------------
+
+  four(3 downto 0) <=  c4;
+
   pc_add : rca_n
   generic map (word_size)
   port map (pc_in, four, '0', next_pc);
 
-  npc : reg_n
+  npc_reg : reg_n
   generic map (word_size)
-  port map (next_pc, npc);
+  port map (clk, rst, '1', next_pc, npc);
 
 -----------------------------------------------------------------------------------------
 -- stage 2
@@ -203,7 +206,7 @@ begin
   port map(clk, rst, en1, inp2_32, out_inp2);
 
   rd_1 : reg_n
-  generic map(log2(word_size))
+  generic map(add_size)
   port map(clk, rst, en1, rd, out_rd1);
 
 -----------------------------------------------------------------------------------------

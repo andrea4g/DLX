@@ -12,10 +12,9 @@ entity subtractor is
     cin  : in  std_logic;
     -- outputs
     y    : out std_logic_vector (n - 1 downto 0);
-    cout : out std_logic;
+    cout : out std_logic
   );
 end entity; -- subtractor
-
 
 architecture behavioral of subtractor is
 

@@ -6,7 +6,7 @@ use work.all;
 entity zero_comp is
   generic(n : integer := 1);
   port (x : in  std_logic_vector (n - 1 downto 0);
-        y : in  std_logic
+        y : out  std_logic
   );
 end entity; -- zero_comp
 
@@ -25,7 +25,7 @@ architecture behavioral of zero_comp is
         );
   end component;
 
-  res : std_logic_vector (n - 1 downto 0) := (others => '0');
+  signal res : std_logic_vector (n - 1 downto 0) := (others => '0');
 
 begin
 

@@ -9,9 +9,9 @@ entity alu is
   port (
     a, b      : in  std_logic_vector(n - 1 downto 0);
     unit_sel  : in  std_logic_vector(2 downto 0);
+    y         : out std_logic_vector(n - 1 downto 0);
     cout      : out std_logic;
-    z         : out std_logic;
-    y         : out std_logic_vector(n - 1 downto 0)
+    z         : out std_logic
   );
 end entity;
 
@@ -55,7 +55,7 @@ architecture structural of alu is
       cout : out std_logic
     );
   end component;
-  
+
   component subtractor is
   generic(n : integer := 2);
   port (
@@ -65,7 +65,7 @@ architecture structural of alu is
     cin  : in  std_logic;
     -- outputs
     y    : out std_logic_vector (n - 1 downto 0);
-    cout : out std_logic;
+    cout : out std_logic
   );
   end component; -- subtractor
 
@@ -101,9 +101,11 @@ architecture structural of alu is
 
   signal out_add, out_sub, out_sl, out_sr : std_logic_vector(n - 1 downto 0);
   signal type_sr                          : std_logic;
-  signal pos_s                            : std_logic_vector(log2(n) downto 0) := b(log2(n) downto 0);
+  signal pos_s                            : std_logic_vector(log2(n) downto 0);
 
 begin
+
+  pos_s <= b(log2(n) downto 0);
 
   add : p4
   generic map(n)
