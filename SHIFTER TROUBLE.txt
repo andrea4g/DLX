@@ -1,1 +1,0 @@
-Handle shifter problem about the second term b in input

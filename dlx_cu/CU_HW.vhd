@@ -42,11 +42,11 @@ entity dlx_cu is
     DRAM_WE            : out std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : out std_logic;  -- LMD Register Latch Enable
     JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
-    PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
+    PC_LATCH_EN        : out std_logic;  -- Program Counter Latch Enable
 
     -- WB Control signals
     WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
-    RF_WE              : out std_logic);  -- Register File Write Enable
+    RF_WE              : out std_logic); -- Register File Write Enable
 
 end entity;
 
