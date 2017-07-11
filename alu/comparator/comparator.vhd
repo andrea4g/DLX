@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.all;
 
-entity branch_unit is
+entity comparator is
   generic(
     n : integer := 2
   );
@@ -14,7 +14,7 @@ entity branch_unit is
   );
 end entity;
 
-architecture structural of branch_unit is
+architecture structural of comparator is
 
   component rca_n is
     generic(n : integer := 1);

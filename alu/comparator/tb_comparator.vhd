@@ -3,12 +3,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.all;
 
-entity tb_branch_unit is
+entity tb_comparator is
 end entity;
 
-architecture test_branch_unit of tb_branch_unit is
+architecture test_comparator of tb_comparator is
 
-  component branch_unit is
+  component comparator is
     generic(
       n : integer := 2
     );
@@ -26,7 +26,7 @@ architecture test_branch_unit of tb_branch_unit is
 
 begin
 
-  dut : branch_unit
+  dut : comparator
   generic map(nbit)
   port map(tb_a, tb_b, tb_cout, tb_z);
 
