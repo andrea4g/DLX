@@ -49,26 +49,45 @@ begin  -- cu_rtl
   -- Process assigning the control word values
   process (IR_opcode, IR_func) is
   begin
-    if Rst = '0'              then CW <= (others => '0'); -- Reset
-    elsif IR_opcode = NOP     then CW <= "0000000000000"; -- NOP
-    elsif IR_opcode = I_ADDI1 then CW <= "1011111001000"; -- I_ADDI1
-    elsif IR_opcode = I_SUBI1 then CW <= "1011111011000"; -- I_SUBI1
-    elsif IR_opcode = I_ANDI1 then CW <= "1011111101000"; -- I_ANDI1
-    elsif IR_opcode = I_ORI1  then CW <= "1011111111000"; -- I_ORI1
-    elsif IR_opcode = I_ADDI2 then CW <= "1101100001000"; -- I_ADDI2
-    elsif IR_opcode = I_SUBI2 then CW <= "1101100011000"; -- I_SUBI2
-    elsif IR_opcode = I_ANDI2 then CW <= "1101100101000"; -- I_ANDI2
-    elsif IR_opcode = I_ORI2  then CW <= "1101100111000"; -- I_ORI2
-    elsif IR_opcode = I_MOV   then CW <= "1101100111000"; -- I_MOV
-    elsif IR_opcode = S_REG1  then CW <= "1001110111000"; -- S_REG1
-    elsif IR_opcode = S_REG2  then CW <= "1001110111000"; -- S_REG2
-    elsif IR_opcode = S_MEM2  then CW <= "1110100001010"; -- S_MEM2
-    elsif IR_opcode = L_MEM1  then CW <= "1011111001101"; -- L_MEM1
-    elsif IR_opcode = L_MEM2  then CW <= "1101100001101"; -- L_MEM2
+    if Rst = '0'                                  then CW <= (others => '0'); -- Reset
+    elsif IR_opcode = NOP                         then CW <= "0000000000000"; -- NOP
+    elsif IR_opcode = I_ADDI1                     then CW <= "1011111001000"; -- I_ADDI1
+    elsif IR_opcode = I_SUBI1                     then CW <= "1011111011000"; -- I_SUBI1
+    elsif IR_opcode = I_ANDI1                     then CW <= "1011111101000"; -- I_ANDI1
+    elsif IR_opcode = I_ORI1                      then CW <= "1011111111000"; -- I_ORI1
+    elsif IR_opcode = I_ADDI2                     then CW <= "1101100001000"; -- I_ADDI2
+    elsif IR_opcode = I_SUBI2                     then CW <= "1101100011000"; -- I_SUBI2
+    elsif IR_opcode = I_ANDI2                     then CW <= "1101100101000"; -- I_ANDI2
+    elsif IR_opcode = I_ORI2                      then CW <= "1101100111000"; -- I_ORI2
+    elsif IR_opcode = I_MOV                       then CW <= "1101100111000"; -- I_MOV
+    elsif IR_opcode = S_REG1                      then CW <= "1001110111000"; -- S_REG1
+    elsif IR_opcode = S_REG2                      then CW <= "1001110111000"; -- S_REG2
+    elsif IR_opcode = S_MEM2                      then CW <= "1110100001010"; -- S_MEM2
+    elsif IR_opcode = L_MEM1                      then CW <= "1011111001101"; -- L_MEM1
+    elsif IR_opcode = L_MEM2                      then CW <= "1101100001101"; -- L_MEM2
+    elsif IR_opcode = I_SGEI                      then CW <= "0000000000000"; -- I_SGEI
+    elsif IR_opcode = I_SLEI                      then CW <= "0000000000000"; -- I_SLEI
+    elsif IR_opcode = I_SLLI                      then CW <= "0000000000000"; -- I_SLLI
+    elsif IR_opcode = I_SNEI                      then CW <= "0000000000000"; -- I_SNEI
+    elsif IR_opcode = I_SRLI                      then CW <= "0000000000000"; -- I_SRLI
+    elsif IR_opcode = I_SUBI                      then CW <= "0000000000000"; -- I_SUBI
+    elsif IR_opcode = I_XORI                      then CW <= "0000000000000"; -- I_XORI
+    elsif IR_opcode = BEQZ                        then CW <= "0000000000000"; -- I_BEQZ
+    elsif IR_opcode = BNEZ                        then CW <= "0000000000000"; -- I_BNEZ
+    elsif IR_opcode = J                           then CW <= "0000000000000"; -- J
+    elsif IR_opcode = JAL                         then CW <= "0000000000000"; -- JAL
+    elsif IR_opcode = LW                          then CW <= "0000000000000"; -- LW
     elsif (IR_opcode = RTYPE and IR_func = R_ADD) then CW <= "1111101001000"; -- R_ADD
     elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "1111101011000"; -- R_SUB
     elsif (IR_opcode = RTYPE and IR_func = R_AND) then CW <= "1111101101000"; -- R_AND
     elsif (IR_opcode = RTYPE and IR_func = R_OR ) then CW <= "1111101111000"; -- R_OR
+    elsif (IR_opcode = RTYPE and IR_func = R_XOR) then CW <= "0000000000000"; -- R_XOR
+    elsif (IR_opcode = RTYPE and IR_func = R_SGE) then CW <= "0000000000000"; -- R_SGE
+    elsif (IR_opcode = RTYPE and IR_func = R_SLE) then CW <= "0000000000000"; -- R_SLE
+    elsif (IR_opcode = RTYPE and IR_func = R_SLL) then CW <= "0000000000000"; -- R_SLL
+    elsif (IR_opcode = RTYPE and IR_func = R_SNE) then CW <= "0000000000000"; -- R_SNE
+    elsif (IR_opcode = RTYPE and IR_func = R_SRL) then CW <= "0000000000000"; -- R_SRL
+    elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "0000000000000"; -- R_SUB
     else                           CW <= (others => '0');
     end if;
   end process;

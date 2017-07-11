@@ -40,7 +40,7 @@ package Control_Unit_Type is
   constant S_MEM1  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "001101";    -- S MEM2 RS1,RS2,INP1 -- MEM[R[RS1]+INP2] = R[RS2]
   constant S_MEM2  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "001100";    -- S_MEM2 RS1,RD, INP2
   constant L_MEM1  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "001111";    -- L_MEM1 RS1,RS2,INP1 -- R[RS2] = MEM[R[RS1]+INP1]
-  constant S_MEM2  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010010";    -- L_MEM2 RS1,RS2,INP2
+  constant L_MEM2  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010010";    -- L_MEM2 RS1,RS2,INP2
   constant I_SGEI  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010001";    -- L_MEM2 RS1,RS2,INP2
   constant I_SLEI  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010000";    -- L_MEM2 RS1,RS2,INP2
   constant I_SLLI  : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "010011";    -- L_MEM2 RS1,RS2,INP2
@@ -54,6 +54,6 @@ package Control_Unit_Type is
   constant BNEZ    : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "011000";    -- L_MEM2 RS1,RS2,INP2
   constant J       : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "011001";    -- L_MEM2 RS1,RS2,INP2
   constant JAL     : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "011010";    -- L_MEM2 RS1,RS2,INP2
+-- BOH
   constant LW      : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "011111";    -- L_MEM2 RS1,RS2,INP2
-  constant NOP     : std_logic_vector(OP_CODE_SIZE - 1 downto 0) := "011100";    -- L_MEM2 RS1,RS2,INP2
 end package;
