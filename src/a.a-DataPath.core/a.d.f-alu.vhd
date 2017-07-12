@@ -8,7 +8,7 @@ entity alu is
   generic(n : integer := 2);
   port (
     a, b      : in  std_logic_vector(n - 1 downto 0);
-    unit_sel  : in  std_logic_vector(2 downto 0);
+    unit_sel  : in  std_logic_vector(3 downto 0);
     y         : out std_logic_vector(n - 1 downto 0);
     cout      : out std_logic;
     z         : out std_logic
@@ -87,8 +87,20 @@ architecture structural of alu is
       out_sub     : in  std_logic_vector(n - 1 downto 0);
       out_sl      : in  std_logic_vector(n - 1 downto 0);
       out_sr      : in  std_logic_vector(n - 1 downto 0);
-      sel         : in  std_logic_vector(2 downto 0);
+      out_log     : in  std_logic_vector(n - 1 downto 0);
+      sel         : in  std_logic_vector(3 downto 0);
       o           : out std_logic_vector(n - 1 downto 0)
+    );
+  end component;
+
+  component logic_n is
+    generic (n : integer := 2);
+    port (
+      -- inputs
+      r1, r2         : in  std_logic_vector(n - 1 downto 0); -- operands
+      s0, s1, s2, s3 : in  std_logic; -- signal for select the operation
+      -- output
+      y              : out std_logic_vector(n - 1 downto 0)
     );
   end component;
 
@@ -99,9 +111,9 @@ architecture structural of alu is
     );
   end component;
 
-  signal out_add, out_sub, out_sl, out_sr : std_logic_vector(n - 1 downto 0);
-  signal type_sr                          : std_logic;
-  signal pos_s                            : std_logic_vector(log2(n) downto 0);
+  signal out_add, out_sub, out_sl, out_sr, out_log : std_logic_vector(n - 1 downto 0);
+  signal type_sr                                   : std_logic;
+  signal pos_s                                     : std_logic_vector(log2(n) downto 0);
 
 begin
 
@@ -130,8 +142,12 @@ begin
   sh : xor_2
   port map(unit_sel(2), unit_sel(0), type_sr);
 
+  logi : logic_n
+  generic map(n)
+  port map(a, b, unit_sel(0), unit_sel(1), unit_sel(2), unit_sel(3), out_log);
+
   enc : encoder
   generic map(n)
-  port map(out_add, out_sub, out_sl, out_sr, unit_sel, y);
+  port map(out_add, out_sub, out_sl, out_sr, out_log, unit_sel, y);
 
 end architecture;

@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 -- unit to do AND, NAND, OR, NOR, XOR, XNOR on n-bits
 entity logic_n is
-  generic (n : integer := 1);
+  generic (n : integer := 2);
   port (
     -- inputs
     r1, r2         : in  std_logic_vector(n - 1 downto 0); -- operands

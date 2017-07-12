@@ -24,6 +24,7 @@ entity datapath is
     alu1  : in  std_logic;  -- alu control bit 1
     alu2  : in  std_logic;  -- alu control bit 2
     alu3  : in  std_logic;  -- alu control bit 3
+    alu4  : in  std_logic;  -- alu control bit 3
     -- stage 4
     en3   : in  std_logic;  -- enables the dram and the pipeline register
     rm    : in  std_logic;  -- enables the read-out of the dram
@@ -45,7 +46,7 @@ architecture structural of datapath is
     generic(n : integer := 2);
     port (
       a, b      : in  std_logic_vector(n - 1 downto 0);
-      unit_sel  : in  std_logic_vector(2 downto 0);
+      unit_sel  : in  std_logic_vector(3 downto 0);
       y         : out std_logic_vector(n - 1 downto 0);
       cout      : out std_logic;
       z         : out std_logic
@@ -118,6 +119,14 @@ architecture structural of datapath is
     );
   end component; -- zero_comp
 
+  component sign_extension is
+    generic(s : integer := 2; f : integer := 3);
+    port(
+      x : in  std_logic_vector(s - 1 downto 0);
+      y : out std_logic_vector(f - 1 downto 0)
+    );
+  end component; -- end sign_extension
+
   -- signals stage 1
   constant c4    : std_logic_vector (3 downto 0) := X"4";
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
@@ -133,7 +142,7 @@ architecture structural of datapath is
   -- signals stage 3
   signal out_mux1, out_mux2, out_alu, out_aluout, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
   signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
-  signal alu_bit  : std_logic_vector(2 downto 0);
+  signal alu_bit  : std_logic_vector(3 downto 0);
   signal cond     : std_logic;
 
   -- signals stage 4
@@ -150,6 +159,7 @@ architecture structural of datapath is
   signal out_alu1 : std_logic;
   signal out_alu2 : std_logic;
   signal out_alu3 : std_logic;
+  signal out_alu4 : std_logic;
   signal out_en3  : std_logic;
   signal out_rm   : std_logic;
   signal out_wm   : std_logic;
@@ -198,8 +208,9 @@ begin
   port map(clk, rst, en1, rf_out2, out_b);
 
   -- sign extension of immediate (16 to 32 bits)
-  inp2_32              <= (others => '0');
-  inp2_32(15 downto 0) <= inp2;
+  ext : sign_extension
+  generic map(16, word_size)
+  port map(inp2, inp2_32);
 
   in2 : reg_n
   generic map(word_size)
@@ -212,7 +223,7 @@ begin
 -----------------------------------------------------------------------------------------
 -- stage 3
 -----------------------------------------------------------------------------------------
-  alu_bit <= out_alu3 & out_alu2 & out_alu1;
+  alu_bit <= out_alu4 & out_alu3 & out_alu2 & out_alu1;
 
   mux1_alu : mux21_generic
   generic map(word_size)

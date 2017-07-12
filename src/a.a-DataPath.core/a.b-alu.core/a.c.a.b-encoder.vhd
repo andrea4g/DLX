@@ -10,7 +10,8 @@ entity encoder is
     out_sub     : in  std_logic_vector(n - 1 downto 0);
     out_sl      : in  std_logic_vector(n - 1 downto 0);
     out_sr      : in  std_logic_vector(n - 1 downto 0);
-    sel         : in  std_logic_vector(2 downto 0);
+    out_log     : in  std_logic_vector(n - 1 downto 0);
+    sel         : in  std_logic_vector(3 downto 0);
     o           : out std_logic_vector(n - 1 downto 0)
   );
 end entity;
@@ -19,13 +20,19 @@ architecture behavioral of encoder is
 
 begin
 
-  o <= out_add          when sel = "000" else -- add
-       out_sub          when sel = "001" else -- sub
-       out_sl           when sel = "010" else -- sll
-       out_sl           when sel = "011" else -- sla
-       out_sr           when sel = "100" else -- srl
-       out_sr           when sel = "101" else -- sra
-       (others => '0')  when sel = "110" else -- bu
+  o <= out_add          when sel = "0000" else -- add
+       out_sub          when sel = "1111" else -- sub
+       out_sl           when sel = "0010" else -- sll
+       out_sl           when sel = "0011" else -- sla
+       out_sr           when sel = "0100" else -- srl
+       out_sr           when sel = "0101" else -- sra
+
+       out_log          when sel = "1000" else -- and
+       out_log          when sel = "0111" else -- nand
+       out_log          when sel = "1110" else -- or
+       out_log          when sel = "0001" else -- nor
+       out_log          when sel = "0110" else -- xor
+       out_log          when sel = "1001" else -- xnor
        (others => 'X');
 
 end architecture; -- behavioral
