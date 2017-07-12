@@ -11,8 +11,9 @@ entity datapath is
     clk   : in  std_logic;  -- clock
     rst   : in  std_logic;  -- reset : active-low
     -- stage 1
-    ir    : in std_logic_vector(instruction_size - 1 downto 0);
-    pc_in : in std_logic_vector(word_size - 1 downto 0);
+    ir    : in  std_logic_vector(instruction_size - 1 downto 0);
+    pc_in : in  std_logic_vector(word_size - 1 downto 0);
+    en0   : in  std_logic;
     -- stage 2
     en1   : in  std_logic;  -- enables the register le and the pipeline registers
     rf1   : in  std_logic;  -- enables the read port 1 of the register ﬁle

@@ -25,6 +25,6 @@ package globals is
 
   constant op_size           : integer := 6;
   constant function_size     : integer := 11;
-  constant control_word_size : integer := 13;
+  constant control_word_size : integer := 16;
 
 end package;

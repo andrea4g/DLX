@@ -9,9 +9,7 @@ entity alu is
   port (
     a, b      : in  std_logic_vector(n - 1 downto 0);
     unit_sel  : in  std_logic_vector(3 downto 0);
-    y         : out std_logic_vector(n - 1 downto 0);
-    cout      : out std_logic;
-    z         : out std_logic
+    y         : out std_logic_vector(n - 1 downto 0)
   );
 end entity;
 
@@ -81,13 +79,14 @@ architecture structural of alu is
   end component;
 
   component encoder is
-    generic(n : integer := 2);
     port (
       out_add     : in  std_logic_vector(n - 1 downto 0);
       out_sub     : in  std_logic_vector(n - 1 downto 0);
       out_sl      : in  std_logic_vector(n - 1 downto 0);
       out_sr      : in  std_logic_vector(n - 1 downto 0);
       out_log     : in  std_logic_vector(n - 1 downto 0);
+      out_cmp     : in  std_logic_vector(n - 1 downto 0);
+      out_eq      : in  std_logic_vector(n - 1 downto 0);
       sel         : in  std_logic_vector(3 downto 0);
       o           : out std_logic_vector(n - 1 downto 0)
     );
@@ -114,10 +113,13 @@ architecture structural of alu is
   signal out_add, out_sub, out_sl, out_sr, out_log : std_logic_vector(n - 1 downto 0);
   signal type_sr                                   : std_logic;
   signal pos_s                                     : std_logic_vector(log2(n) downto 0);
+  signal cmp_out, eq_out                           : std_logic_vector(n - 1 downto 0);
 
 begin
 
   pos_s <= b(log2(n) downto 0);
+  cmp_out <= (others => '0');
+  eq_out <= (others => '0');
 
   add : p4
   generic map(n)
@@ -137,7 +139,7 @@ begin
 
   comp : comparator
   generic map(n)
-  port map(a, b, cout, z);
+  port map(a, b, cmp_out(0), eq_out(0));
 
   sh : xor_2
   port map(unit_sel(2), unit_sel(0), type_sr);
@@ -148,6 +150,6 @@ begin
 
   enc : encoder
   generic map(n)
-  port map(out_add, out_sub, out_sl, out_sr, out_log, unit_sel, y);
+  port map(out_add, out_sub, out_sl, out_sr, out_log, cmp_out, eq_out, unit_sel, y);
 
 end architecture;
