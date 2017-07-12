@@ -187,9 +187,9 @@ begin
 -- stage 2
 -----------------------------------------------------------------------------------------
 
-  rd1  <= ir(r1_up   downto r1_down);
-  rd2  <= ir(r2_up   downto r2_down);
-  rd   <= ir(r3_up   downto r3_down);
+  rd   <= ir(r1_up   downto r1_down);
+  rd1  <= ir(r2_up   downto r2_down);
+  rd2  <= ir(r3_up   downto r3_down);
   inp2 <= ir(inp2_up downto inp2_down);
 
   rf : register_file

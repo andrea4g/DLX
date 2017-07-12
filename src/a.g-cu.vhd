@@ -72,18 +72,18 @@ begin  -- cu_rtl
     elsif (IR_opcode = RTYPE and IR_func = R_SRL) then CW <= "1111110010010011"; -- R_SRL
     elsif (IR_opcode = RTYPE and IR_func = R_SRA) then CW <= "1111110010110011"; -- R_SRL
     elsif (IR_opcode = RTYPE and IR_func = R_SNE) then CW <= "1111110001110011"; -- R_SNE
-    elsif IR_opcode = I_ADDI                      then CW <= ""; -- I_ADDI
-    elsif IR_opcode = I_SUBI                      then CW <= ""; -- I_SUBI
-    elsif IR_opcode = I_ANDI                      then CW <= ""; -- I_ANDI
-    elsif IR_opcode = I_ORI                       then CW <= ""; -- I_ORI
-    elsif IR_opcode = I_XOR                       then CW <= ""; -- I_XOR
-    elsif IR_opcode = I_SLLI                      then CW <= ""; -- I_SLLI
-    elsif IR_opcode = I_SRLI                      then CW <= ""; -- I_SRLI
-    elsif IR_opcode = I_SRAI                      then CW <= ""; -- I_SRAI
-    elsif IR_opcode = I_SNEI                      then CW <= ""; -- I_SNEI
-    elsif IR_opcode = I_SLEI                      then CW <= ""; -- I_SLEI
-    elsif IR_opcode = I_SGEI                      then CW <= ""; -- I_SGEI
-    elsif IR_opcode = LW                          then CW <= ""; -- LW
+    elsif IR_opcode = I_ADDI                      then CW <= "1110111000010011"; -- I_ADDI
+    elsif IR_opcode = I_SUBI                      then CW <= "1110111111110011"; -- I_SUBI
+    elsif IR_opcode = I_ANDI                      then CW <= "1110111100010011"; -- I_ANDI
+    elsif IR_opcode = I_ORI                       then CW <= "1110111111010011"; -- I_ORI
+    elsif IR_opcode = I_XOR                       then CW <= "1110111011010011"; -- I_XOR
+    elsif IR_opcode = I_SLLI                      then CW <= "1110111001010011"; -- I_SLLI
+    elsif IR_opcode = I_SRLI                      then CW <= "1110111010010011"; -- I_SRLI
+    elsif IR_opcode = I_SRAI                      then CW <= "1110111010110011"; -- I_SRAI
+    elsif IR_opcode = I_SNEI                      then CW <= "1110111001110011"; -- I_SNEI
+    elsif IR_opcode = I_SLEI                      then CW <= "1110111101010011"; -- I_SLEI
+    elsif IR_opcode = I_SGEI                      then CW <= "1110111101010011"; -- I_SGEI
+    elsif IR_opcode = LW                          then CW <= "1110111000011001"; -- LW
     elsif IR_opcode = SW                          then CW <= ""; -- SW
     else                                               CW <= (others => '0');
     end if;
