@@ -42,7 +42,6 @@ entity datapath is
   );
 end entity; -- datapath
 
-
 architecture structural of datapath is
 
   component alu is
@@ -294,7 +293,7 @@ begin
   port map(out_dram, out_alu_st4, out_s3, wb);
 
 -----------------------------------------------------------------------------------------
-  -- delay cw
+  -- delay cw (TODO)
   en2_cw2  : ffd_async
   port map(clk, rst, '1', en2, out_en2);
 

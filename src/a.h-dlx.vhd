@@ -15,8 +15,8 @@ entity dlx is
     dram_wr_data         : out std_logic_vector(word_size - 1 downto 0);
     dram_wr_en           : out std_logic;
     dram_rd_en           : out std_logic;
-    dram_addr            : out std_logic_vector(dram_addr_size - 1 downto 0);
-    iram_addr            : out std_logic_vector(iram_addr_size - 1 downto 0)
+    dram_addr            : out std_logic_vector(dram_addr_size - 1 downto 0)
+    --iram_addr            : out std_logic_vector(iram_addr_size - 1 downto 0)
   );
 end entity; -- end dlx
 
@@ -106,7 +106,6 @@ architecture structural of dlx is
 
 begin
 
-
   cu : CU_HW
   generic map(op_size, instruction_size, function_size, control_word_size)
   port map(clk, rst, iram_rd_data, en0_int, en1_int, rf1_int, rf2_int, en2_int, s1_int, s2_int,
@@ -117,16 +116,19 @@ begin
     alu1_int, alu2_int, alu3_int, alu4_int, en3_int, rm_int, wm_int, dram_wr_en, dram_rd_en, dram_rd_data, dram_addr,
     dram_wr_data, pc_out_int, s3_int, wf1_int);
 
-  iram_addr_int(word_size - 1 downto 0) <= pc_out_int;
-  iram_addr <= iram_addr_int;
+  --iram_addr_int(word_size - 1 downto 0) <= pc_out_int;
+  --iram_addr <= iram_addr_int;
 
   pc_proc : process(clk, rst, ICount)
   begin
     if rst = '0' then -- asynchronous reset (active low)
-      iram_addr_int <= (others => '0');
+      --iram_addr_int <= (others => '0');
+      pc_in_int  <= (others => '0');
+      pc_out_int <= (others => '0');
     else
       if ICount = 0 then
-        pc_in_int <= iram_addr_int(word_size - 1 downto 0);
+        --pc_in_int <= iram_addr_int(word_size - 1 downto 0);
+        pc_in_int <= pc_out_int;
       end if; -- end if ICount = 0
     end if; -- end if Rst
   end process; -- end pc_proc
