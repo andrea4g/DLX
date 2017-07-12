@@ -30,6 +30,8 @@ entity datapath is
     en3   : in  std_logic;  -- enables the dram and the pipeline register
     rm    : in  std_logic;  -- enables the read-out of the dram
     wm    : in  std_logic;  -- enables the write-in of the dram
+    dram_wr_en   : out std_logic;
+    dram_rd_en   : out std_logic;
     dram_rd_data : in  std_logic_vector(word_size - 1 downto 0);      -- from dram output
     dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
     dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
@@ -268,6 +270,9 @@ begin
 
   dram_addr    <= out_aluout;
   dram_wr_data <= out_me;
+
+  dram_wr_en <= wm;
+  dram_rd_en <= rm;
 
   out_value : reg_n
   generic map(word_size)

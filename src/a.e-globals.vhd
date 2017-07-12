@@ -22,9 +22,12 @@ package globals is
   constant func_down         : integer :=  0;
 
   constant dram_addr_size    : integer := 32;
+  constant iram_addr_size    : integer := 20;
 
   constant op_size           : integer := 6;
   constant function_size     : integer := 11;
   constant control_word_size : integer := 16;
+
+  constant instructions_execution_cycles : integer := 5;
 
 end package;

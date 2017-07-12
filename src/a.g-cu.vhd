@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 use work.Control_Unit_Type.all;
+use work.globals.all;
 
 entity CU_HW is
   generic (
@@ -57,9 +58,9 @@ begin  -- cu_rtl
   begin
     if Rst = '0'                                  then CW <= (others => '0'); -- Reset
     elsif IR_opcode = J                           then CW <= "1100101000010000"; -- J
-    elsif IR_opcode = JAL                         then CW <= ""; -- JAL
-    elsif IR_opcode = BEQZ                        then CW <= "1110101000010000"; -- I_BEQZ
-    elsif IR_opcode = BNEZ                        then CW <= ""; -- I_BNEZ
+    elsif IR_opcode = J_JAL                       then CW <= "0000000000000000"; -- JAL
+    elsif IR_opcode = J_BEQZ                      then CW <= "1110101000010000"; -- I_BEQZ
+    elsif IR_opcode = J_BNEZ                      then CW <= "0000000000000000"; -- I_BNEZ
     elsif IR_opcode = NOP                         then CW <= "1100000000000000"; -- NOP
     elsif (IR_opcode = RTYPE and IR_func = R_ADD) then CW <= "1111110000010011"; -- R_ADD
     elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "1111110111110011"; -- R_SUB
@@ -83,8 +84,8 @@ begin  -- cu_rtl
     elsif IR_opcode = I_SNEI                      then CW <= "1110111001110011"; -- I_SNEI
     elsif IR_opcode = I_SLEI                      then CW <= "1110111101010011"; -- I_SLEI
     elsif IR_opcode = I_SGEI                      then CW <= "1110111101010011"; -- I_SGEI
-    elsif IR_opcode = LW                          then CW <= "1110111000011001"; -- LW
-    elsif IR_opcode = SW                          then CW <= ""; -- SW
+    elsif IR_opcode = I_LW                        then CW <= "1110111000011001"; -- LW
+    elsif IR_opcode = I_SW                        then CW <= "0000000000000000"; -- SW
     else                                               CW <= (others => '0');
     end if;
   end process;
