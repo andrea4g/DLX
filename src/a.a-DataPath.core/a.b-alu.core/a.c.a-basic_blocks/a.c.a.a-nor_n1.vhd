@@ -10,14 +10,8 @@ entity nor_n1 is
 end entity;
 
 architecture behavioral of nor_n1 is
-
-  begin
-    output : process(a)
-    begin
-      if to_integer(unsigned(a)) = 0 then
-        y <= '0';
-      else
-        y <= '1';
-      end if;
-    end process;
+  signal tmp : std_logic_vector(n - 1 downto 0);
+begin
+  tmp <= (others => '0');
+  y   <= '1' when a = tmp else '0';
 end architecture;

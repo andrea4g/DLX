@@ -10,17 +10,8 @@ entity and_n1 is
 end entity;
 
 architecture behavioral of and_n1 is
-
-  signal a_not : std_logic_vector (n - 1 downto 0);
-
+  signal tmp : std_logic_vector(n - 1 downto 0);
 begin
-    output : process(a)
-    begin
-      a_not <= not a;
-      if to_integer(unsigned(a_not)) = 0 then
-        y <= '1';
-      else
-        y <= '0';
-      end if;
-    end process;
+  tmp <= (others => '1');
+  y   <= '1' when a = tmp else '0';
 end architecture;
