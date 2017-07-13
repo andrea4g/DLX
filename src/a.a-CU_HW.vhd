@@ -8,12 +8,12 @@ use work.myTypes.all;
 
 entity dlx_cu is
   generic (
-    MICROCODE_MEM_SIZE :     integer := 10;  -- Microcode Memory Size
-    FUNC_SIZE          :     integer := 11;  -- Func Field Size for R-Type Ops
-    OP_CODE_SIZE       :     integer := 6;  -- Op Code Size
-    -- ALU_OPC_SIZE       :     integer := 6;  -- ALU Op Code Word Size
-    IR_SIZE            :     integer := 32;  -- Instruction Register Size
-    CW_SIZE            :     integer := 15);  -- Control Word Size
+    MICROCODE_MEM_SIZE : integer := 10;  -- Microcode Memory Size
+    FUNC_SIZE          : integer := 11;  -- Func Field Size for R-Type Ops
+    OP_CODE_SIZE       : integer := 6;  -- Op Code Size
+    -- ALU_OPC_SIZE       : integer := 6;  -- ALU Op Code Word Size
+    IR_SIZE            : integer := 32;  -- Instruction Register Size
+    CW_SIZE            : integer := 15);  -- Control Word Size
   port (
     Clk                : in  std_logic;  -- Clock
     Rst                : in  std_logic;  -- Reset:Active-Low
@@ -40,7 +40,8 @@ entity dlx_cu is
     PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
     -- WB Control signals
     WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
-    RF_WE              : out std_logic);  -- Register File Write Enable
+    RF_WE              : out std_logic   -- Register File Write Enable
+  );
 
 end dlx_cu;
 
@@ -94,11 +95,11 @@ architecture dlx_cu_hw of dlx_cu is
                                 "000000000000000",
                                 "000000000000000",
                                 "000000000000000",
-                                "000000000000000"); -- to be completed (enlarged and filled)
+                                "000000000000000");
 
   signal IR_opcode : std_logic_vector(OP_CODE_SIZE - 1 downto 0);  -- OpCode part of IR
-  signal IR_func : std_logic_vector(FUNC_SIZE downto 0);   -- Func part of IR when Rtype
-  signal cw   : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
+  signal IR_func   : std_logic_vector(FUNC_SIZE downto 0);         -- Func part of IR when Rtype
+  signal cw        : std_logic_vector(CW_SIZE - 1 downto 0);       -- full control word read from cw_mem
 
 
   -- control word is shifted to the correct stage
@@ -108,11 +109,10 @@ architecture dlx_cu_hw of dlx_cu is
   signal cw4 : std_logic_vector(CW_SIZE - 1 - 9  downto 0); -- fourth stage
   signal cw5 : std_logic_vector(CW_SIZE - 1 - 13 downto 0); -- fifth stage
 
-  signal aluOpcode_i: aluOp := NOP; -- ALUOP defined in package
-  signal aluOpcode1: aluOp := NOP;
-  signal aluOpcode2: aluOp := NOP;
-  signal aluOpcode3: aluOp := NOP;
-
+  signal aluOpcode_i : aluOp := NOP; -- ALUOP defined in package
+  signal aluOpcode1  : aluOp := NOP;
+  signal aluOpcode2  : aluOp := NOP;
+  signal aluOpcode3  : aluOp := NOP;
 
 begin  -- dlx_cu_rtl
 

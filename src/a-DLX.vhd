@@ -6,24 +6,24 @@ use work.RWCACHE_PKG.all;
 
 entity DLX is
 	generic (
-    	IR_SIZE      : integer := 32;       -- Instruction Register Size
-    	PC_SIZE      : integer := 32       -- Program Counter Size
-    );
+   	IR_SIZE      : integer := 32;       -- Instruction Register Size
+   	PC_SIZE      : integer := 32       -- Program Counter Size
+  );
 	port (
 		-- Inputs
-		CLK						: in std_logic;		-- Clock
-		RST						: in std_logic;		-- Reset:Active-High
+		CLK						    : in    std_logic;		-- Clock
+		RST						    : in    std_logic;		-- Reset:Active-High
 
-		IRAM_ADDRESS			: out std_logic_vector(Instr_size - 1 downto 0);
-		IRAM_ISSUE				: out std_logic;
-		IRAM_READY				: in std_logic;
-		IRAM_DATA				: in std_logic_vector(2*Data_size-1 downto 0);
+		IRAM_ADDRESS			: out   std_logic_vector(Instr_size - 1 downto 0);
+		IRAM_ISSUE				: out   std_logic;
+		IRAM_READY				: in    std_logic;
+		IRAM_DATA				  : in    std_logic_vector(2 * Data_size - 1 downto 0);
 
-		DRAM_ADDRESS			: out std_logic_vector(Instr_size-1 downto 0);
-		DRAM_ISSUE				: out std_logic;
-		DRAM_READNOTWRITE		: out std_logic;
-		DRAM_READY				: in std_logic;
-		DRAM_DATA				: inout std_logic_vector(2*Data_size-1 downto 0)
+		DRAM_ADDRESS			: out   std_logic_vector(Instr_size - 1 downto 0);
+		DRAM_ISSUE				: out   std_logic;
+		DRAM_READNOTWRITE	: out   std_logic;
+		DRAM_READY				: in    std_logic;
+		DRAM_DATA				  : inout std_logic_vector(2 * Data_size - 1 downto 0)
 	);
 end DLX;
 
@@ -110,22 +110,22 @@ architecture dlx_rtl of DLX is
   signal PC_BUS : std_logic_vector(PC_SIZE -1 downto 0);
 
   -- Control Unit Bus signals
-  signal IR_LATCH_EN_i : std_logic;
-  signal NPC_LATCH_EN_i : std_logic;
-  signal RegA_LATCH_EN_i : std_logic;
-  signal RegB_LATCH_EN_i : std_logic;
-  signal RegIMM_LATCH_EN_i : std_logic;
-  signal EQ_COND_i : std_logic;
-  signal JUMP_EN_i : std_logic;
-  signal ALU_OPCODE_i : aluOp;
-  signal MUXA_SEL_i : std_logic;
-  signal MUXB_SEL_i : std_logic;
-  signal ALU_OUTREG_EN_i : std_logic;
-  signal DRAM_WE_i : std_logic;
-  signal LMD_LATCH_EN_i : std_logic;
-  signal PC_LATCH_EN_i : std_logic;
-  signal WB_MUX_SEL_i : std_logic;
-  signal RF_WE_i : std_logic;
+  signal IR_LATCH_EN_i      : std_logic;
+  signal NPC_LATCH_EN_i     : std_logic;
+  signal RegA_LATCH_EN_i    : std_logic;
+  signal RegB_LATCH_EN_i    : std_logic;
+  signal RegIMM_LATCH_EN_i  : std_logic;
+  signal EQ_COND_i          : std_logic;
+  signal JUMP_EN_i          : std_logic;
+  signal ALU_OPCODE_i       : aluOp;
+  signal MUXA_SEL_i         : std_logic;
+  signal MUXB_SEL_i         : std_logic;
+  signal ALU_OUTREG_EN_i    : std_logic;
+  signal DRAM_WE_i          : std_logic;
+  signal LMD_LATCH_EN_i     : std_logic;
+  signal PC_LATCH_EN_i      : std_logic;
+  signal WB_MUX_SEL_i       : std_logic;
+  signal RF_WE_i            : std_logic;
 
 
   -- Data Ram Bus signals
@@ -176,27 +176,28 @@ architecture dlx_rtl of DLX is
 
     -- Control Unit Instantiation
     CU_I: dlx_cu
-      port map (
-          Clk             => Clk,
-          Rst             => Rst,
-          IR_IN           => IR,
-          IR_LATCH_EN     => IR_LATCH_EN_i,
-          NPC_LATCH_EN    => NPC_LATCH_EN_i,
-          RegA_LATCH_EN   => RegA_LATCH_EN_i,
-          RegB_LATCH_EN   => RegB_LATCH_EN_i,
-          RegIMM_LATCH_EN => RegIMM_LATCH_EN_i,
-          MUXA_SEL        => MUXA_SEL_i,
-          MUXB_SEL        => MUXB_SEL_i,
-          ALU_OUTREG_EN   => ALU_OUTREG_EN_i,
-          EQ_COND         => EQ_COND_i,
-          ALU_OPCODE      => ALU_OPCODE_i,
-          DRAM_WE         => DRAM_WE_i,
-          LMD_LATCH_EN    => LMD_LATCH_EN_i,
-          JUMP_EN         => JUMP_EN_i,
-          PC_LATCH_EN     => PC_LATCH_EN_i,
-          WB_MUX_SEL      => WB_MUX_SEL_i,
-          RF_WE           => RF_WE_i);
-          
+    port map (
+      Clk             => Clk,
+      Rst             => Rst,
+      IR_IN           => IR,
+      IR_LATCH_EN     => IR_LATCH_EN_i,
+      NPC_LATCH_EN    => NPC_LATCH_EN_i,
+      RegA_LATCH_EN   => RegA_LATCH_EN_i,
+      RegB_LATCH_EN   => RegB_LATCH_EN_i,
+      RegIMM_LATCH_EN => RegIMM_LATCH_EN_i,
+      MUXA_SEL        => MUXA_SEL_i,
+      MUXB_SEL        => MUXB_SEL_i,
+      ALU_OUTREG_EN   => ALU_OUTREG_EN_i,
+      EQ_COND         => EQ_COND_i,
+      ALU_OPCODE      => ALU_OPCODE_i,
+      DRAM_WE         => DRAM_WE_i,
+      LMD_LATCH_EN    => LMD_LATCH_EN_i,
+      JUMP_EN         => JUMP_EN_i,
+      PC_LATCH_EN     => PC_LATCH_EN_i,
+      WB_MUX_SEL      => WB_MUX_SEL_i,
+      RF_WE           => RF_WE_i
+    );
+         
           -- IMPLEMENTS DATAPATH
 
 
