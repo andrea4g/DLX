@@ -1,8 +1,8 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
---use work.myTypes.all;
 use work.ROCACHE_PKG.all;
 use work.RWCACHE_PKG.all;
+--use work.myTypes.all;
 
 entity DLX is
   generic (
@@ -13,17 +13,17 @@ entity DLX is
     -- Inputs
     CLK               : in    std_logic;    -- Clock
     RST               : in    std_logic;    -- Reset: Active-High
-
+    -- Instr_size = 32, Data_size = 32
     IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
-    IRAM_ISSUE        : out   std_logic;
-    IRAM_READY        : in    std_logic;
-    IRAM_DATA         : in    std_logic_vector(2 * Data_size - 1 downto 0);
+    --IRAM_ISSUE        : out   std_logic;
+    --IRAM_READY        : in    std_logic;
+    IRAM_DATA         : in    std_logic_vector(Data_size - 1 downto 0);
 
     DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
     DRAM_ISSUE        : out   std_logic;
     DRAM_READNOTWRITE : out   std_logic;
-    DRAM_READY        : in    std_logic;
-    DRAM_DATA         : inout std_logic_vector(2 * Data_size - 1 downto 0)
+    --DRAM_READY        : in    std_logic;
+    DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
   );
 end DLX;
 
@@ -46,15 +46,13 @@ architecture dlx_rtl of DLX is
 --    IRAM_ADDRESS      : out std_logic_vector(Instr_size - 1 downto 0);
 --    IRAM_ISSUE        : out std_logic;
 --    IRAM_READY        : in std_logic;
---    IRAM_DATA         : in std_logic_vector(2*Data_size-1 downto 0);
+--    IRAM_DATA         : in std_logic_vector(Data_size-1 downto 0);
 --
 --    DRAM_ADDRESS      : out std_logic_vector(Instr_size-1 downto 0);
 --    DRAM_ISSUE        : out std_logic;
 --    DRAM_READNOTWRITE : out std_logic;
 --    DRAM_READY        : in std_logic;
---    DRAM_DATA         : inout std_logic_vector(2*Data_size-1 downto 0)
-
-  -- Datapath (MISSING!You must include it in your final project!)
+--    DRAM_DATA         : inout std_logic_vector(Data_size-1 downto 0)
 
   -- Control Unit
   component CU_HW is
@@ -141,7 +139,7 @@ architecture dlx_rtl of DLX is
   signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
 
   -- Instruction Ram Bus signals
-  signal IRam_DOut : std_logic_vector(IR_SIZE - 1 downto 0);
+  -- signal IRam_Dout : std_logic_vector(IR_SIZE - 1 downto 0);
 
   -- Datapath Bus signals
   signal PC_BUS : std_logic_vector(PC_SIZE -1 downto 0);
@@ -164,7 +162,6 @@ architecture dlx_rtl of DLX is
   signal S3_int   : std_logic;
   signal WF1_int  : std_logic;
 
-
   -- Data Ram Bus signals
 
 
@@ -175,7 +172,7 @@ architecture dlx_rtl of DLX is
     -- TO BE REMOVED AS SOON AS THE DATAPATH IS INSERTED!!!!!
     -- a proper connection must be made here if more than one
     -- instruction must be executed
-    PC_BUS <= (others => '0');
+    --PC_BUS <= (others => '0');
 
 
     -- purpose: Instruction Register Process
@@ -188,13 +185,13 @@ architecture dlx_rtl of DLX is
         IR <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
         if (IR_LATCH_EN_i = '1') then
-          IR <= IRam_DOut;
+          IR <= IRAM_DATA;
         end if;
       end if;
     end process IR_P;
 
     -- COMPLETE WITH CACHE TO CONNECT IRAM and DRAM in the testbench...
-
+    IRAM_ADDRESS <= PC_BUS;
 
     -- purpose: Program Counter Process
     -- type   : sequential
@@ -214,25 +211,25 @@ architecture dlx_rtl of DLX is
     -- Control Unit Instantiation
     CU : CU_HW
     port map (
-    Clk   => Clk,
-    Rst   => Rst,
-    IR_I  => IR,
-    EN0   => EN0_int,
-    EN1   => EN1_int,
-    RF1   => RF1_int,
-    RF2   => RF2_int,
-    EN2   => EN2_int,
-    S1    => S1_int ,
-    S2    => S2_int ,
-    ALU1  => ALU1_in,
-    ALU2  => ALU2_in,
-    ALU3  => ALU3_in,
-    ALU4  => ALU4_in,
-    EN3   => EN3_int,
-    DEN   => DEN_int,
-    RW    => RW_int ,
-    S3    => S3_int ,
-    WF1   => WF1_int
+      Clk   => Clk,
+      Rst   => Rst,
+      IR_I  => IR,
+      EN0   => EN0_int,
+      EN1   => EN1_int,
+      RF1   => RF1_int,
+      RF2   => RF2_int,
+      EN2   => EN2_int,
+      S1    => S1_int ,
+      S2    => S2_int ,
+      ALU1  => ALU1_in,
+      ALU2  => ALU2_in,
+      ALU3  => ALU3_in,
+      ALU4  => ALU4_in,
+      EN3   => EN3_int,
+      DEN   => DEN_int,
+      RW    => RW_int ,
+      S3    => S3_int ,
+      WF1   => WF1_int
     );
 
   -- DATAPATH
@@ -244,7 +241,7 @@ architecture dlx_rtl of DLX is
     -- stage 1
     en0           => EN0_int,
     ir            => IR,
-    pc_in         => ,
+    pc_in         => PC_BUS,
     -- stage 2
     en1           => EN1_int,
     rf1           => RF1_int,
@@ -259,14 +256,14 @@ architecture dlx_rtl of DLX is
     alu4          => ALU4_in,
     -- stage 4
     en3           => EN3_int,
-    rw            => DEN_int,
-    den           => RW_int ,
-    dram_rw_en    => ,
+    rw            => RW_int,
+    den           => DEN_int,
+    dram_rw_en    => DRAM_READNOTWRITE,
     dram_enable   => ,
-    dram_rd_data  => ,
-    dram_addr     => ,
-    dram_wr_data  => ,
-    pc_out        => ,
+    dram_rd_data  => DRAM_DATA,
+    dram_addr     => DRAM_ADDRESS,
+    dram_wr_data  => DRAM_DATA,
+    pc_out        => PC_BUS,
     -- stage 5
     s3            => S3_int ,
     wf1           => WF1_int
