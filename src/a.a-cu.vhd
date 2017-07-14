@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
-use work.Control_Unit_Type.all;
+--use work.Control_Unit_Type.all;
 use work.globals.all;
 
 entity CU_HW is
@@ -33,6 +33,7 @@ entity CU_HW is
     ALU4               : out std_logic;  -- alu control bit 4
     -- Pipeline stage 4
     EN3                : out std_logic;  -- enables the memory and the pipeline register
+    DEN                : out std_logic;  -- enables the ram memory
     RW                 : out std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
     -- Pipeline stage 5
     S3                 : out std_logic;  -- input selection of the multiplexer
@@ -104,8 +105,8 @@ begin  -- cu_rtl
       ALU3 <= CW(CW_SIZE - 10);
       ALU4 <= CW(CW_SIZE - 11);
       EN3  <= CW(CW_SIZE - 12);
-      RM   <= CW(CW_SIZE - 13);
-      WM   <= CW(CW_SIZE - 14);
+      DEN  <= CW(CW_SIZE - 13);
+      RW   <= CW(CW_SIZE - 14);
       S3   <= CW(CW_SIZE - 15);
       WF1  <= CW(CW_SIZE - 16);
     end if;

@@ -31,6 +31,7 @@ entity datapath is
     rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
     den     : in  std_logic;
     dram_rw_en   : out std_logic;
+    dram_enable  : out std_logic;
     dram_rd_data : in  std_logic_vector(word_size - 1 downto 0);      -- from dram output
     dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
     dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
@@ -96,12 +97,12 @@ architecture structural of datapath is
 
   component ffd_async is
     port (
-      d     : in  std_logic;
-      clk   : in  std_logic;
-      reset : in  std_logic;
-      en    : in  std_logic;
-      q     : out std_logic
-    );
+  		clk   :	in	std_logic;
+  		reset :	in	std_logic;
+  		en 		: in  std_logic;
+  		d     : in	std_logic;
+  		q     : out	std_logic
+  	);
   end component;
 
   component reg_n is
@@ -216,8 +217,8 @@ begin
 -- stage 1
 -----------------------------------------------------------------------------------------
 
-  ir_ff : ffd_async
-  generic map (word_size)
+  ir_ff : reg_n
+  generic map (instruction_size)
   port map (
     clk, rst, en0, ir, ir_st1
   );
@@ -321,7 +322,7 @@ begin
   generic map(word_size)
   port map(npc_st3, alu_st3, cond_st3, pc_st4);
 
-  pc_ff : ffd_async
+  pc_ff : reg_n
   generic map (word_size)
   port map (
     clk, rst, en3_st3, pc_st4, pc_out
