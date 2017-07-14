@@ -8,29 +8,29 @@ entity datapath is
   port (
   -- inputs
     -- control signals
-    clk   : in  std_logic;  -- clock
-    rst   : in  std_logic;  -- reset : active-low
+    clk     : in  std_logic;  -- clock
+    rst     : in  std_logic;  -- reset: active-low
     -- stage 1
-    ir    : in  std_logic_vector(instruction_size - 1 downto 0);
-    pc_in : in  std_logic_vector(word_size - 1 downto 0);
+    en0     : in  std_logic;
+    ir      : in  std_logic_vector(instruction_size - 1 downto 0);
+    pc_in   : in  std_logic_vector(word_size - 1 downto 0);
     -- stage 2
-    en1   : in  std_logic;  -- enables the register le and the pipeline registers
-    rf1   : in  std_logic;  -- enables the read port 1 of the register ﬁle
-    rf2   : in  std_logic;  -- enables the read port 2 of the register ﬁle
+    en1     : in  std_logic;  -- enables the register file and the pipeline registers
+    rf1     : in  std_logic;  -- enables the read port 1 of the register file
+    rf2     : in  std_logic;  -- enables the read port 2 of the register file
     -- stage 3
-    en2   : in  std_logic;  -- enables the pipe registers
-    s1    : in  std_logic;  -- input selection of the ﬁrst multiplexer
-    s2    : in  std_logic;  -- input selection of the second multiplexer
-    alu1  : in  std_logic;  -- alu control bit 1
-    alu2  : in  std_logic;  -- alu control bit 2
-    alu3  : in  std_logic;  -- alu control bit 3
-    alu4  : in  std_logic;  -- alu control bit 3
+    en2     : in  std_logic;  -- enables the pipe registers
+    s1      : in  std_logic;  -- input selection of the first multiplexer
+    s2      : in  std_logic;  -- input selection of the second multiplexer
+    alu1    : in  std_logic;  -- alu control bit 1
+    alu2    : in  std_logic;  -- alu control bit 2
+    alu3    : in  std_logic;  -- alu control bit 3
+    alu4    : in  std_logic;  -- alu control bit 4
     -- stage 4
-    en3   : in  std_logic;  -- enables the dram and the pipeline register
-    rm    : in  std_logic;  -- enables the read-out of the dram
-    wm    : in  std_logic;  -- enables the write-in of the dram
-    dram_wr_en   : out std_logic;
-    dram_rd_en   : out std_logic;
+    en3     : in  std_logic;  -- enables the dram and the pipeline register
+    rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
+    den     : in  std_logic;
+    dram_rw_en   : out std_logic;
     dram_rd_data : in  std_logic_vector(word_size - 1 downto 0);      -- from dram output
     dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
     dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
@@ -46,11 +46,11 @@ architecture structural of datapath is
   component alu is
     generic(n : integer := 2);
     port (
-      a, b      : in  std_logic_vector(n - 1 downto 0);
-      unit_sel  : in  std_logic_vector(3 downto 0);
-      y         : out std_logic_vector(n - 1 downto 0);
-      cout      : out std_logic;
-      z         : out std_logic
+      a, b      : in  std_logic_vector(n - 1 downto 0); -- operands
+      unit_sel  : in  std_logic_vector(3 downto 0);     -- ALU's unit selector
+      y         : out std_logic_vector(n - 1 downto 0); -- operation result
+      cout      : out std_logic;                        -- comparator output
+      z         : out std_logic                         -- comparator output: useless, it won't be connected
     );
   end component;
 
@@ -95,11 +95,13 @@ architecture structural of datapath is
   end component;
 
   component ffd_async is
-    port (d     : in  std_logic;
-          clk   : in  std_logic;
-          reset : in  std_logic;
-          en    : in  std_logic;
-          q     : out std_logic);
+    port (
+      d     : in  std_logic;
+      clk   : in  std_logic;
+      reset : in  std_logic;
+      en    : in  std_logic;
+      q     : out std_logic
+    );
   end component;
 
   component reg_n is
@@ -115,8 +117,9 @@ architecture structural of datapath is
 
   component zero_comp is
     generic(n : integer := 1);
-    port (x : in  std_logic_vector (n - 1 downto 0);
-          y : in  std_logic
+    port (
+      x : in  std_logic_vector (n - 1 downto 0);
+      y : in  std_logic
     );
   end component; -- zero_comp
 
@@ -133,6 +136,7 @@ architecture structural of datapath is
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
   signal next_pc : std_logic_vector (word_size - 1 downto 0);
   signal npc     : std_logic_vector (word_size - 1 downto 0);
+  signal ir_st1  : std_logic_vector (word_size - 1 downto 0);
 
   -- signals stage 2
   signal data_out, rf_out1, rf_out2, out_inp1, out_a, out_b, inp2_32, out_inp2 : std_logic_vector(word_size - 1 downto 0);
@@ -141,37 +145,82 @@ architecture structural of datapath is
   signal out_rd1      : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 3
-  signal out_mux1, out_mux2, out_alu, out_aluout, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
+  signal out_mux1, out_mux2, out_alu, alu_st3, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
   signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
   signal alu_bit  : std_logic_vector(3 downto 0);
-  signal cond     : std_logic;
+  signal cond, cond_st3 : std_logic; -- zero comparator output
 
   -- signals stage 4
-  signal out_val, out_alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
+  signal out_val, alu_st4, out_dram, pc_st4 : std_logic_vector(word_size - 1 downto 0);
   signal out_rd3 : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 5
   signal wb : std_logic_vector(word_size - 1 downto 0);
 
   -- signals to delay the control word
-  signal out_en2  : std_logic;
-  signal out_s1   : std_logic;
-  signal out_s2   : std_logic;
-  signal out_alu1 : std_logic;
-  signal out_alu2 : std_logic;
-  signal out_alu3 : std_logic;
-  signal out_alu4 : std_logic;
-  signal out_en3  : std_logic;
-  signal out_rm   : std_logic;
-  signal out_wm   : std_logic;
-  signal out_s3   : std_logic;
-  signal out_wf1  : std_logic;
+  -- stage 1->2
+  signal en1_st1  : std_logic;
+  signal rf1_st1  : std_logic;
+  signal rf2_st1  : std_logic;
+
+  signal en2_st1  : std_logic;
+  signal  s1_st1  : std_logic;
+  signal  s2_st1  : std_logic;
+
+  signal alu1_st1 : std_logic;
+  signal alu2_st1 : std_logic;
+  signal alu3_st1 : std_logic;
+  signal alu4_st1 : std_logic;
+
+  signal en3_st1  : std_logic;
+  signal  rw_st1  : std_logic;
+  signal den_st1  : std_logic;
+
+  signal  s3_st1  : std_logic;
+  signal wf1_st1  : std_logic;
+
+  -- stage 2->3
+  signal en2_st2  : std_logic;
+  signal  s1_st2  : std_logic;
+  signal  s2_st2  : std_logic;
+
+  signal alu1_st2 : std_logic;
+  signal alu2_st2 : std_logic;
+  signal alu3_st2 : std_logic;
+  signal alu4_st2 : std_logic;
+
+  signal en3_st2  : std_logic;
+  signal  rw_st2  : std_logic;
+  signal den_st2  : std_logic;
+
+  signal  s3_st2  : std_logic;
+  signal wf1_st2  : std_logic;
+
+  -- stage 3->4
+  signal en3_st3  : std_logic;
+  signal  rw_st3  : std_logic;
+  signal den_st3  : std_logic;
+
+  signal  s3_st3  : std_logic;
+  signal wf1_st3  : std_logic;
+
+  -- stage 4->5
+
+  signal  s3_st4  : std_logic;
+  signal wf1_st4  : std_logic;
+
 
 begin
 
 -----------------------------------------------------------------------------------------
 -- stage 1
 -----------------------------------------------------------------------------------------
+
+  ir_ff : ffd_async
+  generic map (word_size)
+  port map (
+    clk, rst, en0, ir, ir_st1
+  );
 
   four(3 downto 0) <=  c4;
 
@@ -187,26 +236,27 @@ begin
 -- stage 2
 -----------------------------------------------------------------------------------------
 
-  rd   <= ir(r1_up   downto r1_down);
-  rd1  <= ir(r2_up   downto r2_down);
-  rd2  <= ir(r3_up   downto r3_down);
-  inp2 <= ir(inp2_up downto inp2_down);
+  -- Assignment of type of operation to be done
+  rd   <= ir_st1(r1_up   downto r1_down);
+  rd1  <= ir_st1(r2_up   downto r2_down);
+  rd2  <= ir_st1(r3_up   downto r3_down);
+  inp2 <= ir_st1(inp2_up downto inp2_down);
 
   rf : register_file
   generic map (word_size)
-  port map(clk, rst, en1, rf1, rf2, wf1, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
+  port map(clk, rst, en1_st1, rf1_st1, rf2_st1, wf1_st4, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
 
   npc_1 : reg_n
   generic map(word_size)
-  port map(clk, rst, en1, npc, out_inp1);
+  port map(clk, rst, en1_st1, npc, out_inp1);
 
   a : reg_n
   generic map(word_size)
-  port map(clk, rst, en1, rf_out1, out_a);
+  port map(clk, rst, en1_st1, rf_out1, out_a);
 
   b : reg_n
   generic map(word_size)
-  port map(clk, rst, en1, rf_out2, out_b);
+  port map(clk, rst, en1_st1, rf_out2, out_b);
 
   -- sign extension of immediate (16 to 32 bits)
   ext : sign_extension
@@ -215,24 +265,33 @@ begin
 
   in2 : reg_n
   generic map(word_size)
-  port map(clk, rst, en1, inp2_32, out_inp2);
+  port map(clk, rst, en1_st1, inp2_32, out_inp2);
 
   rd_1 : reg_n
   generic map(add_size)
-  port map(clk, rst, en1, rd, out_rd1);
+  port map(clk, rst, en1_st1, rd, out_rd1);
 
 -----------------------------------------------------------------------------------------
 -- stage 3
 -----------------------------------------------------------------------------------------
-  alu_bit <= out_alu4 & out_alu3 & out_alu2 & out_alu1;
+  alu_bit <= alu4_st2 & alu3_st2 & alu2_st2 & alu1_st2;
+
+  cmp : zero_comp
+  generic map(word_size)
+  port map(out_a, cond);
+
+  cond_ff : ffd_async
+  port map (
+    clk, rst, en2_st2, cond, cond_st3
+  );
 
   mux1_alu : mux21_generic
   generic map(word_size)
-  port map(out_inp1, out_a, out_s1, out_mux1);
+  port map(out_inp1, out_a, s1_st2, out_mux1);
 
   mux2_alu : mux21_generic
   generic map(word_size)
-  port map(out_b, out_inp2, out_s2, out_mux2);
+  port map(out_b, out_inp2, s2_st2, out_mux2);
 
   arith_log_un : alu
   generic map(word_size)
@@ -240,23 +299,19 @@ begin
 
   alu_out : reg_n
   generic map(word_size)
-  port map(clk, rst, out_en2, out_alu, out_aluout);
+  port map(clk, rst, en2_st2, out_alu, alu_st3);
 
   me : reg_n
   generic map(word_size)
-  port map(clk, rst, en2, out_b, out_me);
+  port map(clk, rst, en2_st2, out_b, out_me);
 
   rd_2 : reg_n
   generic map(word_size)
-  port map(clk, rst, en2, out_rd1, out_rd2);
+  port map(clk, rst, en2_st2, out_rd1, out_rd2);
 
   npc_2 : reg_n
   generic map(word_size)
-  port map(clk, rst, en1, out_inp1, npc_st3);
-
-  cmp : zero_comp
-  generic map(word_size)
-  port map(out_a, cond);
+  port map(clk, rst, en2_st2, out_inp1, npc_st3);
 
 -----------------------------------------------------------------------------------------
 -- stage 4
@@ -264,66 +319,123 @@ begin
 
   mux_j : mux21_generic
   generic map(word_size)
-  port map(npc_st3, out_aluout, cond, pc_out);
+  port map(npc_st3, alu_st3, cond_st3, pc_st4);
 
-  dram_addr    <= out_aluout;
+  pc_ff : ffd_async
+  generic map (word_size)
+  port map (
+    clk, rst, en3_st3, pc_st4, pc_out
+  );
+
+  dram_addr    <= alu_st3;
   dram_wr_data <= out_me;
 
-  dram_wr_en <= wm;
-  dram_rd_en <= rm;
+  dram_enable <= den_st3;
+  dram_rw_en  <= rw_st3;
 
   out_value : reg_n
   generic map(word_size)
-  port map(clk, rst, out_en3, out_aluout, out_alu_st4);
+  port map(clk, rst, en3_st3, alu_st3, alu_st4);
 
   lmd : reg_n
   generic map(word_size)
-  port map(clk, rst, out_en3, dram_rd_data, out_dram);
+  port map(clk, rst, en3_st3, dram_rd_data, out_dram);
 
   rd_3 : reg_n
   generic map(word_size)
-  port map(clk, rst, en3, out_rd2, out_rd3);
+  port map(clk, rst, en3_st3, out_rd2, out_rd3);
 
 -----------------------------------------------------------------------------------------
 -- stage 5
 -----------------------------------------------------------------------------------------
   mux_out_sel : mux21_generic
   generic map(word_size)
-  port map(out_dram, out_alu_st4, out_s3, wb);
+  port map(out_dram, alu_st4, s3_st4, wb);
 
 -----------------------------------------------------------------------------------------
-  -- delay cw (TODO)
-  en2_cw2  : ffd_async
-  port map(clk, rst, '1', en2, out_en2);
 
-  s1_cw2   : ffd_async
-  port map(clk, rst, '1', s1, out_s1);
+  -- stage 1 -> 2
+   en1_cw1  :  ffd_async
+  port map(clk, rst, '1', en1, en1_st1);
+   rf1_cw1  :  ffd_async
+  port map(clk, rst, '1', rf1, rf1_st1);
+   rf2_cw1  :  ffd_async
+  port map(clk, rst, '1', rf2, rf2_st1);
 
-  s2_cw2   : ffd_async
-  port map(clk, rst, '1', s2, out_s2);
+   en2_cw1  :  ffd_async
+  port map(clk, rst, '1', en2, en2_st1);
+    s1_cw1  :  ffd_async
+  port map(clk, rst, '1', s1, s1_st1);
+    s2_cw1  :  ffd_async
+  port map(clk, rst, '1', s2, s2_st1);
 
-  alu1_cw2 : ffd_async
-  port map(clk, rst, '1', alu1, out_alu1);
+  alu1_cw1  :  ffd_async
+  port map(clk, rst, '1', alu1, alu1_st1);
+  alu2_cw1  :  ffd_async
+  port map(clk, rst, '1', alu2, alu2_st1);
+  alu3_cw1  :  ffd_async
+  port map(clk, rst, '1', alu3, alu3_st1);
+  alu4_cw1  :  ffd_async
+  port map(clk, rst, '1', alu4, alu4_st1);
 
-  alu2_cw2 : ffd_async
-  port map(clk, rst, '1', alu2, out_alu2);
+   en3_cw1  :  ffd_async
+  port map(clk, rst, '1', en3, en3_st1);
+    rw_cw1  :  ffd_async
+  port map(clk, rst, '1', rw, rw_st1);
+   den_cw1  :  ffd_async
+  port map(clk, rst, '1', den, den_st1);
 
-  alu3_cw2 : ffd_async
-  port map(clk, rst, '1', alu3, out_alu3);
+    s3_cw1  :  ffd_async
+  port map(clk, rst, '1', s3, s3_st1);
+   wf1_cw1  :  ffd_async
+  port map(clk, rst, '1', wf1, wf1_st1);
 
-  en3_cw3  : ffd_async
-  port map(clk, rst, '1', en3, out_en3);
+   -- stage 2 -> 3
+   en2_cw2  :  ffd_async
+  port map(clk, rst, '1', en2_st1, en2_st2);
+    s1_cw2  :  ffd_async
+  port map(clk, rst, '1', s1_st1, s1_st2);
+    s2_cw2  :  ffd_async
+  port map(clk, rst, '1', s2_st1, s2_st2);
 
-  rm_cw3   : ffd_async
-  port map(clk, rst, '1', rm, out_rm);
+  alu1_cw2  :  ffd_async
+  port map(clk, rst, '1', alu1_st1, alu1_st2);
+  alu2_cw2  :  ffd_async
+  port map(clk, rst, '1', alu2_st1, alu2_st2);
+  alu3_cw2  :  ffd_async
+  port map(clk, rst, '1', alu3_st1, alu3_st2);
+  alu4_cw2  :  ffd_async
+  port map(clk, rst, '1', alu4_st1, alu4_st2);
 
-  wm_cw3   : ffd_async
-  port map(clk, rst, '1', wm, out_wm);
+   en3_cw2  :  ffd_async
+  port map(clk, rst, '1', en3_st1, en3_st2);
+    rw_cw2  :  ffd_async
+  port map(clk, rst, '1', rw_st1, rw_st2);
+   den_cw2  :  ffd_async
+  port map(clk, rst, '1', den_st1, den_st2);
 
-  s3_cw3   : ffd_async
-  port map(clk, rst, '1', s3, out_s3);
+    s3_cw2  :  ffd_async
+  port map(clk, rst, '1', s3_st1, s3_st2);
+   wf1_cw2  :  ffd_async
+  port map(clk, rst, '1', wf1_st1, wf1_st2);
 
-  wf1_cw3  : ffd_async
-  port map(clk, rst, '1', wf1, out_wf1);
+   -- stage 3 -> 4
+   en3_cw3  :  ffd_async
+  port map(clk, rst, '1', en3_st2, en3_st3);
+    rw_cw3  :  ffd_async
+  port map(clk, rst, '1', rw_st2, rw_st3);
+   den_cw3  :  ffd_async
+  port map(clk, rst, '1', den_st2, den_st3);
+
+    s3_cw3  :  ffd_async
+  port map(clk, rst, '1', s3_st2, s3_st3);
+   wf1_cw3  :  ffd_async
+  port map(clk, rst, '1', wf1_st2, wf1_st3);
+
+   -- stage 4 -> 5
+    s3_cw4  :  ffd_async
+  port map(clk, rst, '1', s3_st3, s3_st4);
+   wf1_cw4  :  ffd_async
+  port map(clk, rst, '1', wf1_st3, wf1_st4);
 
 end architecture; -- structural

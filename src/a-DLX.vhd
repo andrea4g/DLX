@@ -5,26 +5,26 @@ use work.ROCACHE_PKG.all;
 use work.RWCACHE_PKG.all;
 
 entity DLX is
-	generic (
-   	IR_SIZE      : integer := 32;       -- Instruction Register Size
-   	PC_SIZE      : integer := 32       -- Program Counter Size
+  generic (
+    IR_SIZE      : integer := 32;      -- Instruction Register Size
+    PC_SIZE      : integer := 32       -- Program Counter Size
   );
-	port (
-		-- Inputs
-		CLK						    : in    std_logic;		-- Clock
-		RST						    : in    std_logic;		-- Reset:Active-High
+  port (
+    -- Inputs
+    CLK               : in    std_logic;    -- Clock
+    RST               : in    std_logic;    -- Reset: Active-High
 
-		IRAM_ADDRESS			: out   std_logic_vector(Instr_size - 1 downto 0);
-		IRAM_ISSUE				: out   std_logic;
-		IRAM_READY				: in    std_logic;
-		IRAM_DATA				  : in    std_logic_vector(2 * Data_size - 1 downto 0);
+    IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+    IRAM_ISSUE        : out   std_logic;
+    IRAM_READY        : in    std_logic;
+    IRAM_DATA         : in    std_logic_vector(2 * Data_size - 1 downto 0);
 
-		DRAM_ADDRESS			: out   std_logic_vector(Instr_size - 1 downto 0);
-		DRAM_ISSUE				: out   std_logic;
-		DRAM_READNOTWRITE	: out   std_logic;
-		DRAM_READY				: in    std_logic;
-		DRAM_DATA				  : inout std_logic_vector(2 * Data_size - 1 downto 0)
-	);
+    DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+    DRAM_ISSUE        : out   std_logic;
+    DRAM_READNOTWRITE : out   std_logic;
+    DRAM_READY        : in    std_logic;
+    DRAM_DATA         : inout std_logic_vector(2 * Data_size - 1 downto 0)
+  );
 end DLX;
 
 -- This architecture is currently not complete
@@ -33,40 +33,41 @@ end DLX;
 -- program counter (complete)
 -- instruction ram memory (complete)
 -- control unit (UNCOMPLETE)
---
+-- datapath
+
 architecture dlx_rtl of DLX is
 
- --------------------------------------------------------------------
- -- Components Declaration
- --------------------------------------------------------------------
-  
-  -- Instruction Ram And Data Ram are in the TestBench and you must connect it using
-  
---  		IRAM_ADDRESS			: out std_logic_vector(Instr_size - 1 downto 0);
---		IRAM_ISSUE				: out std_logic;
---		IRAM_READY				: in std_logic;
---		IRAM_DATA				: in std_logic_vector(2*Data_size-1 downto 0);
+--------------------------------------------------------------------
+-- Components Declaration
+--------------------------------------------------------------------
+
+-- Instruction Ram And Data Ram are in the TestBench and you must connect it using
+
+--    IRAM_ADDRESS      : out std_logic_vector(Instr_size - 1 downto 0);
+--    IRAM_ISSUE        : out std_logic;
+--    IRAM_READY        : in std_logic;
+--    IRAM_DATA         : in std_logic_vector(2*Data_size-1 downto 0);
 --
---		DRAM_ADDRESS			: out std_logic_vector(Instr_size-1 downto 0);
---		DRAM_ISSUE				: out std_logic;
---		DRAM_READNOTWRITE		: out std_logic;
---		DRAM_READY				: in std_logic;
---		DRAM_DATA				: inout std_logic_vector(2*Data_size-1 downto 0)
+--    DRAM_ADDRESS      : out std_logic_vector(Instr_size-1 downto 0);
+--    DRAM_ISSUE        : out std_logic;
+--    DRAM_READNOTWRITE : out std_logic;
+--    DRAM_READY        : in std_logic;
+--    DRAM_DATA         : inout std_logic_vector(2*Data_size-1 downto 0)
 
   -- Datapath (MISSING!You must include it in your final project!)
-  
+
   -- Control Unit
   component dlx_cu
   generic (
-    MICROCODE_MEM_SIZE :     integer := 10;  -- Microcode Memory Size
-    FUNC_SIZE          :     integer := 11;  -- Func Field Size for R-Type Ops
-    OP_CODE_SIZE       :     integer := 6;  -- Op Code Size
-    --ALU_OPC_SIZE       :     integer := 6;  -- ALU Op Code Word Size
-    IR_SIZE            :     integer := 32;  -- Instruction Register Size    
-    CW_SIZE            :     integer := 15);  -- Control Word Size
+    MICROCODE_MEM_SIZE :     integer := 10;        -- Microcode Memory Size
+    FUNC_SIZE          :     integer := 11;        -- Func Field Size for R-Type Ops
+    OP_CODE_SIZE       :     integer := op_size;   -- Op Code Size
+--  ALU_OPC_SIZE       :     integer := 6;         -- ALU Op Code Word Size
+    IR_SIZE            :     integer := 32;        -- Instruction Register Size
+    CW_SIZE            :     integer := 15);       -- Control Word Size
   port (
     Clk                : in  std_logic;  -- Clock
-    Rst                : in  std_logic;  -- Reset:Active-Low
+    Rst                : in  std_logic;  -- Reset: Active-Low
     -- Instruction Register
     IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
     -- IF Control Signal
@@ -98,7 +99,7 @@ architecture dlx_rtl of DLX is
   ----------------------------------------------------------------
   -- Signals Declaration
   ----------------------------------------------------------------
-  
+
   -- Instruction Register (IR) and Program Counter (PC) declaration
   signal IR : std_logic_vector(IR_SIZE - 1 downto 0);
   signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
@@ -133,12 +134,12 @@ architecture dlx_rtl of DLX is
 
   begin  -- DLX
 
-    -- This is the input to program counter: currently zero 
-    -- so no uptade of PC happens
+    -- This is the input to program counter: currently zero
+    -- so no updade of PC happens
     -- TO BE REMOVED AS SOON AS THE DATAPATH IS INSERTED!!!!!
     -- a proper connection must be made here if more than one
     -- instruction must be executed
-    PC_BUS <= (others => '0'); 
+    PC_BUS <= (others => '0');
 
 
     -- purpose: Instruction Register Process
@@ -155,7 +156,7 @@ architecture dlx_rtl of DLX is
         end if;
       end if;
     end process IR_P;
-    
+
     -- COMPLETE WITH CACHE TO CONNECT IRAM and DRAM in the testbench...
 
 
@@ -197,10 +198,10 @@ architecture dlx_rtl of DLX is
       WB_MUX_SEL      => WB_MUX_SEL_i,
       RF_WE           => RF_WE_i
     );
-         
+
           -- IMPLEMENTS DATAPATH
 
 
-    
-    
+
+
 end dlx_rtl;

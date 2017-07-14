@@ -7,38 +7,36 @@ use work.globals.all;
 
 entity CU_HW is
   generic (
-    OP_CODE_SIZE                  : integer := op_size;   -- Op Code Size
+    OP_CODE_SIZE                  : integer := op_size;           -- Op Code Size
     IR_SIZE                       : integer := instruction_size;  -- Instruction Register Size
-    FUNC_SIZE                     : integer := function_size;  -- Func Field Size for R-Type Ops
-    CW_SIZE                       : integer := control_word_size   -- Control Word Size
+    FUNC_SIZE                     : integer := function_size;     -- Func Field Size for R-Type Ops
+    CW_SIZE                       : integer := control_word_size  -- Control Word Size
   ); -- Control Word Size
   port (
     Clk                : in  std_logic;  -- Clock
-    Rst                : in  std_logic;  -- Reset : Active-Low
+    Rst                : in  std_logic;  -- Reset: Active-Low
     -- Instruction Register
     IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
-    -- Pipe stage 1
+    -- Pipeline stage 1
     EN0                : out std_logic;
-    -- Pipe stage 2
+    -- Pipeline stage 2
     EN1                : out std_logic;  -- enables the register le and the pipeline registers
     RF1                : out std_logic;  -- enables the read port 1 of the register ﬁle
     RF2                : out std_logic;  -- enables the read port 2 of the register ﬁle
-    -- Pipe stage 3
+    -- Pipeline stage 3
     EN2                : out std_logic;  -- enables the pipe registers
-    S1                 : out std_logic;  -- input selection of the ﬁrst multiplexer
+    S1                 : out std_logic;  -- input selection of the first multiplexer
     S2                 : out std_logic;  -- input selection of the second multiplexer
     ALU1               : out std_logic;  -- alu control bit 1
     ALU2               : out std_logic;  -- alu control bit 2
     ALU3               : out std_logic;  -- alu control bit 3
     ALU4               : out std_logic;  -- alu control bit 4
-    -- Pipe stage 4
+    -- Pipeline stage 4
     EN3                : out std_logic;  -- enables the memory and the pipeline register
-    RM                 : out std_logic;  -- enables the read-out of the memory
-    WM                 : out std_logic;  -- enables the write-in of the memory
-    -- Pipe stage 5
+    RW                 : out std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
+    -- Pipeline stage 5
     S3                 : out std_logic;  -- input selection of the multiplexer
     WF1                : out std_logic   -- enables the write port of the register ﬁle
-
   );
 end entity;
 
@@ -50,8 +48,8 @@ architecture cu_rtl of CU_HW is
 
 begin  -- cu_rtl
 
-  IR_opcode(5 downto 0) <= IR_IN(31 downto 26);
-  IR_func(10 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
+  IR_opcode(op_size   - 1 downto 0)  <= IR_IN(opcode_up downto opcode_down);
+  IR_func  (FUNC_SIZE - 1 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
 
   -- Process assigning the control word values
   process (IR_opcode, IR_func) is
