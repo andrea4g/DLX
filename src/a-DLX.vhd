@@ -143,7 +143,7 @@ architecture dlx_rtl of DLX is
   -- signal IRam_Dout : std_logic_vector(IR_SIZE - 1 downto 0);
 
   -- Datapath Bus signals
-  signal PC_BUS : std_logic_vector(PC_SIZE -1 downto 0);
+  signal PC_BUS : std_logic_vector(PC_SIZE - 1 downto 0) := (others => '0');
 
   -- Control Unit Bus signals
   signal EN0_int  : std_logic;

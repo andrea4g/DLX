@@ -47,8 +47,6 @@ architecture beh of RWMEM is
 		end loop;
 	end rewrite_contenent;
 
-
-
 begin  -- beh
 	--write_process
 	WR_PROCESS:
@@ -91,7 +89,9 @@ begin  -- beh
 						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size);
 						mem_ready <= '1';
 					else
-						tmp_data <=DRAM_mem(to_integer(unsigned(ADDR))+1) & DRAM_mem(to_integer(unsigned(ADDR)));
+						tmp_data <=
+						--DRAM_mem(to_integer(unsigned(ADDR))+1) &
+						DRAM_mem(to_integer(unsigned(ADDR)));
 						int_data_ready <= '1';
 					end if;
 				else

@@ -66,7 +66,7 @@ begin
 					count <= 0;
 					valid <= '1';
 					idout <=
-					conv_std_logic_vector(Memory(conv_integer(unsigned(ADDRESS))+1),WORD_SIZE) &
+					--conv_std_logic_vector(Memory(conv_integer(unsigned(ADDRESS)) + 1), WORD_SIZE) &
 					conv_std_logic_vector(Memory(conv_integer(unsigned(ADDRESS))), WORD_SIZE);
 				end if;
 			else
