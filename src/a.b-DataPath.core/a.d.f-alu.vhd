@@ -5,11 +5,11 @@ use work.functions.all;
 use work.all;
 
 entity alu is
-  generic(n : integer := 2);
+  generic(nbit : integer := 32);
   port (
-    a, b      : in  std_logic_vector(n - 1 downto 0);
+    a, b      : in  std_logic_vector(nbit - 1 downto 0);
     unit_sel  : in  std_logic_vector(3 downto 0);
-    y         : out std_logic_vector(n - 1 downto 0)
+    y         : out std_logic_vector(nbit - 1 downto 0)
   );
 end entity;
 
@@ -79,6 +79,7 @@ architecture structural of alu is
   end component;
 
   component encoder is
+    generic(n : integer := 2);
     port (
       out_add     : in  std_logic_vector(n - 1 downto 0);
       out_sub     : in  std_logic_vector(n - 1 downto 0);
@@ -110,46 +111,46 @@ architecture structural of alu is
     );
   end component;
 
-  signal out_add, out_sub, out_sl, out_sr, out_log : std_logic_vector(n - 1 downto 0);
+  signal out_add, out_sub, out_sl, out_sr, out_log : std_logic_vector(nbit - 1 downto 0);
   signal type_sr                                   : std_logic;
-  signal pos_s                                     : std_logic_vector(log2(n) downto 0);
-  signal cmp_out, eq_out                           : std_logic_vector(n - 1 downto 0);
+  signal pos_s                                     : std_logic_vector(log2(nbit) - 1 downto 0);
+  signal cmp_out, eq_out                           : std_logic_vector(nbit - 1 downto 0);
 
 begin
 
-  pos_s <= b(log2(n) downto 0);
+  pos_s <= b(log2(nbit) - 1 downto 0);
   cmp_out <= (others => '0');
   eq_out <= (others => '0');
 
   add : p4
-  generic map(n)
+  generic map(nbit)
   port map(a, b, '0', out_add);
 
   sub : subtractor
-  generic map(n)
+  generic map(nbit)
   port map(a, b, '0', out_sub);
 
   sl : barrel_shifter_left
-  generic map(n)
+  generic map(nbit)
   port map(a, pos_s, out_sl);
 
   sr : barrel_shifter_right
-  generic map(n)
+  generic map(nbit)
   port map(a, pos_s, type_sr, out_sl);
 
   comp : comparator
-  generic map(n)
+  generic map(nbit)
   port map(a, b, cmp_out(0), eq_out(0));
 
   sh : xor_2
   port map(unit_sel(2), unit_sel(0), type_sr);
 
   logi : logic_n
-  generic map(n)
+  generic map(nbit)
   port map(a, b, unit_sel(0), unit_sel(1), unit_sel(2), unit_sel(3), out_log);
 
   enc : encoder
-  generic map(n)
+  generic map(nbit)
   port map(out_add, out_sub, out_sl, out_sr, out_log, cmp_out, eq_out, unit_sel, y);
 
 end architecture;

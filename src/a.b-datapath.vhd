@@ -45,13 +45,11 @@ end entity; -- datapath
 architecture structural of datapath is
 
   component alu is
-    generic(n : integer := 2);
+    generic(nbit : integer := 32);
     port (
-      a, b      : in  std_logic_vector(n - 1 downto 0); -- operands
+      a, b      : in  std_logic_vector(nbit - 1 downto 0); -- operands
       unit_sel  : in  std_logic_vector(3 downto 0);     -- ALU's unit selector
-      y         : out std_logic_vector(n - 1 downto 0); -- operation result
-      cout      : out std_logic;                        -- comparator output
-      z         : out std_logic                         -- comparator output: useless, it won't be connected
+      y         : out std_logic_vector(nbit - 1 downto 0) -- operation result
     );
   end component;
 
@@ -75,9 +73,9 @@ architecture structural of datapath is
       rd1     : in  std_logic;
       rd2     : in  std_logic;
       wr      : in  std_logic;
-      add_wr  : in  std_logic_vector(4  downto 0);
-      add_rd1 : in  std_logic_vector(4  downto 0);
-      add_rd2 : in  std_logic_vector(4  downto 0);
+      add_wr  : in  std_logic_vector(4 downto 0);
+      add_rd1 : in  std_logic_vector(4 downto 0);
+      add_rd2 : in  std_logic_vector(4 downto 0);
       datain  : in  std_logic_vector(word_size - 1 downto 0);
       -- outputs
       out1    : out std_logic_vector(word_size - 1 downto 0);
@@ -120,7 +118,7 @@ architecture structural of datapath is
     generic(n : integer := 1);
     port (
       x : in  std_logic_vector (n - 1 downto 0);
-      y : in  std_logic
+      y : out std_logic
     );
   end component; -- zero_comp
 
@@ -307,7 +305,7 @@ begin
   port map(clk, rst, en2_st2, out_b, out_me);
 
   rd_2 : reg_n
-  generic map(word_size)
+  generic map(add_size)
   port map(clk, rst, en2_st2, out_rd1, out_rd2);
 
   npc_2 : reg_n
@@ -320,13 +318,13 @@ begin
 
   mux_j : mux21_generic
   generic map(word_size)
-  port map(npc_st3, alu_st3, cond_st3, pc_st4);
+  port map(npc_st3, alu_st3, cond_st3, pc_out);
 
-  pc_ff : reg_n
-  generic map (word_size)
-  port map (
-    clk, rst, en3_st3, pc_st4, pc_out
-  );
+  --pc_ff : reg_n
+  --generic map (word_size)
+  --port map (
+  --  clk, rst, en3_st3, pc_st4, pc_out
+  --);
 
   dram_addr    <= alu_st3;
   dram_wr_data <= out_me;
@@ -343,7 +341,7 @@ begin
   port map(clk, rst, en3_st3, dram_rd_data, out_dram);
 
   rd_3 : reg_n
-  generic map(word_size)
+  generic map(add_size)
   port map(clk, rst, en3_st3, out_rd2, out_rd3);
 
 -----------------------------------------------------------------------------------------

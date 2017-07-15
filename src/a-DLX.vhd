@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use work.ROCACHE_PKG.all;
 use work.RWCACHE_PKG.all;
+use work.globals.all;
 --use work.myTypes.all;
 
 entity DLX is
@@ -15,14 +16,14 @@ entity DLX is
     RST               : in    std_logic;    -- Reset: Active-High
     -- Instr_size = 32, Data_size = 32
     IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
-    --IRAM_ISSUE        : out   std_logic;
-    --IRAM_READY        : in    std_logic;
+    IRAM_ISSUE        : out   std_logic;
+    IRAM_READY        : in    std_logic;
     IRAM_DATA         : in    std_logic_vector(Data_size - 1 downto 0);
 
     DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
-    DRAM_ISSUE        : out   std_logic;
     DRAM_READNOTWRITE : out   std_logic;
-    --DRAM_READY        : in    std_logic;
+    DRAM_ISSUE        : out   std_logic;
+    DRAM_READY        : in    std_logic;
     DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
   );
 end DLX;
@@ -67,8 +68,8 @@ architecture dlx_rtl of DLX is
       Rst                : in  std_logic;  -- Reset: Active-Low
       -- Instruction Register
       IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
-      -- Pipeline stage 1
       EN0                : out std_logic;
+      -- Pipeline stage 1
       -- Pipeline stage 2
       EN1                : out std_logic;  -- enables the register le and the pipeline registers
       RF1                : out std_logic;  -- enables the read port 1 of the register ﬁle
@@ -167,14 +168,6 @@ architecture dlx_rtl of DLX is
 
   begin  -- DLX
 
-    -- This is the input to program counter: currently zero
-    -- so no updade of PC happens
-    -- TO BE REMOVED AS SOON AS THE DATAPATH IS INSERTED!!!!!
-    -- a proper connection must be made here if more than one
-    -- instruction must be executed
-    --PC_BUS <= (others => '0');
-
-
     -- purpose: Instruction Register Process
     -- type   : sequential
     -- inputs : Clk, Rst, IRam_DOut, IR_LATCH_EN_i
@@ -184,14 +177,13 @@ architecture dlx_rtl of DLX is
       if Rst = '0' then                 -- asynchronous reset (active low)
         IR <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-        if (IR_LATCH_EN_i = '1') then
+        if (EN0_int = '1') then
           IR <= IRAM_DATA;
         end if;
       end if;
     end process IR_P;
 
     -- COMPLETE WITH CACHE TO CONNECT IRAM and DRAM in the testbench...
-    IRAM_ADDRESS <= PC_BUS;
 
     -- purpose: Program Counter Process
     -- type   : sequential
@@ -202,8 +194,9 @@ architecture dlx_rtl of DLX is
       if Rst = '0' then                 -- asynchronous reset (active low)
         PC <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-        if (PC_LATCH_EN_i = '1') then
+        if (EN3_int = '1') then
           PC <= PC_BUS;
+          IRAM_ADDRESS <= PC_BUS;
         end if;
       end if;
     end process PC_P;
@@ -213,7 +206,7 @@ architecture dlx_rtl of DLX is
     port map (
       Clk   => Clk,
       Rst   => Rst,
-      IR_I  => IR,
+      IR_IN => IR,
       EN0   => EN0_int,
       EN1   => EN1_int,
       RF1   => RF1_int,
@@ -221,10 +214,10 @@ architecture dlx_rtl of DLX is
       EN2   => EN2_int,
       S1    => S1_int ,
       S2    => S2_int ,
-      ALU1  => ALU1_in,
-      ALU2  => ALU2_in,
-      ALU3  => ALU3_in,
-      ALU4  => ALU4_in,
+      ALU1  => ALU1_int,
+      ALU2  => ALU2_int,
+      ALU3  => ALU3_int,
+      ALU4  => ALU4_int,
       EN3   => EN3_int,
       DEN   => DEN_int,
       RW    => RW_int ,
@@ -233,7 +226,6 @@ architecture dlx_rtl of DLX is
     );
 
   -- DATAPATH
-
   dp : datapath
   port map(
     clk           => Clk,
@@ -241,7 +233,7 @@ architecture dlx_rtl of DLX is
     -- stage 1
     en0           => EN0_int,
     ir            => IR,
-    pc_in         => PC_BUS,
+    pc_in         => PC,
     -- stage 2
     en1           => EN1_int,
     rf1           => RF1_int,
@@ -250,16 +242,16 @@ architecture dlx_rtl of DLX is
     en2           => EN2_int,
     s1            => S1_int ,
     s2            => S2_int ,
-    alu1          => ALU1_in,
-    alu2          => ALU2_in,
-    alu3          => ALU3_in,
-    alu4          => ALU4_in,
+    alu1          => ALU1_int,
+    alu2          => ALU2_int,
+    alu3          => ALU3_int,
+    alu4          => ALU4_int,
     -- stage 4
     en3           => EN3_int,
     rw            => RW_int,
     den           => DEN_int,
     dram_rw_en    => DRAM_READNOTWRITE,
-    dram_enable   => ,
+    dram_enable   => DRAM_ISSUE,
     dram_rd_data  => DRAM_DATA,
     dram_addr     => DRAM_ADDRESS,
     dram_wr_data  => DRAM_DATA,

@@ -10,87 +10,106 @@ end DLX_TestBench;
 
 architecture tb of DLX_TestBench is
 	component ROMEM is
-	generic (
-		FILE_PATH	: string;				-- ROM data file
-		ENTRIES		: integer := 128;		-- Number of lines in the ROM
-		WORD_SIZE	: integer := 32;		-- Number of bits per word
-		DATA_DELAY	: natural := 2			-- Delay ( in # of clock cycles )
-	);
-	port (
-		CLK					: in std_logic;
-		RST					: in std_logic;
-		ADDRESS				: in std_logic_vector(WORD_SIZE - 1 downto 0);
-		ENABLE				: in std_logic;
-		DATA_READY			: out std_logic;
-		DATA				: out std_logic_vector(2*WORD_SIZE - 1 downto 0)
-	);
+		generic (
+			file_path	: -- string(1 to 37) := "C://DLX//dlx-master//rocache//hex.txt";
+						string;
+			ENTRIES		: integer := 128;
+			WORD_SIZE	: integer := 32;
+			data_delay	: natural := 2
+		);
+		port (
+			CLK					: in std_logic;
+			RST					: in std_logic;
+			ADDRESS			: in std_logic_vector(WORD_SIZE - 1 downto 0);
+			ENABLE			: in std_logic;
+			DATA_READY	: out std_logic;
+			DATA				: out std_logic_vector(WORD_SIZE - 1 downto 0)
+		);
 	end component;
 
 	component RWMEM is
-	generic(
-			FILE_PATH: string;				-- RAM output data file
-			FILE_PATH_INIT: string;			-- RAM initialization data file
-			WORD_SIZE: natural := 32;		-- Number of bits per word
-			ENTRIES: 	natural := 128;		-- Number of lines in the ROM
-			DATA_DELAY: natural := 2		-- Delay ( in # of clock cycles )
-		);
-	port (
-			CLK   				: in std_logic;
-			RST					: in std_logic;
-			ADDRESS				: in std_logic_vector(WORD_SIZE - 1 downto 0);
-			ENABLE				: in std_logic;
-			READNOTWRITE		: in std_logic;
-			DATA_READY			: out std_logic;
-			INOUT_DATA			: inout std_logic_vector(2*WORD_SIZE-1 downto 0)
-		);
-	end component;
+		generic(
+				file_path: string;
+				file_path_init: string;
+				Data_size : natural := 32;
+				Instr_size: natural := 32;
+				RAM_DEPTH: 	natural := 128;
+				data_delay: natural := 2
+			);
+		port (
+				CLK   				: in std_logic;
+				RST					: in std_logic;
+				ADDR				: in std_logic_vector(Instr_size - 1 downto 0);
+				ENABLE				: in std_logic;
+				READNOTWRITE		: in std_logic;
+				DATA_READY			: out std_logic;
+				INOUT_DATA			: inout std_logic_vector(Data_size-1 downto 0)
+			);
+		end component;
 
 	component DLX is
+		generic (
+			IR_SIZE      : integer := 32;      -- Instruction Register Size
+			PC_SIZE      : integer := 32       -- Program Counter Size
+		);
 		port (
 			-- Inputs
-			CLK						: in std_logic;		-- Clock
-			RST						: in std_logic;		-- Reset:Active-High
+			CLK               : in    std_logic;    -- Clock
+			RST               : in    std_logic;    -- Reset: Active-High
+			-- Instr_size = 32, Data_size = 32
+			IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+			IRAM_ISSUE        : out   std_logic;
+			IRAM_READY        : in    std_logic;
+			IRAM_DATA         : in    std_logic_vector(Data_size - 1 downto 0);
 
-			IRAM_ADDRESS			: out std_logic_vector(Instr_size - 1 downto 0);
-			IRAM_ISSUE				: out std_logic;
-			IRAM_READY				: in std_logic;
-			IRAM_DATA				: in std_logic_vector(2*Data_size-1 downto 0);
-
-			DRAM_ADDRESS			: out std_logic_vector(Instr_size-1 downto 0);
-			DRAM_ISSUE				: out std_logic;
-			DRAM_READNOTWRITE		: out std_logic;
-			DRAM_READY				: in std_logic;
-			DRAM_DATA				: inout std_logic_vector(2*Data_size-1 downto 0)
+			DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+			DRAM_READNOTWRITE : out   std_logic;
+			DRAM_ISSUE        : out   std_logic;
+			DRAM_READY        : in    std_logic;
+			DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
 		);
 	end component;
 
 	signal CLK :				std_logic := '0';		-- Clock
 	signal RST :				std_logic;		-- Reset:Active-Low
 	signal IRAM_ADDRESS :		std_logic_vector(Instr_size - 1 downto 0);
-	signal IRAM_ENABLE :		std_logic;
+	signal IRAM_ENABLE :		std_logic := '1';
 	signal IRAM_READY :			std_logic;
-	signal IRAM_DATA :			std_logic_vector(2*Data_size-1 downto 0);
+	signal IRAM_DATA :			std_logic_vector(Data_size-1 downto 0);
+	signal IRAM_ISSUE : std_logic;
 
 	signal DRAM_ADDRESS :		std_logic_vector(Instr_size-1 downto 0);
 	signal DRAM_ENABLE :		std_logic;
 	signal DRAM_READNOTWRITE :	std_logic;
 	signal DRAM_READY :			std_logic;
-	signal DRAM_DATA :			std_logic_vector(2*Data_size-1 downto 0);
+	signal DRAM_DATA :			std_logic_vector(Data_size-1 downto 0);
 
 begin
 	-- IRAM
 	IRAM : ROMEM
-		generic map ("/home/gandalf/Desktop/dlx/rocache/hex.txt")
+		generic map ("C:/Workspace/DLX/src/test_bench_and_memory/TB_romem/hex.txt")
 		port map (CLK, RST, IRAM_ADDRESS, IRAM_ENABLE, IRAM_READY, IRAM_DATA);
 
 	-- DRAM
 	DRAM : RWMEM
-		generic map ("/home/gandalf/Desktop/dlx/rwcache/hex_init.txt","/home/gandalf/Desktop/dlx/rwcache/hex.txt")
+		generic map("C:/Workspace/DLX/src/test_bench_and_memory/TB_rwmem/hex.txt", "C:/Workspace/DLX/src/test_bench_and_memory/TB_rwmem/hex_init.txt")
 		port map (CLK, RST, DRAM_ADDRESS, DRAM_ENABLE, DRAM_READNOTWRITE, DRAM_READY, DRAM_DATA);
 
 	-- DLX
-	My_DLX_GIANLUCA : DLX
-		port map (CLK, RST, IRAM_ADDRESS, IRAM_ENABLE, IRAM_READY, IRAM_DATA, DRAM_ADDRESS, DRAM_ENABLE, DRAM_READNOTWRITE, DRAM_READY, DRAM_DATA);
+	DLX_SOMEBODY_ONCE : DLX
+		port map (
+			CLK               => CLK,
+			RST               => RST,
+			IRAM_ADDRESS      => IRAM_ADDRESS,
+			IRAM_ISSUE        => IRAM_ISSUE,
+			IRAM_READY        => IRAM_READY,
+			IRAM_DATA         => IRAM_DATA,
+			DRAM_ADDRESS      => DRAM_ADDRESS,
+			DRAM_READNOTWRITE => DRAM_READNOTWRITE,
+			DRAM_ISSUE        => DRAM_ENABLE,
+			DRAM_READY        => DRAM_READY,
+			DRAM_DATA         => DRAM_DATA
+		);
 
 	Clk <= not Clk after 10 ns;
 	Rst <= '1', '0' after 5 ns;

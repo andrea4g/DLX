@@ -13,22 +13,23 @@ entity reg_n is
   );
 end entity; -- reg_n
 
-
 architecture structural of reg_n is
 
   component ffd_async is
-    port (d     : in  std_logic;
-          clk   : in  std_logic;
-          reset : in  std_logic;
-          en    : in  std_logic;
-          q     : out std_logic);
+    port (
+    	clk   :	in	std_logic;
+    	reset :	in	std_logic;
+    	en 		: in  std_logic;
+    	d     : in	std_logic;
+    	q     : out	std_logic
+    );
   end component;
 
 begin
 
   ff_i : for i in 0 to n-1 generate
     ff : ffd_async
-    port map(x(i), clock, reset, enable, y(i));
+    port map(clock, reset, enable, x(i), y(i));
   end generate; -- ff_i
 
 end architecture; -- structural

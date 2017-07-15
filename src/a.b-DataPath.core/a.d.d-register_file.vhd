@@ -15,9 +15,9 @@ entity register_file is
 	  rd1     : in  std_logic;
 	  rd2     : in  std_logic;
 	  wr      : in  std_logic;
-	  add_wr  : in  std_logic_vector(log2(n) downto 0);
-	  add_rd1 : in  std_logic_vector(log2(n) downto 0);
-	  add_rd2 : in  std_logic_vector(log2(n) downto 0);
+	  add_wr  : in  std_logic_vector(log2(n) - 1 downto 0);
+	  add_rd1 : in  std_logic_vector(log2(n) - 1 downto 0);
+	  add_rd2 : in  std_logic_vector(log2(n) - 1 downto 0);
 	  datain  : in  std_logic_vector(n - 1 downto 0);
     -- outputs
     out1    : out std_logic_vector(n - 1 downto 0);

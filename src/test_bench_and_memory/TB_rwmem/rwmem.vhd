@@ -10,7 +10,7 @@ entity RWMEM is
 	generic(
 			file_path: string;
 			file_path_init: string;
-			Data_size : natural := 64;
+			Data_size : natural := 32;
 			Instr_size: natural := 32;
 			RAM_DEPTH: 	natural := 128;
 			data_delay: natural := 2
@@ -33,13 +33,13 @@ architecture beh of RWMEM is
 	signal int_data_ready,mem_ready: std_logic;
 	signal counter: natural:=0;
 
-	procedure rewrite_contenent(data: in DRAMtype; path_file: string) is
+	procedure rewrite_contenent(data: in DRAMtype; file_path: string) is
 		variable index: natural range 0 to RAM_DEPTH;
 		file wr_file: text;
 		variable line_in: line;
 	begin
 		index:=0;
-		file_open(wr_file,path_file,WRITE_MODE);
+		file_open(wr_file,file_path,WRITE_MODE);
 		while index < RAM_DEPTH loop
 			hwrite(line_in,data(index));
 			writeline(wr_file,line_in);
@@ -88,7 +88,7 @@ begin  -- beh
 					counter <= 0;
 					if (READNOTWRITE = '0') then
 						DRAM_Mem(to_integer(unsigned(ADDR))+1) <= INOUT_DATA(Instr_size - 1 downto 0);
-						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size); 
+						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size);
 						mem_ready <= '1';
 					else
 						tmp_data <=DRAM_mem(to_integer(unsigned(ADDR))+1) & DRAM_mem(to_integer(unsigned(ADDR)));
@@ -106,6 +106,6 @@ begin  -- beh
 
 	rewrite_contenent(DRAM_mem,file_path); -- refresh the file
 	INOUT_DATA <= tmp_data when int_data_ready='1' else (others=>'Z'); -- to cache
-	data_ready <= int_data_ready or mem_ready;--delay add
+	data_ready <= int_data_ready or mem_ready; --delay add
 
 end beh;
