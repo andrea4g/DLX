@@ -28,32 +28,11 @@ entity DLX is
   );
 end DLX;
 
--- This architecture is currently not complete
--- it just includes:
--- instruction register (complete)
--- program counter (complete)
--- instruction ram memory (complete)
--- control unit (UNCOMPLETE)
--- datapath
-
+-- Architecture
 architecture dlx_rtl of DLX is
-
 --------------------------------------------------------------------
 -- Components Declaration
 --------------------------------------------------------------------
-
--- Instruction Ram And Data Ram are in the TestBench and you must connect it using
-
---    IRAM_ADDRESS      : out std_logic_vector(Instr_size - 1 downto 0);
---    IRAM_ISSUE        : out std_logic;
---    IRAM_READY        : in std_logic;
---    IRAM_DATA         : in std_logic_vector(Data_size-1 downto 0);
---
---    DRAM_ADDRESS      : out std_logic_vector(Instr_size-1 downto 0);
---    DRAM_ISSUE        : out std_logic;
---    DRAM_READNOTWRITE : out std_logic;
---    DRAM_READY        : in std_logic;
---    DRAM_DATA         : inout std_logic_vector(Data_size-1 downto 0)
 
   -- Control Unit
   component CU_HW is
@@ -94,6 +73,7 @@ architecture dlx_rtl of DLX is
     );
   end component;
 
+  -- Datapath
   component datapath is
     port (
     -- inputs
@@ -134,25 +114,14 @@ architecture dlx_rtl of DLX is
     );
   end component; -- datapath
 
-  component not_1 is
-    port(
-      a : in  std_logic;
-      y : out std_logic
-    );
-  end component;
-
-
   ----------------------------------------------------------------
   -- Signals Declaration
   ----------------------------------------------------------------
 
-  -- Instruction Register (IR) and Program Counter (PC) declaration
+  -- Instruction Register (IR) and Program Counter (pc_in_i) declaration
   signal IR : std_logic_vector(IR_SIZE - 1 downto 0);
-  signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
-  signal PC_BUS : std_logic_vector(PC_SIZE - 1 downto 0);
-
-  -- Instruction Ram Bus signals
-  --signal rst_not : std_logic;
+  signal pc_in_i : std_logic_vector(PC_SIZE - 1 downto 0);
+  signal pc_out_i : std_logic_vector(PC_SIZE - 1 downto 0);
 
   -- Control Unit Bus signals
   signal EN0_int  : std_logic;
@@ -174,39 +143,36 @@ architecture dlx_rtl of DLX is
   signal S3_int   : std_logic;
   signal WF1_int  : std_logic;
 
-  -- Data Ram Bus signals
-
-
   begin  -- DLX
     -- purpose: Instruction Register Process
     -- type   : sequential
-    -- inputs : Clk, Rst, IRam_DOut, IR_LATCH_EN_i
+    -- inputs : Clk, Rst, IRAM_DATA, EN0_int
     -- outputs: IR_IN_i
     IR_P: process (Clk, Rst)
     begin  -- process IR_P
       if Rst = '0' then                 -- asynchronous reset (active low)
         IR <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-        --if (EN0_int = '1') then
+        if (EN0_int = '1') then
           IR <= IRAM_DATA;
-        --end if;
+        end if;
       end if;
     end process IR_P;
 
     -- purpose: Program Counter Process
     -- type   : sequential
-    -- inputs : Clk, Rst, PC
-    -- outputs: IRam_Addr
+    -- inputs : Clk, Rst, pc_out_i
+    -- outputs: IRAM_ADDRESS, pc_in_i
     PC_P: process (Clk, Rst)
     begin  -- process PC_P
       if Rst = '0' then                 -- asynchronous reset (active low)
-        PC  <= (others => '0');
+        pc_in_i  <= (others => '0');
         IRAM_ADDRESS <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
-        --if (EN3_int = '1') then
-        PC <= PC_BUS;
-        IRAM_ADDRESS <= PC_BUS;
-        --end if;
+        if (EN0_int = '1') then
+          pc_in_i <= pc_out_i;
+          IRAM_ADDRESS <= pc_out_i;
+        end if;
       end if;
     end process PC_P;
 
@@ -244,7 +210,7 @@ architecture dlx_rtl of DLX is
     -- stage 1
     en0           => EN0_int,
     ir            => IR,
-    pc_in         => PC,
+    pc_in         => pc_in_i,
     -- stage 2
     en1           => EN1_int,
     rf1           => RF1_int,
@@ -268,10 +234,12 @@ architecture dlx_rtl of DLX is
     dram_rd_data  => DRAM_DATA,
     dram_addr     => DRAM_ADDRESS,
     dram_wr_data  => DRAM_DATA,
-    pc_out        => PC_BUS,
+    pc_out        => pc_out_i,
     -- stage 5
-    s3            => S3_int ,
+    s3            => S3_int,
     wf1           => WF1_int
   );
+
+  -- IRAM_ADDRESS <= pc_out_i;
 
 end dlx_rtl;

@@ -57,7 +57,7 @@ begin  -- cu_rtl
   -- Process assigning the control word values
   process (IR_opcode, IR_func) is
   begin
-    if Rst = '0'                                  then CW <= (others => '0'); -- Reset
+    if Rst = '0'                                  then CW <= "100000000000000000"; -- Reset
     elsif IR_opcode = J                           then CW <= "110011100000110000"; -- J
     elsif IR_opcode = J_JAL                       then CW <= "110011100000110000"; -- JAL
     elsif IR_opcode = J_BEQZ                      then CW <= "111010100000110000"; -- I_BEQZ

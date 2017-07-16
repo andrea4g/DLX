@@ -149,24 +149,24 @@ architecture structural of datapath is
   -- signals stage 1
   constant c4    : std_logic_vector (3 downto 0) := X"4";
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
-  signal next_pc : std_logic_vector (word_size - 1 downto 0);
-  signal npc     : std_logic_vector (word_size - 1 downto 0);
+  -- signal next_pc : std_logic_vector (word_size - 1 downto 0); -- Adder output
+  signal npc     : std_logic_vector (word_size - 1 downto 0); -- Adder output delayed
   signal ir_st1  : std_logic_vector (word_size - 1 downto 0);
 
   -- signals stage 2
-  signal data_out, rf_out1, rf_out2, out_inp1, out_a, out_b, inp2_32, out_inp2 : std_logic_vector(word_size - 1 downto 0);
+  signal data_out, rf_out1, rf_out2, out_a, out_b, inp2_32, imm_st2 : std_logic_vector(word_size - 1 downto 0);
   signal rd1, rd2, rd : std_logic_vector(add_size - 1 downto 0);
   signal inp2         : std_logic_vector(inp2_up downto 0);
   signal out_rd1      : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 3
-  signal out_mux1, out_mux2, out_alu, alu_st3, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
+  signal out_mux1, out_mux2, out_alu, alu_st3, out_me : std_logic_vector(word_size - 1 downto 0);
   signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
   signal alu_bit  : std_logic_vector(3 downto 0);
-  signal z, cond_xor, cond, cond_st3 : std_logic; -- zero comparator output
+  signal z, cond_xor, cond : std_logic; -- zero comparator output
 
   -- signals stage 4
-  signal out_val, alu_st4, out_dram, pc_st4 : std_logic_vector(word_size - 1 downto 0);
+  signal out_val, alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
   signal out_rd3 : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 5
@@ -224,7 +224,6 @@ architecture structural of datapath is
   signal wf1_st3  : std_logic;
 
   -- stage 4->5
-
   signal  s3_st4  : std_logic;
   signal wf1_st4  : std_logic;
 
@@ -237,19 +236,18 @@ begin
 
   ir_ff : reg_n
   generic map (instruction_size)
-  port map (
-    clk, rst, en0, ir, ir_st1
-  );
+  port map (clk, rst, en0, ir, ir_st1);
 
   four(3 downto 0) <=  c4;
 
   pc_add : rca_n
   generic map (word_size)
-  port map (pc_in, four, '0', next_pc);
+  port map (pc_in, four, '0', npc);
+  -- port map (pc_in, four, '0', next_pc);
 
-  npc_reg : reg_n
-  generic map (word_size)
-  port map (clk, rst, '1', next_pc, npc);
+  -- npc_reg : reg_n
+  -- generic map (word_size)
+  -- port map (clk, rst, '1', next_pc, npc);
 
 -----------------------------------------------------------------------------------------
 -- stage 2
@@ -264,10 +262,6 @@ begin
   rf : register_file
   generic map (word_size)
   port map(clk, rst, en1_st1, rf1_st1, rf2_st1, wf1_st4, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
-
-  --npc_1 : reg_n
-  --generic map(word_size)
-  --port map(clk, rst, en1_st1, npc, out_inp1);
 
   a : reg_n
   generic map(word_size)
@@ -284,7 +278,7 @@ begin
 
   in2 : reg_n
   generic map(word_size)
-  port map(clk, rst, en1_st1, inp2_32, out_inp2);
+  port map(clk, rst, en1_st1, inp2_32, imm_st2);
 
   rd_1 : reg_n
   generic map(add_size)
@@ -305,16 +299,13 @@ begin
   and_j : and_2
   port map(cond_xor, jump_en_st2, cond);
 
-  --cond_ff : ffd_async
-  --port map (clk, rst, en2_st2, cond, cond_st3);
-
   mux1_alu : mux21_generic
   generic map(word_size)
-  port map(out_inp1, out_a, s1_st2, out_mux1);
+  port map(npc, out_a, s1_st2, out_mux1);
 
   mux2_alu : mux21_generic
   generic map(word_size)
-  port map(out_b, out_inp2, s2_st2, out_mux2);
+  port map(out_b, imm_st2, s2_st2, out_mux2);
 
   arith_log_un : alu
   generic map(word_size)
@@ -332,10 +323,6 @@ begin
   generic map(add_size)
   port map(clk, rst, en2_st2, out_rd1, out_rd2);
 
-  --npc_2 : reg_n
-  --generic map(word_size)
-  --port map(clk, rst, en2_st2, out_inp1, npc_st3);
-
 -----------------------------------------------------------------------------------------
 -- stage 4
 -----------------------------------------------------------------------------------------
@@ -343,12 +330,6 @@ begin
   mux_j : mux21_generic
   generic map(word_size)
   port map(npc, alu_st3, cond, pc_out);
-
-  --pc_ff : reg_n
-  --generic map (word_size)
-  --port map (
-  --  clk, rst, en3_st3, pc_st4, pc_out
-  --);
 
   dram_addr    <= alu_st3;
   dram_wr_data <= out_me;
@@ -377,6 +358,7 @@ begin
 
 -----------------------------------------------------------------------------------------
 
+  -- FFs to delay the control word that arrives from the CU
   -- stage 1 -> 2
    en1_cw1  :  ffd_async
   port map(clk, rst, '1', en1, en1_st1);
