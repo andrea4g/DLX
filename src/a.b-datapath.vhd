@@ -265,9 +265,9 @@ begin
   generic map (word_size)
   port map(clk, rst, en1_st1, rf1_st1, rf2_st1, wf1_st4, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
 
-  npc_1 : reg_n
-  generic map(word_size)
-  port map(clk, rst, en1_st1, npc, out_inp1);
+  --npc_1 : reg_n
+  --generic map(word_size)
+  --port map(clk, rst, en1_st1, npc, out_inp1);
 
   a : reg_n
   generic map(word_size)
@@ -305,8 +305,8 @@ begin
   and_j : and_2
   port map(cond_xor, jump_en_st2, cond);
 
-  cond_ff : ffd_async
-  port map (clk, rst, en2_st2, cond, cond_st3);
+  --cond_ff : ffd_async
+  --port map (clk, rst, en2_st2, cond, cond_st3);
 
   mux1_alu : mux21_generic
   generic map(word_size)
@@ -332,9 +332,9 @@ begin
   generic map(add_size)
   port map(clk, rst, en2_st2, out_rd1, out_rd2);
 
-  npc_2 : reg_n
-  generic map(word_size)
-  port map(clk, rst, en2_st2, out_inp1, npc_st3);
+  --npc_2 : reg_n
+  --generic map(word_size)
+  --port map(clk, rst, en2_st2, out_inp1, npc_st3);
 
 -----------------------------------------------------------------------------------------
 -- stage 4
@@ -342,7 +342,7 @@ begin
 
   mux_j : mux21_generic
   generic map(word_size)
-  port map(npc_st3, alu_st3, cond_st3, pc_out);
+  port map(npc, alu_st3, cond, pc_out);
 
   --pc_ff : reg_n
   --generic map (word_size)

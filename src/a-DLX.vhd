@@ -149,12 +149,10 @@ architecture dlx_rtl of DLX is
   -- Instruction Register (IR) and Program Counter (PC) declaration
   signal IR : std_logic_vector(IR_SIZE - 1 downto 0);
   signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
+  signal PC_BUS : std_logic_vector(PC_SIZE - 1 downto 0);
 
   -- Instruction Ram Bus signals
   --signal rst_not : std_logic;
-
-  -- Datapath Bus signals
-  signal PC_BUS : std_logic_vector(PC_SIZE - 1 downto 0) := (others => '0');
 
   -- Control Unit Bus signals
   signal EN0_int  : std_logic;
@@ -180,10 +178,6 @@ architecture dlx_rtl of DLX is
 
 
   begin  -- DLX
-
-    --inv : not_1
-    --port map(Rst, rst_not);
-
     -- purpose: Instruction Register Process
     -- type   : sequential
     -- inputs : Clk, Rst, IRam_DOut, IR_LATCH_EN_i
@@ -199,22 +193,19 @@ architecture dlx_rtl of DLX is
       end if;
     end process IR_P;
 
-    -- COMPLETE WITH CACHE TO CONNECT IRAM and DRAM in the testbench...
-
     -- purpose: Program Counter Process
     -- type   : sequential
-    -- inputs : Clk, Rst, PC_BUS
+    -- inputs : Clk, Rst, PC
     -- outputs: IRam_Addr
     PC_P: process (Clk, Rst)
     begin  -- process PC_P
       if Rst = '0' then                 -- asynchronous reset (active low)
-        PC      <= (others => '0');
-        PC_BUS  <= (others => '0');
+        PC  <= (others => '0');
         IRAM_ADDRESS <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
         --if (EN3_int = '1') then
-          PC <= PC_BUS;
-          IRAM_ADDRESS <= PC_BUS;
+        PC <= PC_BUS;
+        IRAM_ADDRESS <= PC_BUS;
         --end if;
       end if;
     end process PC_P;
