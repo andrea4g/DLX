@@ -15,7 +15,7 @@ architecture tb of DLX_TestBench is
 						string;
 			ENTRIES		: integer := 128;
 			WORD_SIZE	: integer := 32;
-			data_delay	: natural := 2
+			data_delay	: natural := 0
 		);
 		port (
 			CLK					: in std_logic;
@@ -34,7 +34,7 @@ architecture tb of DLX_TestBench is
 				Data_size : natural := 32;
 				Instr_size: natural := 32;
 				RAM_DEPTH: 	natural := 128;
-				data_delay: natural := 2
+				data_delay: natural := 0
 			);
 		port (
 				CLK   				: in std_logic;
@@ -71,7 +71,7 @@ architecture tb of DLX_TestBench is
 	end component;
 
 	signal CLK :				std_logic := '0';		-- Clock
-	signal RST :				std_logic;		-- Reset:Active-Low
+	signal RST :				std_logic;		-- Reset : Active-Low
 	signal IRAM_ADDRESS :		std_logic_vector(Instr_size - 1 downto 0);
 	signal IRAM_ENABLE :		std_logic := '1';
 	signal IRAM_READY :			std_logic;
@@ -96,7 +96,7 @@ begin
 		port map (CLK, RST, DRAM_ADDRESS, DRAM_ENABLE, DRAM_READNOTWRITE, DRAM_READY, DRAM_DATA);
 
 	-- DLX
-	DLX_SOMEBODY_ONCE : DLX
+	DLX_PD : DLX
 		port map (
 			CLK               => CLK,
 			RST               => RST,

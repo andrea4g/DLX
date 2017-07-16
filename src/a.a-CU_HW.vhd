@@ -53,7 +53,7 @@ architecture dlx_cu_hw of dlx_cu is
                                 "000000000000000", -- JAL to be filled
                                 "000000000000000", -- BEQZ to be filled
                                 "000000000000000", -- BNEZ
-                                "000000000000000", 
+                                "000000000000000",
                                 "000000000000000",
                                 "000000000000000", -- ADDI (0X08)
                                 "000000000000000",
@@ -178,8 +178,8 @@ begin  -- dlx_cu_rtl
   -- type   : combinational
   -- inputs : IR_i
   -- outputs: aluOpcode
-   ALU_OP_CODE_P : process (IR_opcode, IR_func)
-   begin  -- process ALU_OP_CODE_P
+  ALU_OP_CODE_P : process (IR_opcode, IR_func)
+  begin  -- process ALU_OP_CODE_P
 	case conv_integer(unsigned(IR_opcode)) is
 	        -- case of R type requires analysis of FUNC
 		when 0 =>

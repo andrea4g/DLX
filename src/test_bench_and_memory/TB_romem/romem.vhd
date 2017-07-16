@@ -14,7 +14,7 @@ entity ROMEM is
 					string;
 		ENTRIES		: integer := 128;
 		WORD_SIZE	: integer := 32;
-		data_delay	: natural := 2
+		data_delay	: natural := 0
 	);
 	port (
 		CLK					: in std_logic;

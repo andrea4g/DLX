@@ -13,7 +13,7 @@ entity RWMEM is
 			Data_size : natural := 32;
 			Instr_size: natural := 32;
 			RAM_DEPTH: 	natural := 128;
-			data_delay: natural := 2
+			data_delay: natural := 0
 		);
 	port (
 			CLK   				: in std_logic;
@@ -50,7 +50,7 @@ architecture beh of RWMEM is
 begin  -- beh
 	--write_process
 	WR_PROCESS:
-	process (CLK, RST,READNOTWRITE)
+	process (CLK, RST, READNOTWRITE)
 		file mem_fp: text;
 		variable index: integer range 0 to RAM_DEPTH;
 		variable file_line : line;
@@ -69,6 +69,7 @@ begin  -- beh
 			);
 
 			while (not endfile(mem_fp)) loop
+			--while (index < RAM_DEPTH) loop
 				readline(mem_fp,file_line);
 				hread(file_line,tmp_data_u);
 				DRAM_mem(index) <= tmp_data_u;
@@ -85,8 +86,9 @@ begin  -- beh
 				if (counter = data_delay) then
 					counter <= 0;
 					if (READNOTWRITE = '0') then
-						DRAM_Mem(to_integer(unsigned(ADDR))+1) <= INOUT_DATA(Instr_size - 1 downto 0);
-						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size);
+						-- DRAM_Mem(to_integer(unsigned(ADDR))+1) <= INOUT_DATA(Instr_size - 1 downto 0);
+						-- DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size);
+						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Instr_size - 1 downto 0);
 						mem_ready <= '1';
 					else
 						tmp_data <=
