@@ -63,8 +63,8 @@ begin
           end if;
         end if;
       else
-        out1 <= (others => 'Z');
-        out2 <= (others => 'Z');
+        out1 <= (others => '0');
+        out2 <= (others => '0');
       end if;
     else
       registers <= (others =>(others =>'0'));

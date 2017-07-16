@@ -42,7 +42,7 @@ begin
 		variable index : integer := 0;
 		variable tmp_data_u : std_logic_vector(WORD_SIZE-1 downto 0);
 	begin  -- process FILL_MEM_P
-		if (Rst = '1') then
+		if (Rst = '0') then
 			file_open(
 				mem_fp,
 				file_path,

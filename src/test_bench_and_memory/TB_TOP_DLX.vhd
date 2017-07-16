@@ -112,6 +112,6 @@ begin
 		);
 
 	Clk <= not Clk after 10 ns;
-	Rst <= '1', '0' after 5 ns;
+	Rst <= '0', '1' after 5 ns;
 
 end tb;

@@ -16,10 +16,10 @@ entity RWMEM is
 			data_delay: natural := 0
 		);
 	port (
-			CLK   				: in std_logic;
-			RST					: in std_logic;
-			ADDR				: in std_logic_vector(Instr_size - 1 downto 0);
-			ENABLE				: in std_logic;
+			CLK   					: in std_logic;
+			RST							: in std_logic;
+			ADDR						: in std_logic_vector(Instr_size - 1 downto 0);
+			ENABLE					: in std_logic;
 			READNOTWRITE		: in std_logic;
 			DATA_READY			: out std_logic;
 			INOUT_DATA			: inout std_logic_vector(Data_size-1 downto 0)
@@ -56,7 +56,7 @@ begin  -- beh
 		variable file_line : line;
 		variable tmp_data_u : std_logic_vector(INSTR_SIZE-1 downto 0);
 	begin  -- process
-		if RST = '1' then  	 -- asynchronous reset (active low)
+		if RST = '0' then  	 -- asynchronous reset (active low)
 --			while index < RAM_DEPTH loop
 --				DRAM_mem(index) <= std_logic_vector(to_unsigned(index,instr_size));
 --				index := index + 1;
@@ -74,6 +74,9 @@ begin  -- beh
 				hread(file_line,tmp_data_u);
 				DRAM_mem(index) <= tmp_data_u;
 				index := index + 1;
+				if (index = RAM_DEPTH) then
+					exit;
+				end if;
 			end loop;
 
 			file_close(mem_fp);

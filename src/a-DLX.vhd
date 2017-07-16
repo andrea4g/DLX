@@ -147,7 +147,7 @@ architecture dlx_rtl of DLX is
   signal PC : std_logic_vector(PC_SIZE - 1 downto 0);
 
   -- Instruction Ram Bus signals
-  signal rst_not : std_logic;
+  --signal rst_not : std_logic;
 
   -- Datapath Bus signals
   signal PC_BUS : std_logic_vector(PC_SIZE - 1 downto 0) := (others => '0');
@@ -175,8 +175,8 @@ architecture dlx_rtl of DLX is
 
   begin  -- DLX
 
-    inv : not_1
-    port map(Rst, rst_not);
+    --inv : not_1
+    --port map(Rst, rst_not);
 
     -- purpose: Instruction Register Process
     -- type   : sequential
@@ -184,7 +184,7 @@ architecture dlx_rtl of DLX is
     -- outputs: IR_IN_i
     IR_P: process (Clk, Rst)
     begin  -- process IR_P
-      if rst_not = '0' then                 -- asynchronous reset (active low)
+      if Rst = '0' then                 -- asynchronous reset (active low)
         IR <= (others => '0');
       elsif Clk'event and Clk = '1' then  -- rising clock edge
         --if (EN0_int = '1') then
@@ -201,7 +201,7 @@ architecture dlx_rtl of DLX is
     -- outputs: IRam_Addr
     PC_P: process (Clk, Rst)
     begin  -- process PC_P
-      if rst_not = '0' then                 -- asynchronous reset (active low)
+      if Rst = '0' then                 -- asynchronous reset (active low)
         PC      <= (others => '0');
         PC_BUS  <= (others => '0');
         IRAM_ADDRESS <= (others => '0');
@@ -217,7 +217,7 @@ architecture dlx_rtl of DLX is
     CU : CU_HW
     port map (
       Clk   => Clk,
-      Rst   => rst_not,
+      Rst   => Rst,
       IR_IN => IR,
       EN0   => EN0_int,
       EN1   => EN1_int,
@@ -241,7 +241,7 @@ architecture dlx_rtl of DLX is
   dp : datapath
   port map(
     clk           => Clk,
-    rst           => rst_not,
+    rst           => Rst,
     -- stage 1
     en0           => EN0_int,
     ir            => IR,

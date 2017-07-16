@@ -60,7 +60,7 @@ begin  -- cu_rtl
     elsif IR_opcode = J_JAL                       then CW <= "0000000000000000"; -- JAL
     elsif IR_opcode = J_BEQZ                      then CW <= "1110101000010000"; -- I_BEQZ
     elsif IR_opcode = J_BNEZ                      then CW <= "0000000000000000"; -- I_BNEZ
-    elsif IR_opcode = NOP                         then CW <= "1100000000000000"; -- NOP
+    elsif IR_opcode = NOP                         then CW <= "1100100000000000"; -- NOP
     elsif (IR_opcode = RTYPE and IR_func = R_ADD) then CW <= "1111110000010011"; -- R_ADD
     elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "1111110111110011"; -- R_SUB
     elsif (IR_opcode = RTYPE and IR_func = R_AND) then CW <= "1111110100010011"; -- R_AND

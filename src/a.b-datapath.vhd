@@ -26,6 +26,7 @@ entity datapath is
     alu2    : in  std_logic;  -- alu control bit 2
     alu3    : in  std_logic;  -- alu control bit 3
     alu4    : in  std_logic;  -- alu control bit 4
+    jump_cu : in  std_logic;
     -- stage 4
     en3     : in  std_logic;  -- enables the dram and the pipeline register
     rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
@@ -130,6 +131,13 @@ architecture structural of datapath is
     );
   end component; -- end sign_extension
 
+  component and_2 is
+    port(
+      a, b : in  std_logic;
+      y    : out std_logic
+    );
+  end component;
+
   -- signals stage 1
   constant c4    : std_logic_vector (3 downto 0) := X"4";
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
@@ -148,6 +156,7 @@ architecture structural of datapath is
   signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
   signal alu_bit  : std_logic_vector(3 downto 0);
   signal cond, cond_st3 : std_logic; -- zero comparator output
+  signal jump, cond_j   : std_logic;
 
   -- signals stage 4
   signal out_val, alu_st4, out_dram, pc_st4 : std_logic_vector(word_size - 1 downto 0);
@@ -275,14 +284,17 @@ begin
 -----------------------------------------------------------------------------------------
   alu_bit <= alu4_st2 & alu3_st2 & alu2_st2 & alu1_st2;
 
+  jump <= jump_cu;
+
   cmp : zero_comp
   generic map(word_size)
   port map(out_a, cond);
 
+  or_j : or_2
+  port map(cond, jump, cond_j);
+
   cond_ff : ffd_async
-  port map (
-    clk, rst, en2_st2, cond, cond_st3
-  );
+  port map (clk, rst, en2_st2, cond_j, cond_st3);
 
   mux1_alu : mux21_generic
   generic map(word_size)
