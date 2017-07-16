@@ -6,6 +6,11 @@
 !*.vhdl
 !*.txt
 !*.png
+!*.sh
+!*.asm
+!*.png
+!src/assembler/conv2memory
+!src/assembler/iram
 
 # ...even if they are in subdirectories
 !*/
