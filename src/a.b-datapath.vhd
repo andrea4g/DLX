@@ -26,7 +26,8 @@ entity datapath is
     alu2    : in  std_logic;  -- alu control bit 2
     alu3    : in  std_logic;  -- alu control bit 3
     alu4    : in  std_logic;  -- alu control bit 4
-    jump_cu : in  std_logic;
+    eq_cond : in  std_logic;
+    jump_en : in  std_logic;
     -- stage 4
     en3     : in  std_logic;  -- enables the dram and the pipeline register
     rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
@@ -138,6 +139,13 @@ architecture structural of datapath is
     );
   end component;
 
+  component xor_2 is
+    port(
+      a, b : in  std_logic;
+      y    : out std_logic
+    );
+  end component;
+
   -- signals stage 1
   constant c4    : std_logic_vector (3 downto 0) := X"4";
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
@@ -155,8 +163,7 @@ architecture structural of datapath is
   signal out_mux1, out_mux2, out_alu, alu_st3, out_me, npc_st3 : std_logic_vector(word_size - 1 downto 0);
   signal out_rd2  : std_logic_vector(add_size - 1 downto 0);
   signal alu_bit  : std_logic_vector(3 downto 0);
-  signal cond, cond_st3 : std_logic; -- zero comparator output
-  signal jump, cond_j   : std_logic;
+  signal z, cond_xor, cond, cond_st3 : std_logic; -- zero comparator output
 
   -- signals stage 4
   signal out_val, alu_st4, out_dram, pc_st4 : std_logic_vector(word_size - 1 downto 0);
@@ -179,6 +186,8 @@ architecture structural of datapath is
   signal alu2_st1 : std_logic;
   signal alu3_st1 : std_logic;
   signal alu4_st1 : std_logic;
+  signal eq_cond_st1 : std_logic;
+  signal jump_en_st1 : std_logic;
 
   signal en3_st1  : std_logic;
   signal  rw_st1  : std_logic;
@@ -196,6 +205,8 @@ architecture structural of datapath is
   signal alu2_st2 : std_logic;
   signal alu3_st2 : std_logic;
   signal alu4_st2 : std_logic;
+  signal eq_cond_st2 : std_logic;
+  signal jump_en_st2 : std_logic;
 
   signal en3_st2  : std_logic;
   signal  rw_st2  : std_logic;
@@ -284,17 +295,18 @@ begin
 -----------------------------------------------------------------------------------------
   alu_bit <= alu4_st2 & alu3_st2 & alu2_st2 & alu1_st2;
 
-  jump <= jump_cu;
-
   cmp : zero_comp
   generic map(word_size)
-  port map(out_a, cond);
+  port map(out_a, z);
 
-  or_j : or_2
-  port map(cond, jump, cond_j);
+  eq_xor : xor_2
+  port map(z, eq_cond_st2, cond_xor);
+
+  and_j : and_2
+  port map(cond_xor, jump_en_st2, cond);
 
   cond_ff : ffd_async
-  port map (clk, rst, en2_st2, cond_j, cond_st3);
+  port map (clk, rst, en2_st2, cond, cond_st3);
 
   mux1_alu : mux21_generic
   generic map(word_size)
@@ -388,6 +400,10 @@ begin
   port map(clk, rst, '1', alu3, alu3_st1);
   alu4_cw1  :  ffd_async
   port map(clk, rst, '1', alu4, alu4_st1);
+  eq_cond_cw1  :  ffd_async
+  port map(clk, rst, '1', eq_cond, eq_cond_st1);
+  jump_en_cw1  :  ffd_async
+  port map(clk, rst, '1', jump_en, jump_en_st1);
 
    en3_cw1  :  ffd_async
   port map(clk, rst, '1', en3, en3_st1);
@@ -417,6 +433,10 @@ begin
   port map(clk, rst, '1', alu3_st1, alu3_st2);
   alu4_cw2  :  ffd_async
   port map(clk, rst, '1', alu4_st1, alu4_st2);
+  eq_cond_cw2  :  ffd_async
+  port map(clk, rst, '1', eq_cond_st1, eq_cond_st2);
+  jump_en_cw2  :  ffd_async
+  port map(clk, rst, '1', jump_en_st1, jump_en_st2);
 
    en3_cw2  :  ffd_async
   port map(clk, rst, '1', en3_st1, en3_st2);

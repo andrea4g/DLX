@@ -68,8 +68,8 @@ architecture dlx_rtl of DLX is
       Rst                : in  std_logic;  -- Reset: Active-Low
       -- Instruction Register
       IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
-      EN0                : out std_logic;
       -- Pipeline stage 1
+      EN0                : out std_logic;
       -- Pipeline stage 2
       EN1                : out std_logic;  -- enables the register le and the pipeline registers
       RF1                : out std_logic;  -- enables the read port 1 of the register ﬁle
@@ -82,6 +82,8 @@ architecture dlx_rtl of DLX is
       ALU2               : out std_logic;  -- alu control bit 2
       ALU3               : out std_logic;  -- alu control bit 3
       ALU4               : out std_logic;  -- alu control bit 4
+      EQ_COND            : out std_logic;
+      JUMP_EN            : out std_logic;
       -- Pipeline stage 4
       EN3                : out std_logic;  -- enables the memory and the pipeline register
       DEN                : out std_logic;  -- enables the ram memory
@@ -114,6 +116,8 @@ architecture dlx_rtl of DLX is
       alu2    : in  std_logic;  -- alu control bit 2
       alu3    : in  std_logic;  -- alu control bit 3
       alu4    : in  std_logic;  -- alu control bit 4
+      eq_cond : in  std_logic;
+      jump_en : in  std_logic;
       -- stage 4
       en3     : in  std_logic;  -- enables the dram and the pipeline register
       rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
@@ -164,6 +168,8 @@ architecture dlx_rtl of DLX is
   signal ALU2_int : std_logic;
   signal ALU3_int : std_logic;
   signal ALU4_int : std_logic;
+  signal EQ_COND_int : std_logic;
+  signal JUMP_EN_int : std_logic;
   signal EN3_int  : std_logic;
   signal DEN_int  : std_logic;
   signal RW_int   : std_logic;
@@ -230,6 +236,8 @@ architecture dlx_rtl of DLX is
       ALU2  => ALU2_int,
       ALU3  => ALU3_int,
       ALU4  => ALU4_int,
+      EQ_COND => EQ_COND_int,
+      JUMP_EN => JUMP_EN_int,
       EN3   => EN3_int,
       DEN   => DEN_int,
       RW    => RW_int ,
@@ -258,6 +266,8 @@ architecture dlx_rtl of DLX is
     alu2          => ALU2_int,
     alu3          => ALU3_int,
     alu4          => ALU4_int,
+    eq_cond       => EQ_COND_int,
+    jump_en       => JUMP_EN_int,
     -- stage 4
     en3           => EN3_int,
     rw            => RW_int,

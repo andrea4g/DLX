@@ -31,6 +31,8 @@ entity CU_HW is
     ALU2               : out std_logic;  -- alu control bit 2
     ALU3               : out std_logic;  -- alu control bit 3
     ALU4               : out std_logic;  -- alu control bit 4
+    EQ_COND            : out std_logic;
+    JUMP_EN            : out std_logic;
     -- Pipeline stage 4
     EN3                : out std_logic;  -- enables the memory and the pipeline register
     DEN                : out std_logic;  -- enables the ram memory
@@ -56,35 +58,35 @@ begin  -- cu_rtl
   process (IR_opcode, IR_func) is
   begin
     if Rst = '0'                                  then CW <= (others => '0'); -- Reset
-    elsif IR_opcode = J                           then CW <= "1100101000010000"; -- J
-    elsif IR_opcode = J_JAL                       then CW <= "0000000000000000"; -- JAL
-    elsif IR_opcode = J_BEQZ                      then CW <= "1110101000010000"; -- I_BEQZ
-    elsif IR_opcode = J_BNEZ                      then CW <= "0000000000000000"; -- I_BNEZ
-    elsif IR_opcode = NOP                         then CW <= "1100100000000000"; -- NOP
-    elsif (IR_opcode = RTYPE and IR_func = R_ADD) then CW <= "1111110000010011"; -- R_ADD
-    elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "1111110111110011"; -- R_SUB
-    elsif (IR_opcode = RTYPE and IR_func = R_AND) then CW <= "1111110100010011"; -- R_AND
-    elsif (IR_opcode = RTYPE and IR_func = R_OR ) then CW <= "1111110111010011"; -- R_OR
-    elsif (IR_opcode = RTYPE and IR_func = R_XOR) then CW <= "1111110011010011"; -- R_XOR
-    elsif (IR_opcode = RTYPE and IR_func = R_SGE) then CW <= "1111110101010011"; -- R_SGE
-    elsif (IR_opcode = RTYPE and IR_func = R_SLE) then CW <= "1111110101010011"; -- R_SLE
-    elsif (IR_opcode = RTYPE and IR_func = R_SLL) then CW <= "1111110001010011"; -- R_SLL
-    elsif (IR_opcode = RTYPE and IR_func = R_SRL) then CW <= "1111110010010011"; -- R_SRL
-    elsif (IR_opcode = RTYPE and IR_func = R_SRA) then CW <= "1111110010110011"; -- R_SRL
-    elsif (IR_opcode = RTYPE and IR_func = R_SNE) then CW <= "1111110001110011"; -- R_SNE
-    elsif IR_opcode = I_ADDI                      then CW <= "1110111000010011"; -- I_ADDI
-    elsif IR_opcode = I_SUBI                      then CW <= "1110111111110011"; -- I_SUBI
-    elsif IR_opcode = I_ANDI                      then CW <= "1110111100010011"; -- I_ANDI
-    elsif IR_opcode = I_ORI                       then CW <= "1110111111010011"; -- I_ORI
-    elsif IR_opcode = I_XOR                       then CW <= "1110111011010011"; -- I_XOR
-    elsif IR_opcode = I_SLLI                      then CW <= "1110111001010011"; -- I_SLLI
-    elsif IR_opcode = I_SRLI                      then CW <= "1110111010010011"; -- I_SRLI
-    elsif IR_opcode = I_SRAI                      then CW <= "1110111010110011"; -- I_SRAI
-    elsif IR_opcode = I_SNEI                      then CW <= "1110111001110011"; -- I_SNEI
-    elsif IR_opcode = I_SLEI                      then CW <= "1110111101010011"; -- I_SLEI
-    elsif IR_opcode = I_SGEI                      then CW <= "1110111101010011"; -- I_SGEI
-    elsif IR_opcode = I_LW                        then CW <= "1110111000011001"; -- LW
-    elsif IR_opcode = I_SW                        then CW <= "0000000000000000"; -- SW
+    elsif IR_opcode = J                           then CW <= "110011100000110000"; -- J
+    elsif IR_opcode = J_JAL                       then CW <= "110011100000110000"; -- JAL
+    elsif IR_opcode = J_BEQZ                      then CW <= "111010100000110000"; -- I_BEQZ
+    elsif IR_opcode = J_BNEZ                      then CW <= "111010100001110000"; -- I_BNEZ
+    elsif IR_opcode = NOP                         then CW <= "110011011100010000"; -- NOP
+    elsif (IR_opcode = RTYPE and IR_func = R_ADD) then CW <= "111111000000010011"; -- R_ADD
+    elsif (IR_opcode = RTYPE and IR_func = R_SUB) then CW <= "111111011110010011"; -- R_SUB
+    elsif (IR_opcode = RTYPE and IR_func = R_AND) then CW <= "111111010000010011"; -- R_AND
+    elsif (IR_opcode = RTYPE and IR_func = R_OR ) then CW <= "111111011100010011"; -- R_OR
+    elsif (IR_opcode = RTYPE and IR_func = R_XOR) then CW <= "111111001100010011"; -- R_XOR
+    elsif (IR_opcode = RTYPE and IR_func = R_SGE) then CW <= "111111010100010011"; -- R_SGE
+    elsif (IR_opcode = RTYPE and IR_func = R_SLE) then CW <= "111111010110010011"; -- R_SLE
+    elsif (IR_opcode = RTYPE and IR_func = R_SLL) then CW <= "111111000100010011"; -- R_SLL
+    elsif (IR_opcode = RTYPE and IR_func = R_SRL) then CW <= "111111001000010011"; -- R_SRL
+    elsif (IR_opcode = RTYPE and IR_func = R_SRA) then CW <= "111111001010010011"; -- R_SRA
+    elsif (IR_opcode = RTYPE and IR_func = R_SNE) then CW <= "111111000110010011"; -- R_SNE
+    elsif IR_opcode = I_ADDI                      then CW <= "111011100000010011"; -- I_ADDI
+    elsif IR_opcode = I_SUBI                      then CW <= "111011111110010011"; -- I_SUBI
+    elsif IR_opcode = I_ANDI                      then CW <= "111011110000010011"; -- I_ANDI
+    elsif IR_opcode = I_ORI                       then CW <= "111011111100010011"; -- I_ORI
+    elsif IR_opcode = I_XOR                       then CW <= "111011101100010011"; -- I_XOR
+    elsif IR_opcode = I_SLLI                      then CW <= "111011100100010011"; -- I_SLLI
+    elsif IR_opcode = I_SRLI                      then CW <= "111011101000010011"; -- I_SRLI
+    elsif IR_opcode = I_SRAI                      then CW <= "111011101010010011"; -- I_SRAI
+    elsif IR_opcode = I_SNEI                      then CW <= "111011100110010011"; -- I_SNEI
+    elsif IR_opcode = I_SLEI                      then CW <= "111011110100010011"; -- I_SLEI
+    elsif IR_opcode = I_SGEI                      then CW <= "111011110110010011"; -- I_SGEI
+    elsif IR_opcode = I_LW                        then CW <= "111011100000011101"; -- LW
+    elsif IR_opcode = I_SW                        then CW <= "111011100000011001"; -- SW
     else                                               CW <= (others => '0');
     end if;
   end process;
@@ -93,22 +95,24 @@ begin  -- cu_rtl
   CW_PIPE: process (Clk, Rst)
   begin  -- process Clk
     if (Clk'event and Clk = '1') or Rst = '0' then  -- rising clock edge
-      EN0  <= CW(CW_SIZE - 1);
-      EN1  <= CW(CW_SIZE - 2);
-      RF1  <= CW(CW_SIZE - 3);
-      RF2  <= CW(CW_SIZE - 4);
-      EN2  <= CW(CW_SIZE - 5);
-      S1   <= CW(CW_SIZE - 6);
-      S2   <= CW(CW_SIZE - 7);
-      ALU1 <= CW(CW_SIZE - 8);
-      ALU2 <= CW(CW_SIZE - 9);
-      ALU3 <= CW(CW_SIZE - 10);
-      ALU4 <= CW(CW_SIZE - 11);
-      EN3  <= CW(CW_SIZE - 12);
-      DEN  <= CW(CW_SIZE - 13);
-      RW   <= CW(CW_SIZE - 14);
-      S3   <= CW(CW_SIZE - 15);
-      WF1  <= CW(CW_SIZE - 16);
+      EN0     <= CW(CW_SIZE - 1);
+      EN1     <= CW(CW_SIZE - 2);
+      RF1     <= CW(CW_SIZE - 3);
+      RF2     <= CW(CW_SIZE - 4);
+      EN2     <= CW(CW_SIZE - 5);
+      S1      <= CW(CW_SIZE - 6);
+      S2      <= CW(CW_SIZE - 7);
+      ALU1    <= CW(CW_SIZE - 8);
+      ALU2    <= CW(CW_SIZE - 9);
+      ALU3    <= CW(CW_SIZE - 10);
+      ALU4    <= CW(CW_SIZE - 11);
+      EQ_COND <= CW(CW_SIZE - 12);
+      JUMP_EN <= CW(CW_SIZE - 13);
+      EN3     <= CW(CW_SIZE - 14);
+      DEN     <= CW(CW_SIZE - 15);
+      RW      <= CW(CW_SIZE - 16);
+      S3      <= CW(CW_SIZE - 17);
+      WF1     <= CW(CW_SIZE - 18);
     end if;
       -- if Rst = 0, CW will be all 0s and doing so every output will be reset
   end process CW_PIPE;

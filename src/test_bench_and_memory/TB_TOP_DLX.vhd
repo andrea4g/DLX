@@ -49,25 +49,25 @@ architecture tb of DLX_TestBench is
 
 	component DLX is
 		generic (
-			IR_SIZE      : integer := 32;      -- Instruction Register Size
-			PC_SIZE      : integer := 32       -- Program Counter Size
-		);
-		port (
-			-- Inputs
-			CLK               : in    std_logic;    -- Clock
-			RST               : in    std_logic;    -- Reset: Active-High
-			-- Instr_size = 32, Data_size = 32
-			IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
-			IRAM_ISSUE        : out   std_logic;
-			IRAM_READY        : in    std_logic;
-			IRAM_DATA         : in    std_logic_vector(Data_size - 1 downto 0);
+	    IR_SIZE      : integer := 32;      -- Instruction Register Size
+	    PC_SIZE      : integer := 32       -- Program Counter Size
+	  );
+	  port (
+	    -- Inputs
+	    CLK               : in    std_logic;    -- Clock
+	    RST               : in    std_logic;    -- Reset: Active-High
+	    -- Instr_size = 32, Data_size = 32
+	    IRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+	    IRAM_ISSUE        : out   std_logic;
+	    IRAM_READY        : in    std_logic;
+	    IRAM_DATA         : in    std_logic_vector(Data_size - 1 downto 0);
 
-			DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
-			DRAM_READNOTWRITE : out   std_logic;
-			DRAM_ISSUE        : out   std_logic;
-			DRAM_READY        : in    std_logic;
-			DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
-		);
+	    DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
+	    DRAM_READNOTWRITE : out   std_logic;
+	    DRAM_ISSUE        : out   std_logic;
+	    DRAM_READY        : in    std_logic;
+	    DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
+	  );
 	end component;
 
 	signal CLK :				std_logic := '0';		-- Clock

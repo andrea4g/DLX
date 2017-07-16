@@ -20,21 +20,30 @@ end entity;
 
 architecture behavioral of encoder is
 
+  signal le, ne : std_logic_vector(n - 1 downto 0);
+
 begin
 
-  o <= out_add          when sel = "0000" else -- add
-       out_sub          when sel = "1111" else -- sub
-       out_sl           when sel = "0010" else -- sll
-       out_sr           when sel = "0100" else -- srl
-       out_sr           when sel = "0101" else -- sra
-       out_cmp          when sel = "1010" else -- comparation
-       out_eq           when sel = "0011" else -- equality
-       out_log          when sel = "1000" else -- and
-       out_log          when sel = "0111" else -- nand
-       out_log          when sel = "1110" else -- or
-       out_log          when sel = "0001" else -- nor
-       out_log          when sel = "0110" else -- xor
-       out_log          when sel = "1001" else -- xnor
+  le <= (others => '0');
+  le(0) <= not out_cmp(0) or out_eq(0);
+
+  ne <= (others => '0');
+  ne(0) <= not out_eq(0);
+
+  o <= out_add                      when sel = "0000" else -- add
+       out_sub                      when sel = "1111" else -- sub
+       out_sl                       when sel = "0010" else -- sll
+       out_sr                       when sel = "0100" else -- srl
+       out_sr                       when sel = "0101" else -- sra
+       out_cmp                      when sel = "1010" else -- ge
+       le                           when sel = "1011" else -- le
+       ne                           when sel = "0011" else -- equality
+       out_log                      when sel = "1000" else -- and
+       out_log                      when sel = "0111" else -- nand
+       out_log                      when sel = "1110" else -- or
+       out_log                      when sel = "0001" else -- nor
+       out_log                      when sel = "0110" else -- xor
+       out_log                      when sel = "1001" else -- xnor
        (others => 'X');
 
 end architecture; -- behavioral
