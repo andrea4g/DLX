@@ -65,8 +65,9 @@ architecture tb of DLX_TestBench is
       DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
       DRAM_READNOTWRITE : out   std_logic;
       DRAM_ISSUE        : out   std_logic;
+      DRAM_DATA_in      : in    std_logic_vector(Data_size - 1 downto 0);
       DRAM_READY        : in    std_logic;
-      DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
+      DRAM_DATA_out     : out   std_logic_vector(Data_size - 1 downto 0)
     );
   end component;
 
@@ -108,8 +109,9 @@ begin
       DRAM_ADDRESS      => DRAM_ADDRESS,
       DRAM_READNOTWRITE => DRAM_READNOTWRITE,
       DRAM_ISSUE        => DRAM_ENABLE,
+      DRAM_DATA_in      => DRAM_DATA_in,
       DRAM_READY        => DRAM_READY,
-      DRAM_DATA         => DRAM_DATA
+      DRAM_DATA_out     => DRAM_DATA_out
     );
 
   Clk <= not Clk after 10 ns;
