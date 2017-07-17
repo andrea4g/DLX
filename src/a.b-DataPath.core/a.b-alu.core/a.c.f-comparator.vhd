@@ -53,7 +53,6 @@ architecture structural of comparator is
 
   signal b_not : std_logic_vector(n - 1 downto 0);
   signal s     : std_logic_vector(n - 1 downto 0);
-  signal z_not : std_logic;
 
 begin
 
@@ -67,9 +66,6 @@ begin
 
   big_nor : nor_n1
   generic map(n)
-  port map(s, z_not);
-
-  not_little : not_1
-  port map(z_not, z);
+  port map(s, z);
 
 end architecture;

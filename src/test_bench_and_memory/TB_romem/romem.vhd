@@ -59,7 +59,7 @@ begin
 			file_close(mem_fp);
 
 			count <= 0;
-		elsif CLK'event and clk= '1' then
+		elsif CLK'event and clk= '0' then
 			if (ENABLE = '1' ) then
 				count <= count + 1;
 				if (count = data_delay) then

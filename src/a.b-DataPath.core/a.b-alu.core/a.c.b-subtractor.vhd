@@ -18,15 +18,14 @@ end entity; -- subtractor
 
 architecture behavioral of subtractor is
 
-  component p4 is
-    generic(n : integer := 4);
-    port (--inputs
-          a, b : in  std_logic_vector(n - 1 downto 0);
-          cin  : in  std_logic;
-          -- outputs
-          s    : out std_logic_vector(n - 1 downto 0);
-          cout : out std_logic
-         );
+  component rca_n is
+    generic(n : integer := 1);
+    port(
+      a, b  : in  std_logic_vector(n - 1 downto 0);
+      c_in  : in  std_logic;
+      sum   : out std_logic_vector(n - 1 downto 0);
+      c_out : out std_logic
+    );
   end component;
 
   component not_n is
@@ -44,7 +43,7 @@ begin
   generic map (n)
   port map (b, b_not);
 
-  sub : p4
+  sub : rca_n
   generic map (n)
   port map (a, b_not, '1', y, cout);
 

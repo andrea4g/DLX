@@ -39,7 +39,7 @@ package globals is
   constant J_BNEZ  : std_logic_vector(op_size - 1 downto 0) :=  "000101";    -- BNEZ (0x05)
   -- R-Type instruction -> OPCODE field
   constant NOP     : std_logic_vector(op_size - 1 downto 0) :=  "010101";    -- no operation (0X15)
-  constant RTYPE   : std_logic_vector(op_size - 1 downto 0) :=  "000001";    -- for ADD, SUB, AND, OR register-to-register operation
+  constant RTYPE   : std_logic_vector(op_size - 1 downto 0) :=  "000000";    -- for ADD, SUB, AND, OR register-to-register operation
   -- I-Type instruction -> OPCODE field
   constant I_ADDI : std_logic_vector(op_size - 1 downto 0) :=  "001000";    -- ADDI  RS1,RD,INP2 (0x08)
   constant I_SUBI : std_logic_vector(op_size - 1 downto 0) :=  "001010";    -- SUBI  RS1,RD,INP2 (0x0A)
@@ -56,16 +56,16 @@ package globals is
   constant I_SW   : std_logic_vector(op_size - 1 downto 0) :=  "101011";    -- SW (0x2B)
 
 -- R-Type instruction -> FUNC field
-  constant R_ADD : std_logic_vector(function_size - 1 downto 0) :=  "00000000000";    -- ADD RS1,RS2,RD
-  constant R_SUB : std_logic_vector(function_size - 1 downto 0) :=  "00000001111";    -- SUB RS1,RS2,RD
-  constant R_AND : std_logic_vector(function_size - 1 downto 0) :=  "00000001000";    -- AND RS1,RS2,RD
-  constant R_OR  : std_logic_vector(function_size - 1 downto 0) :=  "00000001110";    -- OR  RS1,RS2,RD
-  constant R_XOR : std_logic_vector(function_size - 1 downto 0) :=  "00000000110";    -- XOR
-  constant R_SGE : std_logic_vector(function_size - 1 downto 0) :=  "00000001010";    -- SGE
-  constant R_SLE : std_logic_vector(function_size - 1 downto 0) :=  "00000001010";    -- SLE
-  constant R_SLL : std_logic_vector(function_size - 1 downto 0) :=  "00000000010";    -- SLL
-  constant R_SRL : std_logic_vector(function_size - 1 downto 0) :=  "00000000100";    -- SRL
-  constant R_SRA : std_logic_vector(function_size - 1 downto 0) :=  "00000000101";    -- SRA
-  constant R_SNE : std_logic_vector(function_size - 1 downto 0) :=  "00000000011";    -- SNE
+  constant R_ADD : std_logic_vector(function_size - 1 downto 0) :=  "00000100000";    -- ADD RS1,RS2,RD
+  constant R_SUB : std_logic_vector(function_size - 1 downto 0) :=  "00000100010";    -- SUB RS1,RS2,RD
+  constant R_AND : std_logic_vector(function_size - 1 downto 0) :=  "00000100100";    -- AND RS1,RS2,RD
+  constant R_OR  : std_logic_vector(function_size - 1 downto 0) :=  "00000100101";    -- OR  RS1,RS2,RD
+  constant R_XOR : std_logic_vector(function_size - 1 downto 0) :=  "00000100110";    -- XOR
+  constant R_SGE : std_logic_vector(function_size - 1 downto 0) :=  "00000101101";    -- SGE
+  constant R_SLE : std_logic_vector(function_size - 1 downto 0) :=  "00000101100";    -- SLE
+  constant R_SLL : std_logic_vector(function_size - 1 downto 0) :=  "00000000100";    -- SLL
+  constant R_SRL : std_logic_vector(function_size - 1 downto 0) :=  "00000000110";    -- SRL
+  constant R_SRA : std_logic_vector(function_size - 1 downto 0) :=  "00000000111";    -- SRA
+  constant R_SNE : std_logic_vector(function_size - 1 downto 0) :=  "00000101001";    -- SNE
 
 end package;

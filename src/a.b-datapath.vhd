@@ -254,22 +254,22 @@ begin
 -----------------------------------------------------------------------------------------
 
   -- Assignment of type of operation to be done
-  rd   <= ir_st1(r1_up   downto r1_down);
-  rd1  <= ir_st1(r2_up   downto r2_down);
+  rd1  <= ir_st1(r1_up   downto r1_down);
+  rd   <= ir_st1(r2_up   downto r2_down);
   rd2  <= ir_st1(r3_up   downto r3_down);
   inp2 <= ir_st1(inp2_up downto inp2_down);
 
   rf : register_file
   generic map (word_size)
-  port map(clk, rst, en1_st1, rf1_st1, rf2_st1, wf1_st4, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
+  port map(clk, rst, en1, rf1, rf2, wf1_st4, out_rd3, rd1, rd2, wb, rf_out1, rf_out2);
 
   a : reg_n
   generic map(word_size)
-  port map(clk, rst, en1_st1, rf_out1, out_a);
+  port map(clk, rst, en1, rf_out1, out_a);
 
   b : reg_n
   generic map(word_size)
-  port map(clk, rst, en1_st1, rf_out2, out_b);
+  port map(clk, rst, en1, rf_out2, out_b);
 
   -- sign extension of immediate (16 to 32 bits)
   ext : sign_extension
@@ -287,7 +287,7 @@ begin
 -----------------------------------------------------------------------------------------
 -- stage 3
 -----------------------------------------------------------------------------------------
-  alu_bit <= alu4_st2 & alu3_st2 & alu2_st2 & alu1_st2;
+  alu_bit <= alu1_st2 & alu2_st2 & alu3_st2 & alu4_st2;
 
   cmp : zero_comp
   generic map(word_size)
@@ -360,12 +360,12 @@ begin
 
   -- FFs to delay the control word that arrives from the CU
   -- stage 1 -> 2
-   en1_cw1  :  ffd_async
-  port map(clk, rst, '1', en1, en1_st1);
-   rf1_cw1  :  ffd_async
-  port map(clk, rst, '1', rf1, rf1_st1);
-   rf2_cw1  :  ffd_async
-  port map(clk, rst, '1', rf2, rf2_st1);
+  --  en1_cw1  :  ffd_async
+  -- port map(clk, rst, '1', en1, en1_st1);
+  --  rf1_cw1  :  ffd_async
+  -- port map(clk, rst, '1', rf1, rf1_st1);
+  --  rf2_cw1  :  ffd_async
+  -- port map(clk, rst, '1', rf2, rf2_st1);
 
    en2_cw1  :  ffd_async
   port map(clk, rst, '1', en2, en2_st1);

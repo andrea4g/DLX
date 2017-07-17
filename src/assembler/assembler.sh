@@ -6,7 +6,7 @@ if [ ! -r $1.asm ]; then
 else
   sed '/^$/d' $1.asm > $1.out 
   mv  $1.out $1.asm
-  echo "nop" >> $1.asm
+  echo "\nnop" >> $1.asm
 
   perl ./dlxasm.pl -o $1.bin $1.asm
   rm $1.bin.hdr

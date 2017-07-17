@@ -20,14 +20,11 @@ end entity;
 
 architecture behavioral of encoder is
 
-  signal le, ne : std_logic_vector(n - 1 downto 0);
+  signal le, ne : std_logic_vector(n - 1 downto 0) := (others => '0');
 
 begin
 
-  le <= (others => '0');
   le(0) <= not out_cmp(0) or out_eq(0);
-
-  ne <= (others => '0');
   ne(0) <= not out_eq(0);
 
   o <= out_add                      when sel = "0000" else -- add

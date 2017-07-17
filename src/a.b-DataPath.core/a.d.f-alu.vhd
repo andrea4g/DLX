@@ -114,13 +114,13 @@ architecture structural of alu is
   signal out_add, out_sub, out_sl, out_sr, out_log : std_logic_vector(nbit - 1 downto 0);
   signal type_sr                                   : std_logic;
   signal pos_s                                     : std_logic_vector(log2(nbit) - 1 downto 0);
-  signal cmp_out, eq_out                           : std_logic_vector(nbit - 1 downto 0);
+  signal cmp_out, eq_out                           : std_logic_vector(nbit - 1 downto 0) := (others => '0');
+  signal cmp_bit, eq_bit                           : std_logic;
 
 begin
 
   pos_s <= b(log2(nbit) - 1 downto 0);
-  cmp_out <= (others => '0');
-  eq_out <= (others => '0');
+
 
   add : p4
   generic map(nbit)
@@ -140,7 +140,10 @@ begin
 
   comp : comparator
   generic map(nbit)
-  port map(a, b, cmp_out(0), eq_out(0));
+  port map(a, b, cmp_bit, eq_bit);
+
+  cmp_out(0) <= cmp_bit;
+  eq_out(0) <= eq_bit;
 
   sh : xor_2
   port map(unit_sel(2), unit_sel(0), type_sr);
