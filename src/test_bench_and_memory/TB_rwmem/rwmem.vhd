@@ -84,33 +84,35 @@ begin  -- beh
 			int_data_ready <= '0';
 			mem_ready <= '0';
 		elsif CLK'event and CLK = '1' then  -- rising clock edge
-			if(ENABLE = '1') then
-				counter <= counter + 1;
-				if (counter = data_delay) then
-					counter <= 0;
-					if (READNOTWRITE = '0') then
+			--if(ENABLE = '1') then
+				-- counter <= counter + 1;
+				-- if (counter = data_delay) then
+				-- 	counter <= 0;
+					if (READNOTWRITE = '0') then -- write
 						-- DRAM_Mem(to_integer(unsigned(ADDR))+1) <= INOUT_DATA(Instr_size - 1 downto 0);
 						-- DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Data_size - 1 downto Instr_size);
 						DRAM_Mem(to_integer(unsigned(ADDR))) <= INOUT_DATA(Instr_size - 1 downto 0);
 						mem_ready <= '1';
-					else
-						tmp_data <=
-						--DRAM_mem(to_integer(unsigned(ADDR))+1) &
-						DRAM_mem(to_integer(unsigned(ADDR)));
-						int_data_ready <= '1';
+					else -- read
+						-- tmp_data <= DRAM_mem(to_integer(unsigned(ADDR)));
+						-- -- DRAM_mem(to_integer(unsigned(ADDR))+1) &
+						-- -- DRAM_mem(to_integer(unsigned(ADDR)));
+						-- int_data_ready <= '1';
+
+						INOUT_DATA <= DRAM_mem(to_integer(unsigned(ADDR)));
 					end if;
-				else
-					mem_ready <= '0';
-					int_data_ready <= '0';
-				end if;
-			else
-				counter <= 0;
-			end if;
+				-- else
+				-- 	mem_ready <= '0';
+				-- 	int_data_ready <= '0';
+				-- end if;
+			-- else
+				-- counter <= 0;
+			--end if;
 		end if;
 	end process;
 
 	rewrite_contenent(DRAM_mem,file_path); -- refresh the file
-	INOUT_DATA <= tmp_data when int_data_ready='1' else (others=>'Z'); -- to cache
-	data_ready <= int_data_ready or mem_ready; --delay add
+	--INOUT_DATA <= tmp_data when int_data_ready = '1' else (others=>'Z'); -- to cache
+	--data_ready <= int_data_ready or mem_ready; --delay add
 
 end beh;

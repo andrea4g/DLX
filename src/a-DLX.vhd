@@ -104,9 +104,8 @@ architecture dlx_rtl of DLX is
       den     : in  std_logic;
       dram_rw_en   : out std_logic;
       dram_enable  : out std_logic;
-      dram_rd_data : in  std_logic_vector(word_size - 1 downto 0);      -- from dram output
+      dram_data    : inout  std_logic_vector(word_size - 1 downto 0);      -- from dram output
       dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
-      dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
       pc_out       : out std_logic_vector(word_size - 1 downto 0);
       -- stage 5
       s3    : in  std_logic;  -- input selection of the multiplexer
@@ -232,9 +231,8 @@ architecture dlx_rtl of DLX is
     den           => DEN_int,
     dram_rw_en    => DRAM_READNOTWRITE,
     dram_enable   => DRAM_ISSUE,
-    dram_rd_data  => DRAM_DATA,
+    dram_data  => DRAM_DATA,
     dram_addr     => DRAM_ADDRESS,
-    dram_wr_data  => DRAM_DATA,
     pc_out        => pc_out_i,
     -- stage 5
     s3            => S3_int,

@@ -34,9 +34,9 @@ entity datapath is
     den     : in  std_logic;
     dram_rw_en   : out std_logic;
     dram_enable  : out std_logic;
-    dram_rd_data : in  std_logic_vector(word_size - 1 downto 0);      -- from dram output
+    dram_data    : inout  std_logic_vector(word_size - 1 downto 0);      -- from dram output
     dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
-    dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
+    -- dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
     pc_out       : out std_logic_vector(word_size - 1 downto 0);
     -- stage 5
     s3    : in  std_logic;  -- input selection of the multiplexer
@@ -166,7 +166,7 @@ architecture structural of datapath is
   signal z, cond_xor, cond : std_logic; -- zero comparator output
 
   -- signals stage 4
-  signal alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
+  signal alu_st4, out_dram, dram_rd_data : std_logic_vector(word_size - 1 downto 0);
   signal out_rd3 : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 5
@@ -175,8 +175,6 @@ architecture structural of datapath is
   -- signals to delay the control word
   -- stage 1->2
   signal en1_st1  : std_logic;
-  signal rf1_st1  : std_logic;
-  signal rf2_st1  : std_logic;
 
   signal en2_st1  : std_logic;
   signal  s1_st1  : std_logic;
@@ -253,11 +251,25 @@ begin
 -- stage 2
 -----------------------------------------------------------------------------------------
 
-  -- Assignment of type of operation to be done
-  rd   <= ir_st1(r2_up   downto r2_down);
-  rd1  <= ir_st1(r1_up   downto r1_down);
-  rd2  <= ir_st1(r3_up   downto r3_down);
-  inp2 <= ir_st1(inp2_up downto inp2_down);
+  reg_assign : process(ir_st1)
+  begin
+    if ir_st1(opcode_up downto opcode_down) = RTYPE then
+      rd1  <= ir_st1(r1_up downto r1_down);
+      rd2  <= ir_st1(r2_up downto r2_down);
+      rd   <= ir_st1(r3_up downto r3_down);
+      inp2 <= (others => '0');
+    elsif ir_st1(opcode_up downto opcode_down) = I_SW then
+      rd1  <= ir_st1(r1_up downto r1_down);
+      rd2  <= ir_st1(r2_up downto r2_down);
+      rd   <= (others => '0');
+      inp2 <= ir_st1(inp2_up downto inp2_down);
+    else
+      rd1  <= ir_st1(r1_up downto r1_down);
+      rd   <= ir_st1(r2_up downto r2_down);
+      rd2  <= (others => '0');
+      inp2 <= ir_st1(inp2_up downto inp2_down);
+    end if;
+  end process; -- end reg_assign
 
   rf : register_file
   generic map (word_size)
@@ -332,7 +344,18 @@ begin
   port map(npc, alu_st3, cond, pc_out);
 
   dram_addr    <= alu_st3;
-  dram_wr_data <= out_me;
+
+  DRAM_inout : process(rw_st3, den_st3)
+  begin
+    if den_st3 = '1' then
+      if rw_st3 = '0' then  -- write
+        dram_data <= out_me;
+      else                  -- read
+        dram_rd_data <= dram_data;
+      end if; -- end if rw_st3 = '0' and den_st3 = '1'
+    end if; -- end if den_st3 = '1'
+  end process; -- DRAM_inout
+  -- dram_wr_data <= out_me;
 
   dram_enable <= den_st3;
   dram_rw_en  <= rw_st3;
