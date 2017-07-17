@@ -230,9 +230,10 @@ architecture dlx_rtl of DLX is
     en3           => EN3_int,
     rw            => RW_int,
     den           => DEN_int,
+    dram_data_in  => DRAM_DATA_in,
     dram_rw_en    => DRAM_READNOTWRITE,
     dram_enable   => DRAM_ISSUE,
-    dram_data  => DRAM_DATA,
+    dram_data_out => DRAM_DATA_out,
     dram_addr     => DRAM_ADDRESS,
     pc_out        => pc_out_i,
     -- stage 5

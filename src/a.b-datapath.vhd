@@ -32,12 +32,13 @@ entity datapath is
     en3     : in  std_logic;  -- enables the dram and the pipeline register
     rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
     den     : in  std_logic;
-    dram_rw_en   : out std_logic;
-    dram_enable  : out std_logic;
-    dram_data    : inout  std_logic_vector(word_size - 1 downto 0);      -- from dram output
-    dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
+    dram_data_in    : in std_logic_vector(word_size - 1 downto 0);      -- from dram output
+    dram_rw_en      : out std_logic;
+    dram_enable     : out std_logic;
+    dram_data_out   : out  std_logic_vector(word_size - 1 downto 0);      -- from dram output
+    dram_addr       : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
     -- dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
-    pc_out       : out std_logic_vector(word_size - 1 downto 0);
+    pc_out          : out std_logic_vector(word_size - 1 downto 0);
     -- stage 5
     s3    : in  std_logic;  -- input selection of the multiplexer
     wf1   : in  std_logic   -- enables the write port of the register ﬁle
@@ -349,9 +350,9 @@ begin
   begin
     if den_st3 = '1' then
       if rw_st3 = '0' then  -- write
-        dram_data <= out_me;
+        dram_data_out <= out_me;
       else                  -- read
-        dram_rd_data <= dram_data;
+        dram_rd_data <= dram_data_in;
       end if; -- end if rw_st3 = '0' and den_st3 = '1'
     end if; -- end if den_st3 = '1'
   end process; -- DRAM_inout
