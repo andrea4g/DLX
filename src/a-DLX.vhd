@@ -23,8 +23,9 @@ entity DLX is
     DRAM_ADDRESS      : out   std_logic_vector(Instr_size - 1 downto 0);
     DRAM_READNOTWRITE : out   std_logic;
     DRAM_ISSUE        : out   std_logic;
+    DRAM_DATA_in      : in    std_logic_vector(Data_size - 1 downto 0)
     DRAM_READY        : in    std_logic;
-    DRAM_DATA         : inout std_logic_vector(Data_size - 1 downto 0)
+    DRAM_DATA_out     : out   std_logic_vector(Data_size - 1 downto 0)
   );
 end DLX;
 
