@@ -77,7 +77,7 @@ begin  -- behavioral
 
       int_data_ready <= '0';
       mem_ready <= '0';
-    elsif CLK'event and CLK = '1' then  -- rising clock edge
+    elsif CLK'event and CLK = '0' then  -- rising clock edge
       if(ENABLE = '1') then
         if (READNOTWRITE = '0') then -- write
             DRAM_Mem(to_integer(unsigned(ADDR))) <= DATA_IN(Instr_size - 1 downto 0);
@@ -94,7 +94,8 @@ begin  -- behavioral
   end process;
 
   rewrite_contenent(DRAM_mem, file_path); -- refresh the file
-  DATA_OUT <= tmp_data when int_data_ready = '1' else (others=>'Z'); -- to cache
+  -- DATA_OUT <= tmp_data; --when int_data_ready = '1' else (others=>'Z'); -- to cache
+  DATA_OUT <= tmp_data when int_data_ready = '1' else (others=>'Z');
   DATA_READY <= int_data_ready or mem_ready;
 
 end behavioral;

@@ -103,11 +103,13 @@ architecture dlx_rtl of DLX is
       en3     : in  std_logic;  -- enables the dram and the pipeline register
       rw      : in  std_logic;  -- enables the read-out (1) or the write-in (0) of the memory
       den     : in  std_logic;
-      dram_rw_en   : out std_logic;
-      dram_enable  : out std_logic;
-      dram_data    : inout  std_logic_vector(word_size - 1 downto 0);      -- from dram output
-      dram_addr    : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
-      pc_out       : out std_logic_vector(word_size - 1 downto 0);
+      dram_data_in    : in std_logic_vector(word_size - 1 downto 0);      -- from dram output
+      dram_rw_en      : out std_logic;
+      dram_enable     : out std_logic;
+      dram_data_out   : out  std_logic_vector(word_size - 1 downto 0);      -- from dram output
+      dram_addr       : out std_logic_vector(dram_addr_size - 1 downto 0); -- to dram address
+      -- dram_wr_data : out std_logic_vector(word_size - 1 downto 0);      -- to dram input
+      pc_out          : out std_logic_vector(word_size - 1 downto 0);
       -- stage 5
       s3    : in  std_logic;  -- input selection of the multiplexer
       wf1   : in  std_logic   -- enables the write port of the register ﬁle

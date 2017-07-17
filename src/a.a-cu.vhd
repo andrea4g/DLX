@@ -86,7 +86,7 @@ begin  -- cu_rtl
     elsif IR_opcode = I_SLEI                      then CW <= "111011110100010011"; -- I_SLEI
     elsif IR_opcode = I_SGEI                      then CW <= "111011110110010011"; -- I_SGEI
     elsif IR_opcode = I_LW                        then CW <= "111011100000011101"; -- LW
-    elsif IR_opcode = I_SW                        then CW <= "111111100000011001"; -- SW
+    elsif IR_opcode = I_SW                        then CW <= "111111100000011000"; -- SW
     else                                               CW <= (others => '0');
     end if;
   end process;

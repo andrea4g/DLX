@@ -345,18 +345,20 @@ begin
   port map(npc, alu_st3, cond, pc_out);
 
   dram_addr    <= alu_st3;
+  dram_data_out <= out_me;
+  dram_rd_data <= dram_data_in;
 
-  DRAM_inout : process(rw_st3, den_st3)
-  begin
-    if den_st3 = '1' then
-      if rw_st3 = '0' then  -- write
-        dram_data_out <= out_me;
-      else                  -- read
-        dram_rd_data <= dram_data_in;
-      end if; -- end if rw_st3 = '0' and den_st3 = '1'
-    end if; -- end if den_st3 = '1'
-  end process; -- DRAM_inout
-  -- dram_wr_data <= out_me;
+  --DRAM_inout : process(rw_st3, den_st3)
+  --begin
+  --  if den_st3 = '1' then
+  --    if rw_st3 = '0' then  -- write
+  --
+  --    else                  -- read
+  --
+  --    end if; -- end if rw_st3 = '0' and den_st3 = '1'
+  --  end if; -- end if den_st3 = '1'
+  --end process; -- DRAM_inout
+  ---- dram_wr_data <= out_me;
 
   dram_enable <= den_st3;
   dram_rw_en  <= rw_st3;

@@ -95,7 +95,7 @@ begin
   -- DRAM
   DRAM : RWMEM
     generic map("C:/Workspace/DLX/src/test_bench_and_memory/TB_rwmem/hex.txt", "C:/Workspace/DLX/src/test_bench_and_memory/TB_rwmem/hex_init.txt")
-    port map (CLK, RST, DRAM_ADDRESS, DRAM_ENABLE, DRAM_READNOTWRITE, DRAM_DATA_in, DRAM_READY, DRAM_DATA_out);
+    port map (CLK, RST, DRAM_ADDRESS, DRAM_ENABLE, DRAM_READNOTWRITE, DRAM_DATA_out, DRAM_READY, DRAM_DATA_in);
 
   -- DLX
   DLX_PD : DLX
