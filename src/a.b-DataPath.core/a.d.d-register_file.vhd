@@ -37,8 +37,8 @@ begin
 
   process(clk) -- sensitivity list
   begin
-    if (clk = '1' and clk'event) then
-      if(reset = '0') then  -- reset is checked only at the rising edge of clock.
+    if(reset = '1') then  -- reset - active-low
+      if (clk = '1' and clk'event) then
         -- start with the other operations
         if (enable = '1') then
           -- enable active => let's see the operation the rf has to perform
@@ -61,10 +61,10 @@ begin
   					 out2 <= datain;
   				  end if;
           end if;
+        else
+          out1 <= (others => '0');
+          out2 <= (others => '0');
         end if;
-      else
-        out1 <= (others => '0');
-        out2 <= (others => '0');
       end if;
     else
       registers <= (others =>(others =>'0'));

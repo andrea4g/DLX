@@ -147,7 +147,7 @@ architecture structural of datapath is
   end component;
 
   -- signals stage 1
-  constant c4    : std_logic_vector (3 downto 0) := X"4";
+  constant c4    : std_logic_vector (3 downto 0) := X"1";
   signal four    : std_logic_vector (word_size - 1 downto 0) := (others => '0');
   -- signal next_pc : std_logic_vector (word_size - 1 downto 0); -- Adder output
   signal npc     : std_logic_vector (word_size - 1 downto 0); -- Adder output delayed
@@ -166,7 +166,7 @@ architecture structural of datapath is
   signal z, cond_xor, cond : std_logic; -- zero comparator output
 
   -- signals stage 4
-  signal out_val, alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
+  signal alu_st4, out_dram : std_logic_vector(word_size - 1 downto 0);
   signal out_rd3 : std_logic_vector(add_size - 1 downto 0);
 
   -- signals stage 5
