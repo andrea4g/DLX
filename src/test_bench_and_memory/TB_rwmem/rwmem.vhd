@@ -12,7 +12,7 @@ entity RWMEM is
       file_path_init: string;
       Data_size : natural := 32;
       Instr_size: natural := 32;
-      RAM_DEPTH:  natural := 128;
+      RAM_DEPTH:  natural := 128
     );
   port (
       CLK             : in std_logic;
@@ -20,7 +20,7 @@ entity RWMEM is
       ADDR            : in std_logic_vector(Instr_size - 1 downto 0);
       ENABLE          : in std_logic;
       READNOTWRITE    : in std_logic;
-      DATA_IN         : in std_logic_vector(Data_size-1 downto 0)
+      DATA_IN         : in std_logic_vector(Data_size-1 downto 0);
       DATA_READY      : out std_logic;
       DATA_OUT        : out std_logic_vector(Data_size-1 downto 0)
     );

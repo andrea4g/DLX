@@ -39,7 +39,7 @@ begin
        out_log                      when sel = "0111" else -- nand
        out_log                      when sel = "1110" else -- or
        out_log                      when sel = "0001" else -- nor
-       out_log                      when sel = "0110" else -- xor
+       out_log                      when sel = "0110" else -- xor     
        out_log                      when sel = "1001" else -- xnor
        (others => 'X');
 

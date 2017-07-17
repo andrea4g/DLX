@@ -28,23 +28,23 @@ architecture tb of DLX_TestBench is
   end component;
 
   component RWMEM is
-    generic(
-        file_path: string;
-        file_path_init: string;
-        Data_size : natural := 32;
-        Instr_size: natural := 32;
-        RAM_DEPTH:  natural := 128;
-      );
-    port (
-        CLK             : in std_logic;
-        RST             : in std_logic;
-        ADDR            : in std_logic_vector(Instr_size - 1 downto 0);
-        ENABLE          : in std_logic;
-        READNOTWRITE    : in std_logic;
-        DATA_IN         : in std_logic_vector(Data_size-1 downto 0)
-        DATA_READY      : out std_logic;
-        DATA_OUT        : out std_logic_vector(Data_size-1 downto 0)
-      );
+		generic(
+	      file_path: string;
+	      file_path_init: string;
+	      Data_size : natural := 32;
+	      Instr_size: natural := 32;
+	      RAM_DEPTH:  natural := 128
+	    );
+	  port (
+	      CLK             : in std_logic;
+	      RST             : in std_logic;
+	      ADDR            : in std_logic_vector(Instr_size - 1 downto 0);
+	      ENABLE          : in std_logic;
+	      READNOTWRITE    : in std_logic;
+	      DATA_IN         : in std_logic_vector(Data_size-1 downto 0);
+	      DATA_READY      : out std_logic;
+	      DATA_OUT        : out std_logic_vector(Data_size-1 downto 0)
+	    );
   end component;
 
   component DLX is
