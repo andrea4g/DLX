@@ -9,6 +9,7 @@
 !*.sh
 !*.asm
 !*.png
+!*.tcl
 !src/assembler/conv2memory
 !src/assembler/iram
 
