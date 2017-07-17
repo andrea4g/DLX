@@ -254,8 +254,8 @@ begin
 -----------------------------------------------------------------------------------------
 
   -- Assignment of type of operation to be done
-  rd1  <= ir_st1(r1_up   downto r1_down);
   rd   <= ir_st1(r2_up   downto r2_down);
+  rd1  <= ir_st1(r1_up   downto r1_down);
   rd2  <= ir_st1(r3_up   downto r3_down);
   inp2 <= ir_st1(inp2_up downto inp2_down);
 
