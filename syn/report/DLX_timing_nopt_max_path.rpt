@@ -1,0 +1,44 @@
+Information: Updating design information... (UID-85)
+Warning: Design 'DLX_IR_SIZE32_PC_SIZE32' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : DLX_IR_SIZE32_PC_SIZE32
+Version: Z-2007.03-SP1
+Date   : Tue Jul 18 13:11:30 2017
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: dp/alu_out/ff_31/q_reg
+              (rising edge-triggered flip-flop)
+  Endpoint: DRAM_ADDRESS[31]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  DLX_IR_SIZE32_PC_SIZE32
+                     5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  dp/alu_out/ff_31/q_reg/CK (DFFR_X1)      0.00       0.00 r
+  dp/alu_out/ff_31/q_reg/Q (DFFR_X1)       0.10       0.10 r
+  dp/alu_out/ff_31/q (ffd_async_107)       0.00       0.10 r
+  dp/alu_out/y[31] (reg_n_n32_4)           0.00       0.10 r
+  dp/dram_addr[31] (datapath)              0.00       0.10 r
+  DRAM_ADDRESS[31] (out)                   0.00       0.11 r
+  data arrival time                                   0.11
+  -----------------------------------------------------------
+  (Path is unconstrained)
+
+
+1
