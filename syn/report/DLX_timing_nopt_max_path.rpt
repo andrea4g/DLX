@@ -8,7 +8,7 @@ Report : timing
         -max_paths 1
 Design : DLX_IR_SIZE32_PC_SIZE32
 Version: Z-2007.03-SP1
-Date   : Tue Jul 18 13:11:30 2017
+Date   : Tue Jul 18 14:16:55 2017
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.

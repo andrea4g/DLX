@@ -1,6 +1,7 @@
 set LIBRARY work
 set SOURCE_DIRECTORY ../src
 set DEST_DIRECTORY report
+set PH_DIRECTORY ../ph
 set SOURCE_FILES {
   000-functions.vhd
   000-globals.vhd
@@ -66,3 +67,19 @@ report_power  > $DEST_DIRECTORY/$ENTITY\_power_nopt_max_path.rpt
 
 report_power -cell > $DEST_DIRECTORY/$ENTITY\_power_cell_nopt_max_path.rpt
 report_power -net  > $DEST_DIRECTORY/$ENTITY\_power_net_nopt_max_path.rpt
+
+set_wire_load_model -name 0K_hvratio_1_4
+#Forces a clock of period Period connected to the input port CLK
+create_clock -name "CLK" -period 5 {"CLK"}
+
+#forces a combinational max delay of 5 ns from each of the inputs
+#to each of th output in case combinational paths are present 
+set_max_delay 5 -from [all_inputs] -to [all_outputs]
+
+compile -map_effort high
+
+report_power > $DEST_DIRECTORY/$ENTITY\_power_timeopt.rpt
+report_timing > $DEST_DIRECTORY/$ENTITY\_timing_timeopt.rpt
+
+write -hierarchy -f verilog -output $PH_DIRECTORY/$ENTITY\.v
+write_sdc $PH_DIRECTORY/$ENTITY\.sdc

@@ -13,6 +13,7 @@
 !*.tcl
 !src/assembler/conv2memory
 !src/assembler/iram
+!ph/*
 
 # ...even if they are in subdirectories
 !*/
