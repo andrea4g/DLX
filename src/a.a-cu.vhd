@@ -55,7 +55,7 @@ begin  -- cu_rtl
   IR_func  (FUNC_SIZE - 1 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
 
   -- Process assigning the control word values
-  process (IR_opcode, IR_func) is
+  process (IR_opcode, IR_func, Rst) is
   begin
     if Rst = '0'                                  then CW <= "100000000000000000"; -- Reset
     elsif IR_opcode = J                           then CW <= "110011100000110000"; -- J
