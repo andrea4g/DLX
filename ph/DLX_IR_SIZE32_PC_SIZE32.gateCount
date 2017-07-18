@@ -1,0 +1,30 @@
+Gate area 0.7980 um^2
+Level 0 Module DLX_IR_SIZE32_PC_SIZE32                  Gates=     20009 Cells=    8695 Area=   15967.4 um^2
+Level 1 Module CU                                       Gates=210        Cells=115      Area=     167.8 um^2
+Level 1 Module dp                                       Gates=18575      Cells=7991     Area=   14822.8 um^2
+Level 2 Module dp/ir_ff                                 Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/pc_add                                Gates=210        Cells=126      Area=     168.1 um^2
+Level 2 Module dp/rf                                    Gates=12029      Cells=4168     Area=    9599.7 um^2
+Level 2 Module dp/a                                     Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/b                                     Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/in2                                   Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/mux1_alu                              Gates=152        Cells=131      Area=     121.6 um^2
+Level 2 Module dp/mux2_alu                              Gates=152        Cells=131      Area=     121.6 um^2
+Level 2 Module dp/arith_log_un                          Gates=3270       Cells=2477     Area=    2610.0 um^2
+Level 3 Module dp/arith_log_un/add                      Gates=787        Cells=529      Area=     628.3 um^2
+Level 4 Module dp/arith_log_un/add/sparse_tree_carry_gen_p4 Gates=236        Cells=162      Area=     188.9 um^2
+Level 4 Module dp/arith_log_un/add/sum_generator_p4     Gates=550        Cells=367      Area=     439.4 um^2
+Level 3 Module dp/arith_log_un/sub                      Gates=273        Cells=189      Area=     218.1 um^2
+Level 4 Module dp/arith_log_un/sub/sub                  Gates=252        Cells=157      Area=     201.1 um^2
+Level 3 Module dp/arith_log_un/sl                       Gates=720        Cells=624      Area=     574.8 um^2
+Level 3 Module dp/arith_log_un/sr                       Gates=761        Cells=655      Area=     607.8 um^2
+Level 3 Module dp/arith_log_un/comp                     Gates=295        Cells=203      Area=     235.4 um^2
+Level 4 Module dp/arith_log_un/comp/sub                 Gates=256        Cells=160      Area=     204.3 um^2
+Level 3 Module dp/arith_log_un/logi                     Gates=202        Cells=160      Area=     161.7 um^2
+Level 3 Module dp/arith_log_un/enc                      Gates=227        Cells=116      Area=     181.4 um^2
+Level 2 Module dp/alu_out                               Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/me                                    Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/mux_j                                 Gates=152        Cells=131      Area=     121.6 um^2
+Level 2 Module dp/out_value                             Gates=213        Cells=32       Area=     170.2 um^2
+Level 2 Module dp/lmd                                   Gates=513        Cells=332      Area=     409.6 um^2
+Level 2 Module dp/mux_out_sel                           Gates=153        Cells=131      Area=     122.4 um^2
