@@ -92,9 +92,9 @@ begin  -- cu_rtl
   end process;
 
   -- process handling the output
-  CW_PIPE: process (Clk, Rst)
+  CW_PIPE: process (Clk)
   begin  -- process Clk
-    if (Clk'event and Clk = '0') or Rst = '0' then  -- rising clock edge
+    if (Clk'event and Clk = '0') then  -- rising clock edge
       EN0     <= CW(CW_SIZE - 1);
       EN1     <= CW(CW_SIZE - 2);
       RF1     <= CW(CW_SIZE - 3);
