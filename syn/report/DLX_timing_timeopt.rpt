@@ -1,0 +1,478 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : DLX_IR_SIZE32_PC_SIZE32
+Version: Z-2007.03-SP1
+Date   : Tue Jul 18 14:19:07 2017
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: dp/s2_cw2/q_reg
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: dp/alu_out/ff_0/q_reg
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  DLX_IR_SIZE32_PC_SIZE32
+                     5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  dp/s2_cw2/q_reg/CK (DFFR_X1)                            0.00       0.00 r
+  dp/s2_cw2/q_reg/Q (DFFR_X1)                             0.11       0.11 r
+  dp/s2_cw2/q (ffd_async_290)                             0.00       0.11 r
+  dp/mux2_alu/sel (mux21_generic_n32_3)                   0.00       0.11 r
+  dp/mux2_alu/U1/Z (BUF_X1)                               0.15       0.25 r
+  dp/mux2_alu/mux21_i_0/s (mux21_448)                     0.00       0.25 r
+  dp/mux2_alu/mux21_i_0/and2/b (and_2_1246)               0.00       0.25 r
+  dp/mux2_alu/mux21_i_0/and2/U1/ZN (AND2_X1)              0.07       0.32 r
+  dp/mux2_alu/mux21_i_0/and2/y (and_2_1246)               0.00       0.32 r
+  dp/mux2_alu/mux21_i_0/or1/b (or_2_612)                  0.00       0.32 r
+  dp/mux2_alu/mux21_i_0/or1/U1/ZN (OR2_X1)                0.10       0.43 r
+  dp/mux2_alu/mux21_i_0/or1/y (or_2_612)                  0.00       0.43 r
+  dp/mux2_alu/mux21_i_0/y (mux21_448)                     0.00       0.43 r
+  dp/mux2_alu/y[0] (mux21_generic_n32_3)                  0.00       0.43 r
+  dp/arith_log_un/b[0] (alu_nbit32)                       0.00       0.43 r
+  dp/arith_log_un/comp/b[0] (comparator_n32)              0.00       0.43 r
+  dp/arith_log_un/comp/b_negate/a[0] (not_n_n32_1)        0.00       0.43 r
+  dp/arith_log_un/comp/b_negate/not_1_component_0/a (not_1_64)
+                                                          0.00       0.43 r
+  dp/arith_log_un/comp/b_negate/not_1_component_0/U1/ZN (INV_X1)
+                                                          0.04       0.47 f
+  dp/arith_log_un/comp/b_negate/not_1_component_0/y (not_1_64)
+                                                          0.00       0.47 f
+  dp/arith_log_un/comp/b_negate/y[0] (not_n_n32_1)        0.00       0.47 f
+  dp/arith_log_un/comp/sub/b[0] (rca_n_n32_1)             0.00       0.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/b (fa_2_96)           0.00       0.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/xor1/b (xor_2_224)
+                                                          0.00       0.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/xor1/U1/Z (XOR2_X1)
+                                                          0.08       0.55 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/xor1/y (xor_2_224)
+                                                          0.00       0.55 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/and2/a (and_2_287)
+                                                          0.00       0.55 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/and2/U1/ZN (AND2_X1)
+                                                          0.04       0.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/and2/y (and_2_287)
+                                                          0.00       0.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/or1/a (or_2_128)      0.00       0.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/or1/U1/ZN (OR2_X1)
+                                                          0.06       0.65 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/or1/y (or_2_128)      0.00       0.65 f
+  dp/arith_log_un/comp/sub/fa_2_i_0/c_out (fa_2_96)       0.00       0.65 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/c_in (fa_2_95)        0.00       0.65 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/and2/b (and_2_285)
+                                                          0.00       0.65 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/and2/U1/ZN (AND2_X1)
+                                                          0.04       0.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/and2/y (and_2_285)
+                                                          0.00       0.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/or1/a (or_2_127)      0.00       0.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/or1/U1/ZN (OR2_X1)
+                                                          0.06       0.74 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/or1/y (or_2_127)      0.00       0.74 f
+  dp/arith_log_un/comp/sub/fa_2_i_1/c_out (fa_2_95)       0.00       0.74 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/c_in (fa_2_94)        0.00       0.74 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/and2/b (and_2_283)
+                                                          0.00       0.74 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/and2/U1/ZN (AND2_X1)
+                                                          0.04       0.78 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/and2/y (and_2_283)
+                                                          0.00       0.78 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/or1/a (or_2_126)      0.00       0.78 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/or1/U1/ZN (OR2_X1)
+                                                          0.06       0.83 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/or1/y (or_2_126)      0.00       0.83 f
+  dp/arith_log_un/comp/sub/fa_2_i_2/c_out (fa_2_94)       0.00       0.83 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/c_in (fa_2_93)        0.00       0.83 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/and2/b (and_2_281)
+                                                          0.00       0.83 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/and2/U1/ZN (AND2_X1)
+                                                          0.04       0.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/and2/y (and_2_281)
+                                                          0.00       0.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/or1/a (or_2_125)      0.00       0.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/or1/U1/ZN (OR2_X1)
+                                                          0.06       0.93 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/or1/y (or_2_125)      0.00       0.93 f
+  dp/arith_log_un/comp/sub/fa_2_i_3/c_out (fa_2_93)       0.00       0.93 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/c_in (fa_2_92)        0.00       0.93 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/and2/b (and_2_279)
+                                                          0.00       0.93 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/and2/U1/ZN (AND2_X1)
+                                                          0.04       0.97 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/and2/y (and_2_279)
+                                                          0.00       0.97 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/or1/a (or_2_124)      0.00       0.97 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.02 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/or1/y (or_2_124)      0.00       1.02 f
+  dp/arith_log_un/comp/sub/fa_2_i_4/c_out (fa_2_92)       0.00       1.02 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/c_in (fa_2_91)        0.00       1.02 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/and2/b (and_2_277)
+                                                          0.00       1.02 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/and2/y (and_2_277)
+                                                          0.00       1.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/or1/a (or_2_123)      0.00       1.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.12 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/or1/y (or_2_123)      0.00       1.12 f
+  dp/arith_log_un/comp/sub/fa_2_i_5/c_out (fa_2_91)       0.00       1.12 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/c_in (fa_2_90)        0.00       1.12 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/and2/b (and_2_275)
+                                                          0.00       1.12 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/and2/y (and_2_275)
+                                                          0.00       1.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/or1/a (or_2_122)      0.00       1.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.21 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/or1/y (or_2_122)      0.00       1.21 f
+  dp/arith_log_un/comp/sub/fa_2_i_6/c_out (fa_2_90)       0.00       1.21 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/c_in (fa_2_89)        0.00       1.21 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/and2/b (and_2_273)
+                                                          0.00       1.21 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.25 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/and2/y (and_2_273)
+                                                          0.00       1.25 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/or1/a (or_2_121)      0.00       1.25 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.30 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/or1/y (or_2_121)      0.00       1.30 f
+  dp/arith_log_un/comp/sub/fa_2_i_7/c_out (fa_2_89)       0.00       1.30 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/c_in (fa_2_88)        0.00       1.30 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/and2/b (and_2_271)
+                                                          0.00       1.30 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/and2/y (and_2_271)
+                                                          0.00       1.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/or1/a (or_2_120)      0.00       1.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.40 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/or1/y (or_2_120)      0.00       1.40 f
+  dp/arith_log_un/comp/sub/fa_2_i_8/c_out (fa_2_88)       0.00       1.40 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/c_in (fa_2_87)        0.00       1.40 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/and2/b (and_2_269)
+                                                          0.00       1.40 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.44 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/and2/y (and_2_269)
+                                                          0.00       1.44 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/or1/a (or_2_119)      0.00       1.44 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.49 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/or1/y (or_2_119)      0.00       1.49 f
+  dp/arith_log_un/comp/sub/fa_2_i_9/c_out (fa_2_87)       0.00       1.49 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/c_in (fa_2_86)       0.00       1.49 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/and2/b (and_2_267)
+                                                          0.00       1.49 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/and2/y (and_2_267)
+                                                          0.00       1.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/or1/a (or_2_118)     0.00       1.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/or1/y (or_2_118)     0.00       1.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_10/c_out (fa_2_86)      0.00       1.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/c_in (fa_2_85)       0.00       1.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/and2/b (and_2_265)
+                                                          0.00       1.59 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/and2/y (and_2_265)
+                                                          0.00       1.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/or1/a (or_2_117)     0.00       1.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/or1/y (or_2_117)     0.00       1.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_11/c_out (fa_2_85)      0.00       1.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/c_in (fa_2_84)       0.00       1.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/and2/b (and_2_263)
+                                                          0.00       1.68 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.72 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/and2/y (and_2_263)
+                                                          0.00       1.72 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/or1/a (or_2_116)     0.00       1.72 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.77 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/or1/y (or_2_116)     0.00       1.77 f
+  dp/arith_log_un/comp/sub/fa_2_i_12/c_out (fa_2_84)      0.00       1.77 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/c_in (fa_2_83)       0.00       1.77 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/and2/b (and_2_261)
+                                                          0.00       1.77 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/and2/y (and_2_261)
+                                                          0.00       1.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/or1/a (or_2_115)     0.00       1.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/or1/y (or_2_115)     0.00       1.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_13/c_out (fa_2_83)      0.00       1.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/c_in (fa_2_82)       0.00       1.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/and2/b (and_2_259)
+                                                          0.00       1.87 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/and2/U1/ZN (AND2_X1)
+                                                          0.04       1.91 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/and2/y (and_2_259)
+                                                          0.00       1.91 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/or1/a (or_2_114)     0.00       1.91 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/or1/U1/ZN (OR2_X1)
+                                                          0.06       1.96 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/or1/y (or_2_114)     0.00       1.96 f
+  dp/arith_log_un/comp/sub/fa_2_i_14/c_out (fa_2_82)      0.00       1.96 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/c_in (fa_2_81)       0.00       1.96 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/and2/b (and_2_257)
+                                                          0.00       1.96 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/and2/y (and_2_257)
+                                                          0.00       2.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/or1/a (or_2_113)     0.00       2.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/or1/y (or_2_113)     0.00       2.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_15/c_out (fa_2_81)      0.00       2.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/c_in (fa_2_80)       0.00       2.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/and2/b (and_2_255)
+                                                          0.00       2.06 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/and2/y (and_2_255)
+                                                          0.00       2.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/or1/a (or_2_112)     0.00       2.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/or1/y (or_2_112)     0.00       2.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_16/c_out (fa_2_80)      0.00       2.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/c_in (fa_2_79)       0.00       2.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/and2/b (and_2_253)
+                                                          0.00       2.15 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.19 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/and2/y (and_2_253)
+                                                          0.00       2.19 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/or1/a (or_2_111)     0.00       2.19 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.24 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/or1/y (or_2_111)     0.00       2.24 f
+  dp/arith_log_un/comp/sub/fa_2_i_17/c_out (fa_2_79)      0.00       2.24 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/c_in (fa_2_78)       0.00       2.24 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/and2/b (and_2_251)
+                                                          0.00       2.24 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/and2/y (and_2_251)
+                                                          0.00       2.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/or1/a (or_2_110)     0.00       2.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/or1/y (or_2_110)     0.00       2.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_18/c_out (fa_2_78)      0.00       2.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/c_in (fa_2_77)       0.00       2.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/and2/b (and_2_249)
+                                                          0.00       2.34 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.38 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/and2/y (and_2_249)
+                                                          0.00       2.38 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/or1/a (or_2_109)     0.00       2.38 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.43 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/or1/y (or_2_109)     0.00       2.43 f
+  dp/arith_log_un/comp/sub/fa_2_i_19/c_out (fa_2_77)      0.00       2.43 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/c_in (fa_2_76)       0.00       2.43 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/and2/b (and_2_247)
+                                                          0.00       2.43 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/and2/y (and_2_247)
+                                                          0.00       2.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/or1/a (or_2_108)     0.00       2.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/or1/y (or_2_108)     0.00       2.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_20/c_out (fa_2_76)      0.00       2.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/c_in (fa_2_75)       0.00       2.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/and2/b (and_2_245)
+                                                          0.00       2.53 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.56 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/and2/y (and_2_245)
+                                                          0.00       2.56 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/or1/a (or_2_107)     0.00       2.56 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/or1/y (or_2_107)     0.00       2.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_21/c_out (fa_2_75)      0.00       2.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/c_in (fa_2_74)       0.00       2.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/and2/b (and_2_243)
+                                                          0.00       2.62 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.66 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/and2/y (and_2_243)
+                                                          0.00       2.66 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/or1/a (or_2_106)     0.00       2.66 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.71 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/or1/y (or_2_106)     0.00       2.71 f
+  dp/arith_log_un/comp/sub/fa_2_i_22/c_out (fa_2_74)      0.00       2.71 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/c_in (fa_2_73)       0.00       2.71 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/and2/b (and_2_241)
+                                                          0.00       2.71 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.75 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/and2/y (and_2_241)
+                                                          0.00       2.75 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/or1/a (or_2_105)     0.00       2.75 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/or1/y (or_2_105)     0.00       2.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_23/c_out (fa_2_73)      0.00       2.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/c_in (fa_2_72)       0.00       2.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/and2/b (and_2_239)
+                                                          0.00       2.81 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.85 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/and2/y (and_2_239)
+                                                          0.00       2.85 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/or1/a (or_2_104)     0.00       2.85 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/or1/U1/ZN (OR2_X1)
+                                                          0.06       2.90 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/or1/y (or_2_104)     0.00       2.90 f
+  dp/arith_log_un/comp/sub/fa_2_i_24/c_out (fa_2_72)      0.00       2.90 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/c_in (fa_2_71)       0.00       2.90 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/and2/b (and_2_237)
+                                                          0.00       2.90 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/and2/U1/ZN (AND2_X1)
+                                                          0.04       2.94 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/and2/y (and_2_237)
+                                                          0.00       2.94 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/or1/a (or_2_103)     0.00       2.94 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/or1/y (or_2_103)     0.00       3.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_25/c_out (fa_2_71)      0.00       3.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/c_in (fa_2_70)       0.00       3.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/and2/b (and_2_235)
+                                                          0.00       3.00 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/and2/U1/ZN (AND2_X1)
+                                                          0.04       3.03 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/and2/y (and_2_235)
+                                                          0.00       3.03 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/or1/a (or_2_102)     0.00       3.03 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/or1/y (or_2_102)     0.00       3.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_26/c_out (fa_2_70)      0.00       3.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/c_in (fa_2_69)       0.00       3.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/and2/b (and_2_233)
+                                                          0.00       3.09 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/and2/U1/ZN (AND2_X1)
+                                                          0.04       3.13 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/and2/y (and_2_233)
+                                                          0.00       3.13 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/or1/a (or_2_101)     0.00       3.13 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.18 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/or1/y (or_2_101)     0.00       3.18 f
+  dp/arith_log_un/comp/sub/fa_2_i_27/c_out (fa_2_69)      0.00       3.18 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/c_in (fa_2_68)       0.00       3.18 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/and2/b (and_2_231)
+                                                          0.00       3.18 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/and2/U1/ZN (AND2_X1)
+                                                          0.04       3.22 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/and2/y (and_2_231)
+                                                          0.00       3.22 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/or1/a (or_2_100)     0.00       3.22 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/or1/y (or_2_100)     0.00       3.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_28/c_out (fa_2_68)      0.00       3.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/c_in (fa_2_67)       0.00       3.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/and2/b (and_2_229)
+                                                          0.00       3.28 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/and2/U1/ZN (AND2_X1)
+                                                          0.04       3.32 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/and2/y (and_2_229)
+                                                          0.00       3.32 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/or1/a (or_2_99)      0.00       3.32 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.37 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/or1/y (or_2_99)      0.00       3.37 f
+  dp/arith_log_un/comp/sub/fa_2_i_29/c_out (fa_2_67)      0.00       3.37 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/c_in (fa_2_66)       0.00       3.37 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/and2/b (and_2_227)
+                                                          0.00       3.37 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/and2/U1/ZN (AND2_X1)
+                                                          0.04       3.41 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/and2/y (and_2_227)
+                                                          0.00       3.41 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/or1/a (or_2_98)      0.00       3.41 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/or1/U1/ZN (OR2_X1)
+                                                          0.06       3.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/or1/y (or_2_98)      0.00       3.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_30/c_out (fa_2_66)      0.00       3.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_31/c_in (fa_2_65)       0.00       3.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_31/xor2/b (xor_2_161)
+                                                          0.00       3.47 f
+  dp/arith_log_un/comp/sub/fa_2_i_31/xor2/U1/Z (XOR2_X1)
+                                                          0.07       3.54 f
+  dp/arith_log_un/comp/sub/fa_2_i_31/xor2/y (xor_2_161)
+                                                          0.00       3.54 f
+  dp/arith_log_un/comp/sub/fa_2_i_31/sum (fa_2_65)        0.00       3.54 f
+  dp/arith_log_un/comp/sub/sum[31] (rca_n_n32_1)          0.00       3.54 f
+  dp/arith_log_un/comp/big_nor/a[31] (nor_n1_n32)         0.00       3.54 f
+  dp/arith_log_un/comp/big_nor/U1/ZN (NOR4_X1)            0.09       3.63 r
+  dp/arith_log_un/comp/big_nor/U9/ZN (NAND4_X1)           0.05       3.68 f
+  dp/arith_log_un/comp/big_nor/U7/ZN (NOR2_X1)            0.05       3.73 r
+  dp/arith_log_un/comp/big_nor/y (nor_n1_n32)             0.00       3.73 r
+  dp/arith_log_un/comp/z (comparator_n32)                 0.00       3.73 r
+  dp/arith_log_un/enc/out_eq[0] (encoder_n32)             0.00       3.73 r
+  dp/arith_log_un/enc/U2/ZN (INV_X1)                      0.02       3.76 f
+  dp/arith_log_un/enc/U43/ZN (AOI22_X1)                   0.05       3.81 r
+  dp/arith_log_un/enc/U42/ZN (NOR3_X1)                    0.03       3.83 f
+  dp/arith_log_un/enc/U41/ZN (AOI221_X1)                  0.09       3.92 r
+  dp/arith_log_un/enc/U40/ZN (NOR2_X1)                    0.03       3.95 f
+  dp/arith_log_un/enc/U124/ZN (AOI221_X1)                 0.09       4.04 r
+  dp/arith_log_un/enc/U122/ZN (NAND2_X1)                  0.03       4.07 f
+  dp/arith_log_un/enc/o[0] (encoder_n32)                  0.00       4.07 f
+  dp/arith_log_un/y[0] (alu_nbit32)                       0.00       4.07 f
+  dp/alu_out/x[0] (reg_n_n32_4)                           0.00       4.07 f
+  dp/alu_out/ff_0/d (ffd_async_138)                       0.00       4.07 f
+  dp/alu_out/ff_0/q_reg/D (DFFR_X1)                       0.01       4.08 f
+  data arrival time                                                  4.08
+
+  clock CLK (rise edge)                                   5.00       5.00
+  clock network delay (ideal)                             0.00       5.00
+  dp/alu_out/ff_0/q_reg/CK (DFFR_X1)                      0.00       5.00 r
+  library setup time                                     -0.04       4.96
+  data required time                                                 4.96
+  --------------------------------------------------------------------------
+  data required time                                                 4.96
+  data arrival time                                                 -4.08
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.88
+
+
+1
