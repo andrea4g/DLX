@@ -5,6 +5,7 @@
 !*.vhd
 !*.vhdl
 !*.txt
+!*.rpt
 !*.png
 !*.sh
 !*.asm
