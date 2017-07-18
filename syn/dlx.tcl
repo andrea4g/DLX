@@ -58,11 +58,11 @@ set ARCH structural
 
 elaborate $ENTITY -architecture $ARCH -library DEFAULT -parameters "IR_SIZE = 32, PC_SIZE = 32"
 
-# compile
-# 
-# report_timing > $DEST_DIRECTORY/$ENTITY\_timing_nopt_max_path.rpt
-# report_area   > $DEST_DIRECTORY/$ENTITY\_area_nopt_max_path.rpt
-# report_power  > $DEST_DIRECTORY/$ENTITY\_power_nopt_max_path.rpt
-# 
-# report_power -cell > $DEST_DIRECTORY/$ENTITY\_power_cell_nopt_max_path.rpt
-# report_power -net  > $DEST_DIRECTORY/$ENTITY\_power_net_nopt_max_path.rpt
+compile
+
+report_timing > $DEST_DIRECTORY/$ENTITY\_timing_nopt_max_path.rpt
+report_area   > $DEST_DIRECTORY/$ENTITY\_area_nopt_max_path.rpt
+report_power  > $DEST_DIRECTORY/$ENTITY\_power_nopt_max_path.rpt
+
+report_power -cell > $DEST_DIRECTORY/$ENTITY\_power_cell_nopt_max_path.rpt
+report_power -net  > $DEST_DIRECTORY/$ENTITY\_power_net_nopt_max_path.rpt
