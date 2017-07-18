@@ -1,13 +1,12 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use work.functions.all;
 
 package globals is
 
   -- Datapath constants
   constant instruction_size  : integer := 32;
   constant word_size         : integer := 32;
-  constant add_size          : integer := log2(32);
+  constant add_size          : integer := 5;
 
   constant opcode_up         : integer :=  31;
   constant opcode_down       : integer :=  26;

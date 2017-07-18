@@ -30,7 +30,7 @@ entity DLX is
 end DLX;
 
 -- Architecture
-architecture dlx_rtl of DLX is
+architecture structural of DLX is
 --------------------------------------------------------------------
 -- Components Declaration
 --------------------------------------------------------------------
@@ -245,4 +245,4 @@ architecture dlx_rtl of DLX is
 
   IRAM_ISSUE <= iram_issue_i;
 
-end dlx_rtl;
+end structural;
